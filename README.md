@@ -40,15 +40,16 @@ For a new or existing project:
 3. Add the minimum project context:
    - `README.md`,
    - `CONTEXT.md`,
-   - roadmap or phase plan,
+   - Roadmap / Master Plan,
    - behavior specs or OpenSpec root,
    - ADRs for hard-to-reverse decisions,
    - QA, manual test, and integration test plans,
    - Mermaid diagrams when architecture or workflows matter.
 4. Classify the work as greenfield, brownfield, or maintenance.
 5. Choose the execution mode and tool availability mode.
-6. Prepare the phase plan or brownfield feature plan.
-7. Wait for approval before implementation.
+6. Confirm the phase or feature fits the Roadmap / Master Plan.
+7. Prepare the phase plan or brownfield feature plan.
+8. Wait for approval before implementation.
 
 ## ForgeLoop Core
 
@@ -177,7 +178,7 @@ project context:
 2. Approved phase plan.
 3. Behavior specs, OpenSpecs if used, and BDD scenarios.
 4. ADRs and architecture notes.
-5. Product, technical, QA, and roadmap documents.
+5. Product, technical, QA, and Roadmap / Master Plan documents.
 6. README and project status.
 7. Agent chat history or memory.
 
@@ -206,8 +207,9 @@ Markdown equivalents and document the substitution.
 ## Core Workflow
 
 ```txt
-Idea -> Documents -> Decisions -> Roadmap -> Behavior Spec -> Phase Plan
-     -> Branch -> Tests -> Code -> Smoke Test -> PR -> Merge
+Idea -> Documents -> Decisions -> Roadmap / Master Plan
+     -> Behavior Spec -> Phase Plan -> Branch -> Tests -> Code
+     -> Smoke Test -> PR -> Merge
 ```
 
 This flow applies to both new and existing projects, but the entry point
@@ -270,7 +272,8 @@ keeper. Do not let one continuous answer replace the review gate.
 ForgeLoop treats these planning and review documents as first-class artifacts,
 not optional notes:
 
-- `Roadmap`: ordered milestones, sequencing, and release intent.
+- `Roadmap / Master Plan`: project-level sequencing, milestones, dependencies,
+  phase order, release intent, and explicit deferrals.
 - `Architecture Plan`: system shape, module boundaries, deployment assumptions,
   and hard-to-reverse technical decisions.
 - `QA Plan`: test strategy, acceptance rules, regression expectations, and
@@ -283,10 +286,20 @@ not optional notes:
 These artifacts may live as standalone files or sections inside the startup
 document pack. They must be easy to find before implementation starts.
 
+The planning hierarchy is:
+
+```txt
+Product Intent
+  -> Roadmap / Master Plan
+    -> Phase Plan
+      -> User Story or Vertical Slice
+        -> Task or Sub-phase
+```
+
 User Stories can be execution units inside the workflow, but they are not the
 source of truth by themselves. A User Story should link back to the relevant
-roadmap item, behavior spec, acceptance criteria, architecture notes, tests, and
-phase plan.
+Roadmap / Master Plan item, behavior spec, acceptance criteria, architecture
+notes, tests, and phase plan.
 
 When a phase is delivered through User Stories, ForgeLoop should use a concrete
 delivery lane:
@@ -352,5 +365,5 @@ decisions. It is not yet a full project scaffold for applying the workflow to
 another repository.
 
 Before adding implementation code, define the missing repo-local artifacts,
-especially the roadmap, architecture plan, QA plan, manual test plan, and
-integration test plan.
+especially the Roadmap / Master Plan, architecture plan, QA plan, manual test
+plan, and integration test plan.

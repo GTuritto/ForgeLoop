@@ -12,8 +12,9 @@ Do not start from vibes, loose chat history, or an agent's memory. Start from
 the current repository state:
 
 ```txt
-Idea -> Documents -> Decisions -> Roadmap -> Behavior Spec -> Phase Plan
-     -> Branch -> Tests -> Code -> Smoke Test -> PR -> Merge
+Idea -> Documents -> Decisions -> Roadmap / Master Plan
+     -> Behavior Spec -> Phase Plan -> Branch -> Tests -> Code
+     -> Smoke Test -> PR -> Merge
 ```
 
 The source of truth is always the repo: docs, behavior specs, ADRs, current
@@ -50,13 +51,15 @@ Source-of-truth order:
 2. Approved phase plan or brownfield feature plan.
 3. Behavior specs, OpenSpecs if used, and BDD scenarios.
 4. ADRs and architecture notes.
-5. Product, technical, QA, manual test, integration test, and roadmap docs.
+5. Product, technical, QA, manual test, integration test, and Roadmap / Master
+   Plan docs.
 6. README and project status.
 7. Agent chat history or memory.
 
 Core loop:
-Idea -> Documents -> Decisions -> Roadmap -> Behavior Spec -> Phase Plan
-     -> Branch -> Tests -> Code -> Smoke Test -> PR -> Merge
+Idea -> Documents -> Decisions -> Roadmap / Master Plan
+     -> Behavior Spec -> Phase Plan -> Branch -> Tests -> Code
+     -> Smoke Test -> PR -> Merge
 
 Rules:
 - classify work as greenfield, brownfield, or maintenance,
@@ -86,8 +89,8 @@ Choose the project tier before deciding how much of ForgeLoop to apply.
 - `Throwaway/script`: disposable, local, or exploratory work.
   Use ForgeLoop Core only. Add tests only when risk justifies them.
 - `Real project`: a repo that should be maintained, resumed, or handed to
-  agents later. Use Core plus README, `AGENTS.md`, `CONTEXT.md`, a phase or
-  feature plan, tests, and basic QA notes.
+  agents later. Use Core plus README, `AGENTS.md`, `CONTEXT.md`, Roadmap /
+  Master Plan, a phase or feature plan, tests, and basic QA notes.
 - `Productized/SaaS`: projects with users, auth, data, payments,
   integrations, or production risk. Use the full startup pack, phase plans,
   behavior specs, ADRs, QA plans, manual and integration test plans, diagrams,
@@ -360,7 +363,8 @@ for their risk level.
   rules.
 - `docs/08-qa-plan.md`: unit, integration, smoke, acceptance, AI evals,
   security tests, release gates.
-- `docs/09-development-plan.md`: ordered phases, deliverables, exit criteria.
+- `docs/09-development-plan.md`: Roadmap / Master Plan, ordered phases,
+  deliverables, exit criteria.
 - `docs/10-go-to-market.md`: market, launch offer, channels, pricing
   hypothesis.
 - `docs/11-red-team-review.md`: product, architecture, security, and GTM
@@ -432,6 +436,58 @@ openspec/phase-N-short-name/
   contracts.md
 ```
 
+## Roadmap / Master Plan
+
+The Roadmap / Master Plan is the project-level sequencing document. It sits
+above phase plans and prevents agents from treating isolated tasks as the whole
+project.
+
+Use it to answer:
+
+- what the project is trying to become,
+- what milestones matter,
+- what order the work should happen in,
+- which dependencies control sequencing,
+- which phases are approved, blocked, deferred, or complete,
+- which risks shape the plan,
+- which work is explicitly out of scope for now.
+
+The Roadmap / Master Plan should include:
+
+- product intent,
+- current project tier,
+- current project state,
+- milestones,
+- ordered phases,
+- dependencies between phases,
+- release or demo targets,
+- known risks,
+- explicit deferrals,
+- links to phase plans, behavior specs, ADRs, QA plans, and diagrams.
+
+The planning hierarchy is:
+
+```txt
+Product Intent
+  -> Roadmap / Master Plan
+    -> Phase Plan
+      -> User Story or Vertical Slice
+        -> Task or Sub-phase
+```
+
+A phase should not start unless it appears in the Roadmap / Master Plan or the
+user explicitly approves an exception. If the Roadmap / Master Plan is stale,
+update it before creating new phase plans.
+
+Default location:
+
+```txt
+docs/09-development-plan.md
+```
+
+Split it into `docs/roadmap.md` or `docs/master-plan.md` only when it becomes
+large enough to need independent ownership or review history.
+
 ## First-Class Planning Artifacts
 
 ForgeLoop treats planning and review artifacts as executable context for agents.
@@ -440,8 +496,8 @@ They are not loose notes and they do not live only in chat history.
 Every serious project should make these artifacts explicit before
 implementation:
 
-- `Roadmap`: ordered milestones, release intent, sequencing, dependencies, and
-  deferrals.
+- `Roadmap / Master Plan`: project-level sequencing, milestones,
+  dependencies, phase order, release intent, and explicit deferrals.
 - `Architecture Plan`: system boundaries, module boundaries, data ownership,
   deployment assumptions, integration boundaries, and hard-to-reverse technical
   decisions.
@@ -465,7 +521,7 @@ docs/
   00-index.md                       # documentation map and artifact ownership
   03-architecture-decisions.md      # links to ADRs and architecture plan notes
   08-qa-plan.md                     # QA plan and release gates
-  09-development-plan.md            # roadmap and phase order
+  09-development-plan.md            # Roadmap / Master Plan and phase order
   phases/
     phase-N-short-name.md           # phase-specific scope and test handoff
 ```
@@ -475,6 +531,7 @@ review history, or independent updates:
 
 ```txt
 docs/roadmap.md
+docs/master-plan.md
 docs/architecture-plan.md
 docs/qa-plan.md
 docs/manual-test-plan.md
@@ -483,7 +540,8 @@ docs/integration-test-plan.md
 
 Canonical ownership:
 
-- roadmap belongs in `docs/09-development-plan.md` unless split out,
+- Roadmap / Master Plan belongs in `docs/09-development-plan.md` unless split
+  out,
 - architecture plan belongs in `docs/03-architecture-decisions.md` unless split
   out,
 - ADRs live in `docs/adr/` and record only hard-to-reverse decisions,
@@ -515,7 +573,7 @@ Every executable User Story should include:
 - user goal,
 - business value,
 - acceptance criteria,
-- linked roadmap item,
+- linked Roadmap / Master Plan item,
 - linked behavior spec or OpenSpec if used,
 - affected domain and modules,
 - risk level,
@@ -545,8 +603,8 @@ and the team wants one repeatable execution cycle per story.
 
 ### Delivery Steps
 
-1. **Select User Story**: choose the next ready story from the approved roadmap
-   or backlog. Check dependencies and risk before work starts.
+1. **Select User Story**: choose the next ready story from the approved Roadmap
+   / Master Plan or backlog. Check dependencies and risk before work starts.
 2. **SDD/Behavior Spec**: create or update the behavior spec, acceptance
    criteria, design notes, and task list. Use OpenSpec when the project uses
    it.
@@ -795,7 +853,7 @@ These are reusable capabilities the harness should eventually invoke.
 - `bdd-scenario-writer`: convert expected behavior into Given/When/Then
   scenarios.
 - `user-story-selector`: choose the next ready User Story from the approved
-  roadmap or backlog.
+  Roadmap / Master Plan or backlog.
 - `contract-engineer`: freeze API, schema, SDK, DTO, event, or provider
   contracts before implementation.
 - `tdd-engineer`: write failing tests and verify they fail for the right reason
@@ -957,6 +1015,7 @@ The active agent reads:
 - `README.md`,
 - `AGENTS.md`,
 - `CONTEXT.md`,
+- Roadmap / Master Plan,
 - relevant docs,
 - relevant ADRs,
 - relevant behavior specs,
@@ -1010,6 +1069,8 @@ docs/phases/phase-N-short-name.md
 The plan must include:
 
 - goal,
+- linked Roadmap / Master Plan item,
+- phase sequence position,
 - source docs reviewed,
 - scope,
 - out-of-scope items,
@@ -1472,7 +1533,7 @@ Recommended cadence:
 - after docs or scaffold changes: `kaddo scan`,
 - before asking an agent to understand the repo: `kaddo context` and
   `kaddo understand`,
-- when turning roadmap or phase work into tracked work:
+- when turning Roadmap / Master Plan or phase work into tracked work:
   `kaddo create --from roadmap`,
 - after meaningful code changes: `kaddo scan`,
 - before commit or PR: `kaddo guard`,
@@ -1678,6 +1739,8 @@ docs/17-development-workflow.md, docs/18-openspec-kdd-bdd.md, diagrams, and
 relevant ADRs.
 
 Prepare Phase N only.
+Confirm the phase exists in the Roadmap / Master Plan or explain the approved
+exception.
 Classify the phase as greenfield, brownfield, or maintenance.
 Classify the phase risk and select the execution mode.
 Create docs/phases/phase-N-short-name.md from the phase plan template.
@@ -1689,7 +1752,8 @@ regression evidence plan.
 Create or update behavior specs and Mermaid diagrams for this phase.
 Include KDD notes, BDD scenarios, Docker commands, unit tests, smoke test,
 integration test plan, manual test plan, regression test plan, manual test
-handoff, test evidence, exit criteria, risks, and out-of-scope items.
+handoff, test evidence, exit criteria, risks, out-of-scope items, and the
+Roadmap / Master Plan update needed after completion.
 
 Run a grill-with-docs pass against CONTEXT.md, ADRs, behavior specs, diagrams,
 docs, and source code.

@@ -11,6 +11,10 @@ This file maps the current ForgeLoop documentation.
   optional tool guidance.
 - [CONTEXT.md](../CONTEXT.md): shared terms for the ForgeLoop repo.
 
+## Planned Documents
+
+- `docs/09-development-plan.md`: Roadmap / Master Plan for ForgeLoop itself.
+
 ## Decisions
 
 - [ADR 0001: Builder And Critic Roles](adr/0001-builder-and-critic-roles.md)

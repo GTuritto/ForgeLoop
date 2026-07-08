@@ -9,6 +9,8 @@ is not a coding agent and not yet an executable harness.
   files such as `AGENTS.md` or `CLAUDE.md`.
 - `Full workflow`: the long reference guide in
   `AI-Assisted-Development-Workflow.md`.
+- `Roadmap / Master Plan`: the project-level sequencing document above phase
+  plans, User Stories, vertical slices, and tasks.
 - `Builder agent`: the tool that edits the repository, runs commands, and
   prepares branches, commits, and PR-ready work.
 - `Critic agent`: the tool or pass that reviews plans, architecture, diffs,
@@ -28,5 +30,6 @@ is not a coding agent and not yet an executable harness.
 
 - `README.md`: project entrypoint and usage guide.
 - `AI-Assisted-Development-Workflow.md`: canonical workflow reference.
+- `docs/09-development-plan.md`: future Roadmap / Master Plan location.
 - `docs/00-index.md`: documentation map.
 - `docs/adr/0001-builder-and-critic-roles.md`: role-separation decision.
