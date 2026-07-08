@@ -37,50 +37,9 @@ Use this guide by entry point:
 
 ## ForgeLoop Core
 
-ForgeLoop Core is the loadable spine. Paste it into `AGENTS.md`, `CLAUDE.md`,
-or another project instruction file when a repo needs the workflow but not the
-whole reference guide.
-
-```md
-# ForgeLoop Core
-
-Use repository evidence before chat memory.
-
-Source-of-truth order:
-1. Current code, tests, and Git state.
-2. Approved phase plan or brownfield feature plan.
-3. Behavior specs, OpenSpecs if used, and BDD scenarios.
-4. ADRs and architecture notes.
-5. Product, technical, QA, manual test, integration test, and Roadmap / Master
-   Plan docs.
-6. README and project status.
-7. Agent chat history or memory.
-
-Core loop:
-Idea -> Documents -> Decisions -> Roadmap / Master Plan
-     -> Behavior Spec -> Phase Plan -> Branch -> Tests -> Code
-     -> Smoke Test -> PR -> Merge
-
-Rules:
-- classify work as greenfield, brownfield, or maintenance,
-- choose the execution mode: Docs-only, Mechanical, Low-risk, Standard,
-  Strict, or Release-critical,
-- choose the tool mode: Single-tool, Multi-tool, or Human-plus-tool,
-- prepare or update the plan before implementation,
-- stop for human approval at required gates,
-- implement one sub-phase, story, or vertical slice at a time,
-- run the required verification before continuing,
-- update docs, diagrams, specs, ADRs, and handoff notes when behavior changes,
-- review the diff against the approved plan and current repo evidence,
-- commit, push, open PRs, archive, and merge only after explicit approval.
-
-Commits and PRs must explain both:
-- what changed,
-- why the change was made.
-```
-
-Treat the rest of this document as the reference library. Reach for the deeper
-sections only when the project needs them.
+The loadable spine lives in [FORGELOOP_CORE.md](FORGELOOP_CORE.md). Agents
+should read that file by default and use this long workflow as a reference
+library.
 
 ## Project Tier Selector
 

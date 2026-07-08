@@ -28,6 +28,7 @@ is not a coding agent and not yet an executable harness.
 
 ## Current Canonical Files
 
+- `FORGELOOP_CORE.md`: compact agent-loading layer.
 - `README.md`: project entrypoint and usage guide.
 - `AI-Assisted-Development-Workflow.md`: canonical workflow reference.
 - `docs/09-development-plan.md`: future Roadmap / Master Plan location.

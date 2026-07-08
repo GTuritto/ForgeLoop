@@ -55,7 +55,7 @@ For a new or existing project:
 
 ForgeLoop Core is the paste-in spine for `AGENTS.md`, `CLAUDE.md`, or another
 project instruction file. The canonical copy lives in
-[AI-Assisted-Development-Workflow.md](AI-Assisted-Development-Workflow.md#forgeloop-core).
+[FORGELOOP_CORE.md](FORGELOOP_CORE.md).
 
 Use the Core when you need the reusable non-negotiables: source-of-truth order,
 phase loop, approval gates, execution modes, tool modes, and the rule that
@@ -65,22 +65,26 @@ Use the full workflow when the project needs deeper rules for brownfield work,
 QA, diagrams, OpenSpec, Kaddo, User Stories, single-tool review, or PR
 preparation.
 
+## Token Loading Strategy
+
+Agents should not load the full workflow by default.
+
+Default load:
+
+1. `FORGELOOP_CORE.md`
+2. `CONTEXT.md`
+3. `docs/00-index.md`
+4. the current Roadmap / Master Plan, phase plan, behavior spec, ADR, or test
+   plan relevant to the task
+
+Load [AI-Assisted-Development-Workflow.md](AI-Assisted-Development-Workflow.md)
+only when the task needs the reference rules. Load `README.md` when the agent
+needs project orientation beyond the Core and index.
+
 ## Project Tier Selector
 
-Choose the smallest tier that fits the project.
-
-- `Throwaway/script`: disposable, local, or exploratory work.
-  Use ForgeLoop Core only. Add tests only when risk justifies them.
-- `Real project`: a repo that should be maintained, resumed, or handed to
-  agents later. Use Core plus README, `AGENTS.md`, `CONTEXT.md`, a phase or
-  feature plan, tests, and basic QA notes.
-- `Productized/SaaS`: projects with users, auth, data, payments,
-  integrations, or production risk. Use the full startup pack, phase plans,
-  behavior specs, ADRs, QA plans, manual and integration test plans, diagrams,
-  PR discipline, and regression evidence.
-
-Do not force the full pack onto small work. Do not use the small-work tier to
-avoid controls when data, users, security, or production behavior are at risk.
+Choose the smallest tier that fits the project. The canonical tier definitions
+live in [FORGELOOP_CORE.md](FORGELOOP_CORE.md#project-tiers).
 
 ### Loading The Workflow Into Tools
 
@@ -95,6 +99,9 @@ For Codex, add or update the target repo's `AGENTS.md`:
 Follow ForgeLoop for docs-first, phase-gated development.
 Read the repo's README, CONTEXT.md, phase plans, behavior specs, ADRs,
 diagrams, tests, and current Git state before implementation.
+
+For normal tasks, load FORGELOOP_CORE.md first. Use the full workflow only
+when the Core does not answer the process question.
 
 Do not implement before the required plan or approval gate.
 Do not commit, push, open a PR, merge, or archive unless Giuseppe explicitly
