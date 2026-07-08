@@ -1,9 +1,10 @@
 # AI-Assisted Development Workflow
 
 This guide defines Giuseppe's standard workflow for building projects with VS
-Code, Codex, Claude Code, GitHub, [OpenSpec][openspec], Knowledge Driven
-Development, Behaviour Driven Development, [Kaddo][kaddo], tests, Mermaid
-diagrams, and local Docker development.
+Code, Codex, Claude Code, GitHub, behavior specs, Knowledge Driven Development,
+Behaviour Driven Development, tests, Mermaid diagrams, and local Docker
+development. Tools such as [OpenSpec][openspec] and [Kaddo][kaddo] can support
+the workflow, but they are not hard requirements.
 
 ## Core Rule
 
@@ -11,12 +12,12 @@ Do not start from vibes, loose chat history, or an agent's memory. Start from
 the current repository state:
 
 ```txt
-Idea -> Documents -> Decisions -> Roadmap -> OpenSpec -> Phase Plan
+Idea -> Documents -> Decisions -> Roadmap -> Behavior Spec -> Phase Plan
      -> Branch -> Tests -> Code -> Smoke Test -> PR -> Merge
 ```
 
-The source of truth is always the repo: docs, OpenSpecs, ADRs, current code,
-tests, and Git state.
+The source of truth is always the repo: docs, behavior specs, ADRs, current
+code, tests, and Git state.
 
 ## Workflow Spec Versus Harness
 
@@ -85,15 +86,15 @@ Use it for:
 
 - keeping the active repo visible,
 - reviewing diffs,
-- reading docs and OpenSpecs side by side,
+- reading docs and behavior specs side by side,
 - running terminals,
 - observing Docker logs,
 - comparing Codex and Claude Code outputs,
 - running manual smoke tests.
 
 VS Code is not the source of truth. Useful notes from editor tabs, terminals,
-or chats must be moved into the right artifact: phase plan, OpenSpec, ADR,
-`CONTEXT.md`, README, or review log.
+or chats must be moved into the right artifact: phase plan, behavior spec,
+ADR, `CONTEXT.md`, README, or review log.
 
 ### Codex
 
@@ -171,7 +172,7 @@ Use Kaddo for:
 - knowledge drift checks,
 - agent handoff context.
 
-Kaddo does not replace OpenSpecs, phase plans, tests, GitHub PRs, or human
+Kaddo does not replace behavior specs, phase plans, tests, GitHub PRs, or human
 review.
 
 ## Required Startup Documents
@@ -216,10 +217,75 @@ Every serious project should start with these files.
 - `docs/16-project-knowledge-brief.md`: condensed orientation for agents.
 - `docs/17-development-workflow.md`: branch, phase, testing, manual QA, PR
   process.
-- `docs/18-openspec-kdd-bdd.md`: OpenSpecs, KDD, BDD, traceability.
+- `docs/18-openspec-kdd-bdd.md`: behavior specs, KDD, BDD, traceability.
 - `docs/19-local-docker-development.md`: Docker-local development contract.
 - `docs/templates/phase-plan-template.md`: phase-plan template.
 - `docs/phases/README.md`: approved phase plans.
+
+### Diagrams
+
+Every serious project should include Mermaid diagrams under:
+
+```txt
+docs/diagrams/
+  architecture.md
+  data-structure.md
+  data-flow.md
+  process-flows.md
+  sequences.md
+```
+
+Required diagram types:
+
+- architecture diagrams,
+- data structure diagrams,
+- data flow diagrams,
+- process flow diagrams,
+- sequence diagrams.
+
+Diagrams must evolve as the project advances. Future-state diagrams must be
+labeled as future-state.
+
+### ADRs
+
+ADRs live under:
+
+```txt
+docs/adr/
+```
+
+Create an ADR only when a decision is:
+
+- hard to reverse,
+- surprising without context,
+- the result of a real tradeoff.
+
+### Behavior Specs And OpenSpecs
+
+Behavior specs define behavior before implementation. A project may use
+OpenSpec for this contract, or plain Markdown specs when OpenSpec is not
+available.
+
+Recommended OpenSpec structure:
+
+```txt
+openspec/
+  README.md
+  changes/<change-id>/
+    proposal.md
+    design.md
+    spec.md
+    tasks.md
+```
+
+Small projects can use phase-scoped Markdown specs:
+
+```txt
+openspec/phase-N-short-name/
+  spec.md
+  scenarios.md
+  contracts.md
+```
 
 ## First-Class Planning Artifacts
 
@@ -276,7 +342,7 @@ before implementation.
 ## User Stories
 
 User Stories are useful execution units inside the phase workflow. They should
-not replace product docs, OpenSpecs, ADRs, phase plans, tests, or code.
+not replace product docs, behavior specs, ADRs, phase plans, tests, or code.
 
 Use User Stories when they help:
 
@@ -295,7 +361,7 @@ Every executable User Story should include:
 - business value,
 - acceptance criteria,
 - linked roadmap item,
-- linked OpenSpec or behavior spec,
+- linked behavior spec or OpenSpec if used,
 - affected domain and modules,
 - risk level,
 - selected execution mode,
@@ -305,8 +371,111 @@ Every executable User Story should include:
 - PR or branch linkage.
 
 Do not let a User Story stand alone as the source of truth. If it conflicts
-with OpenSpecs, ADRs, current code, tests, or the approved phase plan, stop and
-resolve the conflict before implementation.
+with behavior specs, ADRs, current code, tests, or the approved phase plan,
+stop and resolve the conflict before implementation.
+
+## User Story Delivery Lane
+
+When a phase is implemented through User Stories, use a concrete delivery lane
+inside the broader phase workflow.
+
+```txt
+Select User Story -> SDD/Behavior Spec -> Human Gate -> Contract Freeze
+     -> TDD RED -> Implementation -> QA -> Code Review -> Docs
+     -> Human Gate -> Archive/PR Prep
+```
+
+This lane is useful when the phase plan contains several independent stories
+and the team wants one repeatable execution cycle per story.
+
+### Delivery Steps
+
+1. **Select User Story**: choose the next ready story from the approved roadmap
+   or backlog. Check dependencies and risk before work starts.
+2. **SDD/Behavior Spec**: create or update the behavior spec, acceptance
+   criteria, design notes, and task list. Use OpenSpec when the project uses
+   it.
+3. **Human Gate After Spec**: stop until the user approves scope, behavior,
+   open decisions, and test depth.
+4. **Contract Freeze**: if the story touches an API, schema, event, command, or
+   provider boundary, freeze the contract before implementation.
+5. **TDD RED**: write the failing tests first. Verify they fail for the right
+   reason, not because of setup errors.
+6. **Implementation**: implement the smallest code path that turns the approved
+   tests green. Parallelize backend and frontend only after contracts freeze.
+7. **QA**: run the selected test ladder, including integration, smoke, manual,
+   and regression checks required by the execution mode.
+8. **Code Review**: run an adversarial review against the story, behavior spec,
+   architecture, tests, security constraints, and docs.
+9. **Docs**: update technical docs, diagrams, behavior specs, ADRs, phase status,
+   and execution evidence.
+10. **Human Gate Before PR**: stop again for final user approval before archive,
+    push, or PR.
+11. **Archive/PR Prep**: archive the completed spec/change when the project
+    uses that pattern, then prepare the PR notes. Push or open the PR only after
+    explicit user approval.
+
+### Story Agent Roles
+
+A User Story lane may use specialized agent roles:
+
+- `harness-orchestrator`: selects the story, checks dependencies, tracks gates,
+  and collects the final report.
+- `spec-author`: writes the SDD or behavior spec artifacts and task list.
+- `contract-engineer`: updates contracts, schemas, SDKs, DTOs, or API specs.
+- `tdd-engineer`: writes failing tests before implementation.
+- `backend-developer`: implements backend behavior within approved contracts.
+- `frontend-developer`: implements frontend behavior within approved contracts.
+- `qa-verifier`: runs the selected QA plan and records evidence.
+- `code-reviewer`: returns `APTO` or `NO APTO` with blocking findings.
+- `docs-keeper`: synchronizes docs, diagrams, specs, and status.
+
+These are roles, not mandatory tools. One agent can perform several roles if
+the task is small.
+
+### Story Artifacts
+
+Each story execution should record the artifacts it produces:
+
+- selected User Story and dependency check,
+- proposal or behavior spec,
+- design notes,
+- task list,
+- contract or schema changes,
+- failing test evidence,
+- implementation commits or file list,
+- QA report,
+- code-review verdict,
+- docs and diagram updates,
+- final human approval,
+- archive or PR notes.
+
+### Hard Gates
+
+Use hard gates for risky story work:
+
+- after SDD/behavior spec, before implementation,
+- after contract freeze, before backend/frontend parallel work,
+- after QA and code review, before archive or PR.
+
+The code-review gate must produce a clear verdict:
+
+- `APTO`: the story can move to final human approval.
+- `NO APTO`: the story returns to implementation or planning.
+
+Do not archive a story, push a branch, or open a PR for a story with a
+`NO APTO` verdict.
+
+### Parallel Work
+
+Parallelize only when dependencies are explicit:
+
+- backend and frontend may run in parallel after contract freeze,
+- docs and code review may run in parallel after implementation,
+- QA must wait for the relevant implementation path and test data to exist.
+
+If parallel work creates conflicting changes, stop and let the orchestrator
+resolve the conflict before continuing.
 
 ## Adaptive Execution Modes
 
@@ -359,19 +528,26 @@ These are reusable capabilities the harness should eventually invoke.
 - `grill-me-with-docs`: challenge plans against repo evidence and ask blocking
   questions.
 - `phase-plan-generator`: create phase plans from the template.
-- `openspec-author`: create or update behavior specs, scenarios, contracts, and
-  acceptance criteria.
+- `behavior-spec-author`: create or update behavior specs, scenarios,
+  contracts, and acceptance criteria.
 - `bdd-scenario-writer`: convert expected behavior into Given/When/Then
   scenarios.
+- `user-story-selector`: choose the next ready User Story from the approved
+  roadmap or backlog.
+- `contract-engineer`: freeze API, schema, SDK, DTO, event, or provider
+  contracts before implementation.
+- `tdd-engineer`: write failing tests and verify they fail for the right reason
+  before implementation.
 - `implementation-planner`: break approved work into smallest coherent
   sub-phases.
 - `subphase-implementer`: implement one approved sub-phase at a time.
+- `story-orchestrator`: track a User Story lane from selection through PR.
 - `test-strategy-selector`: select required tests from risk and execution mode.
 - `qa-runner`: run verification, report failures, and classify blockers.
 - `adversarial-code-reviewer`: review implementation against specs,
   architecture, tests, security, and docs.
-- `docs-alignment-reviewer`: check README, docs, OpenSpecs, ADRs, diagrams, and
-  phase plans.
+- `docs-alignment-reviewer`: check README, docs, behavior specs, ADRs,
+  diagrams, and phase plans.
 - `diagram-maintainer`: maintain Mermaid architecture, data, flow, process, and
   sequence diagrams.
 - `telemetry-reporter`: capture time, tokens, retries, tests, defects,
@@ -381,7 +557,7 @@ These are reusable capabilities the harness should eventually invoke.
 
 ### Supporting Tools
 
-- OpenSpec: behavior specs and acceptance criteria.
+- OpenSpec: optional behavior specs and acceptance criteria.
 - Kaddo: optional Knowledge Driven Development support and drift checks.
 - GitHub CLI: branches, PRs, checks, and review surface.
 - Mermaid: living diagrams.
@@ -389,69 +565,6 @@ These are reusable capabilities the harness should eventually invoke.
 
 Project-specific `AGENTS.md`, `CLAUDE.md`, and `docs/` files decide which tools
 are mandatory for that repository.
-
-### Diagrams
-
-Every serious project should include Mermaid diagrams under:
-
-```txt
-docs/diagrams/
-  architecture.md
-  data-structure.md
-  data-flow.md
-  process-flows.md
-  sequences.md
-```
-
-Required diagram types:
-
-- architecture diagrams,
-- data structure diagrams,
-- data flow diagrams,
-- process flow diagrams,
-- sequence diagrams.
-
-Diagrams must evolve as the project advances. Future-state diagrams must be
-labeled as future-state.
-
-### ADRs
-
-ADRs live under:
-
-```txt
-docs/adr/
-```
-
-Create an ADR only when a decision is:
-
-- hard to reverse,
-- surprising without context,
-- the result of a real tradeoff.
-
-### OpenSpecs
-
-OpenSpecs define behavior before implementation.
-
-Recommended structure:
-
-```txt
-openspec/
-  README.md
-  changes/<change-id>/
-    proposal.md
-    design.md
-    spec.md
-    tasks.md
-```
-
-Small projects can use phase-scoped OpenSpecs:
-
-```txt
-openspec/phase-N-short-name/
-  spec.md
-  scenarios.md
-  contracts.md
-```
 
 ## Architecture Defaults
 
@@ -485,7 +598,7 @@ Microservices require an ADR explaining:
 4. Create the startup document pack.
 5. Define canonical terms in `CONTEXT.md`.
 6. Add initial ADRs for hard-to-reverse decisions.
-7. Create OpenSpec root.
+7. Create behavior spec root, using OpenSpec only when the project chooses it.
 8. Create diagram folder and starter diagrams.
 9. Create development workflow docs.
 10. Create phase-plan template.
@@ -533,7 +646,7 @@ Codex reads:
 - `CONTEXT.md`,
 - relevant docs,
 - relevant ADRs,
-- relevant OpenSpecs,
+- relevant behavior specs,
 - diagrams,
 - current code,
 - current tests,
@@ -562,7 +675,7 @@ Before a phase plan is approved, run **Grill Me With Docs**.
 
 Rules:
 
-- challenge the plan against `CONTEXT.md`, ADRs, OpenSpecs, docs, diagrams,
+- challenge the plan against `CONTEXT.md`, ADRs, behavior specs, docs, diagrams,
   current code, and tests,
 - ask one question at a time,
 - provide a recommended answer for every question,
@@ -593,7 +706,8 @@ The plan must include:
 - tasks per sub-phase,
 - User Stories if used,
 - selected execution mode,
-- OpenSpec changes,
+- User Story delivery lane if used,
+- behavior spec changes,
 - Kaddo notes if used,
 - KDD notes,
 - BDD scenarios,
@@ -606,14 +720,16 @@ The plan must include:
 - diagram updates,
 - manual test handoff,
 - test evidence required,
+- story artifacts and gates if using User Stories,
 - exit criteria,
 - risks and deferred work.
 
 No implementation before user approval.
 
-### 7. Create Or Update OpenSpecs
+### 7. Create Or Update Behavior Specs
 
-OpenSpecs are the behavior contract.
+Behavior specs are the behavior contract. Use OpenSpec when the project uses
+it; otherwise use Markdown specs with the same intent.
 
 Define:
 
@@ -625,8 +741,8 @@ Define:
 - BDD scenarios,
 - acceptance criteria.
 
-Use OpenSpecs for observable behavior changes. Skip only for trivial docs-only
-or mechanical changes.
+Use behavior specs for observable behavior changes. Skip only for trivial
+docs-only or mechanical changes.
 
 ### 8. User Approval Gate
 
@@ -635,6 +751,7 @@ Approval means:
 - scope is correct,
 - sub-phases are acceptable,
 - execution mode is acceptable,
+- User Story delivery lane is acceptable if used,
 - testing plan is sufficient,
 - manual test plan is sufficient,
 - diagram plan is sufficient,
@@ -651,7 +768,7 @@ For each sub-phase:
 2. Re-check `git status`.
 3. Gather full context before editing:
    - phase plan,
-   - OpenSpecs,
+   - behavior specs,
    - `CONTEXT.md`,
    - ADRs,
    - docs,
@@ -663,7 +780,7 @@ For each sub-phase:
 5. Implement the smallest coherent unit.
 6. Add or update tests.
 7. Run the sub-phase test suite until green.
-8. Update docs, OpenSpecs, and diagrams if behavior changed.
+8. Update docs, behavior specs, and diagrams if behavior changed.
 9. Review the diff.
 
 Do not continue to the next sub-phase while the current one has failing tests,
@@ -687,17 +804,14 @@ Add when relevant:
 - AI eval fixtures for LLM behavior,
 - security tests for tenant boundaries and secret handling.
 
-Every non-trivial phase must define a phase QA plan:
+Every non-trivial phase must define a phase QA plan with:
 
-```txt
-## Phase QA Plan
-### Unit Test Plan
-### Integration Test Plan
-### Smoke Test Plan
-### Manual Test Plan
-### Regression Test Plan
-### Test Evidence Required
-```
+- unit test plan,
+- integration test plan,
+- smoke test plan,
+- manual test plan,
+- regression test plan,
+- test evidence required.
 
 ### Integration Test Plan
 
@@ -784,7 +898,7 @@ Required updates:
 - what was deferred,
 - known issues,
 - README alignment,
-- OpenSpecs alignment,
+- behavior specs alignment,
 - Mermaid diagrams aligned with current architecture and behavior,
 - ADRs for new hard-to-reverse decisions,
 - `CONTEXT.md` if domain language changed,
@@ -799,7 +913,7 @@ The docs must answer:
 - What changed from the previous state?
 - What remains incomplete or deferred?
 - Is the README accurate?
-- Are OpenSpecs, ADRs, phase plans, and diagrams aligned?
+- Are behavior specs, ADRs, phase plans, and diagrams aligned?
 
 Do not close a phase if docs describe an older project state.
 
@@ -846,6 +960,8 @@ Tests run:
 Tests passing:
 Defects found by QA:
 Defects found by review:
+Agent roles used:
+Parallel steps:
 Docs updated:
 Diagrams updated:
 Artifacts changed:
@@ -873,7 +989,7 @@ PR must include:
 - project status updated,
 - diagram updates,
 - manual test notes,
-- OpenSpecs updated,
+- behavior specs updated,
 - Kaddo notes if used,
 - execution report,
 - risks and deferred work.
@@ -983,7 +1099,7 @@ Rules:
 - do not let Kaddo overwrite `AGENTS.md` or `CLAUDE.md` without review,
 - map approved phase plans to Kaddo Work Items if useful,
 - use Kaddo Guard as a drift signal, not as a test replacement,
-- keep OpenSpecs as the behavior source of truth.
+- keep behavior specs as the behavior source of truth.
 - when Kaddo is unavailable, use Markdown docs and manual drift checks.
 
 Recommended cadence:
@@ -1034,28 +1150,29 @@ The objective should include:
 
 ### Recommended Multi-Agent Phase Flow
 
-1. Use Codex to prepare the phase plan and OpenSpecs.
+1. Use Codex to prepare the phase plan and behavior specs.
 2. Review the plan in VS Code.
 3. Send the phase plan to Claude Code for adversarial critique.
 4. Decide which Claude Code feedback is accepted.
 5. Use Codex to update the phase plan and docs.
 6. Approve the phase plan.
 7. Classify task risk and select the execution mode.
-8. Use Codex to gather full context at each sub-phase start.
-9. Use Codex to implement one sub-phase at a time.
-10. Require the sub-phase test suite to pass green before continuing.
-11. Use Claude Code for review after meaningful milestones or before PR.
-12. Use Codex to apply accepted fixes and run verification.
-13. At phase end, run current phase tests plus previous phase regressions.
-14. Update project documentation and diagrams before phase close.
-15. Produce the execution report.
-16. Use VS Code for manual smoke testing.
-17. Use GitHub PR as the final review record only after the user says it is
+8. Use the User Story delivery lane when the phase is story-driven.
+9. Use Codex to gather full context at each sub-phase or story start.
+10. Use Codex to implement one sub-phase or story step at a time.
+11. Require the relevant test suite to pass green before continuing.
+12. Use Claude Code for review after meaningful milestones or before PR.
+13. Use Codex to apply accepted fixes and run verification.
+14. At phase end, run current phase tests plus previous phase regressions.
+15. Update project documentation and diagrams before phase close.
+16. Produce the execution report.
+17. Use VS Code for manual smoke testing.
+18. Use GitHub PR as the final review record only after the user says it is
     ready.
 
 ### Conflict Rules
 
-- If Codex and Claude Code disagree, repo docs, OpenSpecs, ADRs, current code,
+- If Codex and Claude Code disagree, repo docs, behavior specs, ADRs, current code,
   and tests win over chat memory.
 - If docs are unclear, update docs before implementation.
 - If both agents propose different architectures, capture the tradeoff in the
@@ -1164,12 +1281,14 @@ relevant ADRs.
 Prepare Phase N only.
 Classify the phase risk and select the execution mode.
 Create docs/phases/phase-N-short-name.md from the phase plan template.
-Create or update OpenSpecs and Mermaid diagrams for this phase.
+If the phase is delivered through User Stories, include the User Story delivery
+lane, hard gates, agent roles, parallel steps, and expected story artifacts.
+Create or update behavior specs and Mermaid diagrams for this phase.
 Include KDD notes, BDD scenarios, Docker commands, unit tests, smoke test,
 integration test plan, manual test plan, regression test plan, manual test
 handoff, test evidence, exit criteria, risks, and out-of-scope items.
 
-Run a Grill Me With Docs pass against CONTEXT.md, ADRs, OpenSpecs, diagrams,
+Run a Grill Me With Docs pass against CONTEXT.md, ADRs, behavior specs, diagrams,
 docs, and source code.
 Ask one blocking question at a time and provide your recommended answer.
 
@@ -1181,14 +1300,14 @@ Do not implement until I approve the plan.
 ```txt
 Implement Phase N, Sub-Phase X from the approved plan.
 Set this as the active goal for the agent.
-Before editing, inspect git status, docs, OpenSpecs, diagrams, tests, nearby
+Before editing, inspect git status, docs, behavior specs, diagrams, tests, nearby
 code, and the full source context relevant to this sub-phase.
 Resolve all blocking questions before implementation.
 Confirm the selected execution mode and required verification.
 Keep changes scoped.
 Add or update tests.
 Run the sub-phase Docker-local verification until green.
-Update docs, OpenSpecs, and diagrams if behavior changed.
+Update docs, behavior specs, and diagrams if behavior changed.
 Report changed files, tests run, smoke-test status, unresolved issues, proposed
 solutions, execution telemetry, and residual risk.
 Do not push, open a PR, or merge unless I explicitly say we are ready.
@@ -1197,7 +1316,7 @@ Do not push, open a PR, or merge unless I explicitly say we are ready.
 ### Review
 
 ```txt
-Review the current branch against the approved phase plan, OpenSpecs, diagrams,
+Review the current branch against the approved phase plan, behavior specs, diagrams,
 ADRs, technical requirements, and tests.
 Lead with bugs, missing tests, architecture drift, security issues, and behavior
 that does not match the spec.
@@ -1220,7 +1339,7 @@ Phase 0 should usually deliver:
 - unit test harness,
 - smoke test,
 - CI skeleton,
-- OpenSpec root,
+- behavior spec root or OpenSpec root if used,
 - starter diagrams,
 - phase plan,
 - docs linked from README.
@@ -1295,7 +1414,7 @@ A project is ready to start implementation when:
 - hard decisions have ADRs,
 - development workflow is documented,
 - Docker-local rule is documented,
-- OpenSpecs convention exists,
+- behavior spec convention exists,
 - starter Mermaid diagrams exist or are explicitly deferred,
 - Phase 0 plan is drafted,
 - Phase 0 testing plan exists,
@@ -1312,7 +1431,7 @@ A phase is done when:
 - out-of-scope items stayed out,
 - docs match behavior,
 - README and project status reflect the current phase,
-- OpenSpecs match behavior,
+- behavior specs match behavior,
 - diagrams match behavior,
 - phase plan status is updated,
 - KDD notes are updated,

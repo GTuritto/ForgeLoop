@@ -51,7 +51,7 @@ project context:
 
 1. Current code, tests, and Git state.
 2. Approved phase plan.
-3. OpenSpecs and BDD scenarios.
+3. Behavior specs, OpenSpecs if used, and BDD scenarios.
 4. ADRs and architecture notes.
 5. Product, technical, QA, and roadmap documents.
 6. README and project status.
@@ -82,7 +82,7 @@ document the substitution.
 ## Core Workflow
 
 ```txt
-Idea -> Documents -> Decisions -> Roadmap -> OpenSpec -> Phase Plan
+Idea -> Documents -> Decisions -> Roadmap -> Behavior Spec -> Phase Plan
      -> Branch -> Tests -> Code -> Smoke Test -> PR -> Merge
 ```
 
@@ -91,7 +91,7 @@ Each phase follows the same gates:
 1. Read the repo.
 2. Run a Grill Me With Docs pass.
 3. Create or update the phase plan.
-4. Create or update OpenSpecs and BDD scenarios.
+4. Create or update behavior specs and BDD scenarios.
 5. Wait for user approval.
 6. Implement one sub-phase at a time.
 7. Run the required verification.
@@ -139,14 +139,26 @@ document pack. They must be easy to find before implementation starts.
 
 User Stories can be execution units inside the workflow, but they are not the
 source of truth by themselves. A User Story should link back to the relevant
-roadmap item, OpenSpec, acceptance criteria, architecture notes, tests, and
+roadmap item, behavior spec, acceptance criteria, architecture notes, tests, and
 phase plan.
+
+When a phase is delivered through User Stories, ForgeLoop should use a concrete
+delivery lane:
+
+```txt
+Select User Story -> SDD/Behavior Spec -> Human Gate -> Contract Freeze
+     -> TDD RED -> Implementation -> QA -> Code Review -> Docs
+     -> Human Gate -> Archive/PR Prep
+```
+
+This lane gives each User Story clear roles, artifacts, gates, timing, and test
+evidence while preserving the broader phase workflow.
 
 ## Documentation Map
 
 - [AI-Assisted-Development-Workflow.md](AI-Assisted-Development-Workflow.md):
-  canonical workflow, gates, tool roles, testing ladder, Kaddo usage, and
-  definitions of ready and done.
+  canonical workflow, gates, tool roles, testing ladder, KDD guidance,
+  optional Kaddo usage, and definitions of ready and done.
 - [README.md](README.md): project entrypoint and summary of how to use the
   workflow.
 
