@@ -9,6 +9,9 @@ is not a coding agent and not yet an executable harness.
   files such as `AGENTS.md` or `CLAUDE.md`.
 - `Full workflow`: the long reference guide in
   `AI-Assisted-Development-Workflow.md`.
+- `Canonical concept home`: the file that owns the current definition of a
+  repeated workflow concept. Other files should link to it instead of carrying
+  competing definitions.
 - `Roadmap / Master Plan`: the project-level sequencing document above phase
   plans, User Stories, vertical slices, and tasks.
 - `Builder agent`: the tool that edits the repository, runs commands, and

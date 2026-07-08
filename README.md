@@ -50,6 +50,21 @@ pack that future skills or automation should implement.
 Use ForgeLoop as a source workflow, then adapt the minimum useful parts into
 the target repo. Do not copy the full reference document into every project.
 
+### Concept Authority
+
+Use one canonical home for each concept:
+
+- Loading order, source-of-truth order, project tiers, execution modes, tool
+  modes, and commit/PR rule: [FORGELOOP_CORE.md](FORGELOOP_CORE.md).
+- Detailed workflow rules, gates, optional tools, brownfield flow, testing
+  ladder, and prompts:
+  [AI-Assisted-Development-Workflow.md](AI-Assisted-Development-Workflow.md).
+- Repo glossary and current canonical file list: [CONTEXT.md](CONTEXT.md).
+- Documentation navigation and template inventory:
+  [docs/00-index.md](docs/00-index.md).
+- ForgeLoop's own roadmap and phase sequencing:
+  [docs/09-development-plan.md](docs/09-development-plan.md).
+
 ### Default Agent Load
 
 For most tasks, load only:
@@ -74,21 +89,12 @@ answer the process question.
    - ADRs for hard-to-reverse decisions
    - behavior specs for user-visible behavior
    - QA, integration, smoke, manual, and regression test plans as needed
-3. Choose the project tier:
-   - `Throwaway/script`: Core only.
-   - `Real project`: Core plus minimal docs and plans.
-   - `Productized/SaaS`: full workflow pack and stricter gates.
-4. Choose the execution mode:
-   - `Docs-only`
-   - `Mechanical`
-   - `Low-risk`
-   - `Standard`
-   - `Strict`
-   - `Release-critical`
-5. Prepare the plan before implementation.
-6. Stop for approval at the required gate.
-7. Implement in small slices.
-8. Record evidence in an execution report or PR description.
+3. Choose the project tier and execution mode from
+   [FORGELOOP_CORE.md](FORGELOOP_CORE.md).
+4. Prepare the plan before implementation.
+5. Stop for approval at the required gate.
+6. Implement in small slices.
+7. Record evidence in an execution report or PR description.
 
 ### Use With One Tool Or Many
 
@@ -157,28 +163,14 @@ the stricter templates:
 
 ## Template Pack
 
-Use the templates as starting points, not as paperwork to fill blindly.
-
-- `master-plan-template.md`: roadmap and phase strategy.
-- `phase-plan-template.md`: scoped phase plan with QA expectations.
-- `brownfield-feature-plan-template.md`: existing-code feature plan.
-- `behavior-spec-template.md`: behavior and acceptance criteria.
-- `qa-plan-template.md`: overall QA structure.
-- `integration-test-plan-template.md`: real boundary test plan.
-- `manual-test-plan-template.md`: human verification plan.
-- `execution-report-template.md`: evidence after work is completed.
-- `pr-description-template.md`: PR summary with what changed and why.
-- `architecture-plan-template.md`: architecture direction and constraints.
-- `adr-template.md`: durable decision record.
+Use the templates as starting points, not as paperwork to fill blindly. The
+canonical template inventory lives in [docs/00-index.md](docs/00-index.md).
 
 ## Commit And PR Standard
 
-Commits and PRs must explain both:
-
-- what changed,
-- why the change was made.
-
-The "why" matters because future agents will read the repo instead of the chat.
+Follow the commit and PR rule in [FORGELOOP_CORE.md](FORGELOOP_CORE.md). The
+short version: explain both what changed and why, because future agents will
+read the repo instead of the chat.
 
 ## Current Project Status
 
@@ -187,6 +179,7 @@ ForgeLoop is in prose-and-template evolution. The current work is focused on:
 - making the workflow easier to load with fewer tokens,
 - applying ForgeLoop to its own repo,
 - adding reusable templates before creating skills,
+- reducing duplicate definitions across entrypoint docs,
 - keeping optional tools such as OpenSpec and Kaddo supportive, not mandatory,
 - supporting brownfield projects as first-class cases.
 
