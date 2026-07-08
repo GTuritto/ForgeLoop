@@ -1,10 +1,10 @@
 # AI-Assisted Development Workflow
 
-This guide defines Giuseppe's standard workflow for building projects with VS
-Code, Codex, Claude Code, GitHub, behavior specs, Knowledge Driven Development,
-Behaviour Driven Development, tests, Mermaid diagrams, and local Docker
-development. Tools such as [OpenSpec][openspec] and [Kaddo][kaddo] can support
-the workflow, but they are not hard requirements.
+This guide defines Giuseppe's standard workflow for building projects with
+agent-capable coding tools, GitHub, behavior specs, Knowledge Driven
+Development, Behavior Driven Development, tests, Mermaid diagrams, and local
+Docker development. Tools such as Codex, Claude Code, OpenSpec, and Kaddo can
+support the workflow, but they are not hard requirements.
 
 ## Core Rule
 
@@ -18,6 +18,98 @@ Idea -> Documents -> Decisions -> Roadmap -> Behavior Spec -> Phase Plan
 
 The source of truth is always the repo: docs, behavior specs, ADRs, current
 code, tests, and Git state.
+
+## Navigation
+
+Use this guide by entry point:
+
+- load the workflow into a repo: ForgeLoop Core and Project Tier Selector,
+- decide how much process applies: Project Tier Selector and Adaptive Execution
+  Modes,
+- start a new repo: Full Startup Document Pack and Project Startup Checklist,
+- add work to an existing repo: Brownfield Feature Workflow,
+- run a phase: Canonical Phase Workflow,
+- deliver story-shaped work: User Story Delivery Lane,
+- verify work: Testing Ladder and Diagram Requirements,
+- prepare a PR: Pull Request, GitHub Rules, and Execution Report,
+- use optional tools: Optional OpenSpec Workflow and Optional Kaddo Workflow.
+
+## ForgeLoop Core
+
+ForgeLoop Core is the loadable spine. Paste it into `AGENTS.md`, `CLAUDE.md`,
+or another project instruction file when a repo needs the workflow but not the
+whole reference guide.
+
+```md
+# ForgeLoop Core
+
+Use repository evidence before chat memory.
+
+Source-of-truth order:
+1. Current code, tests, and Git state.
+2. Approved phase plan or brownfield feature plan.
+3. Behavior specs, OpenSpecs if used, and BDD scenarios.
+4. ADRs and architecture notes.
+5. Product, technical, QA, manual test, integration test, and roadmap docs.
+6. README and project status.
+7. Agent chat history or memory.
+
+Core loop:
+Idea -> Documents -> Decisions -> Roadmap -> Behavior Spec -> Phase Plan
+     -> Branch -> Tests -> Code -> Smoke Test -> PR -> Merge
+
+Rules:
+- classify work as greenfield, brownfield, or maintenance,
+- choose the execution mode: Docs-only, Mechanical, Low-risk, Standard,
+  Strict, or Release-critical,
+- choose the tool mode: Single-tool, Multi-tool, or Human-plus-tool,
+- prepare or update the plan before implementation,
+- stop for human approval at required gates,
+- implement one sub-phase, story, or vertical slice at a time,
+- run the required verification before continuing,
+- update docs, diagrams, specs, ADRs, and handoff notes when behavior changes,
+- review the diff against the approved plan and current repo evidence,
+- commit, push, open PRs, archive, and merge only after explicit approval.
+
+Commits and PRs must explain both:
+- what changed,
+- why the change was made.
+```
+
+Treat the rest of this document as the reference library. Reach for the deeper
+sections only when the project needs them.
+
+## Project Tier Selector
+
+Choose the project tier before deciding how much of ForgeLoop to apply.
+
+- `Throwaway/script`: disposable, local, or exploratory work.
+  Use ForgeLoop Core only. Add tests only when risk justifies them.
+- `Real project`: a repo that should be maintained, resumed, or handed to
+  agents later. Use Core plus README, `AGENTS.md`, `CONTEXT.md`, a phase or
+  feature plan, tests, and basic QA notes.
+- `Productized/SaaS`: projects with users, auth, data, payments,
+  integrations, or production risk. Use the full startup pack, phase plans,
+  behavior specs, ADRs, QA plans, manual and integration test plans, diagrams,
+  PR discipline, and regression evidence.
+
+Do not force the full pack onto small work. Do not use the small-work tier to
+avoid controls when data, users, security, or production behavior are at risk.
+
+## Rule Provenance Tags
+
+ForgeLoop itself should use Knowledge Driven Development. When adding or
+promoting a rule, tag its provenance so future agents know how hard to defend
+it under pressure.
+
+- `scar`: learned from real project pain. Keep unless the repo has strong
+  contrary evidence.
+- `pattern`: repeated useful practice. Use by default, but adapt to the repo.
+- `aspiration`: promising rule or future harness behavior. Keep optional until
+  tested in real work.
+
+Use provenance tags in templates, ADRs, workflow change notes, or section
+comments when a rule's authority matters. Do not tag every sentence.
 
 ## Workflow Spec Versus Harness
 
@@ -56,7 +148,7 @@ The document should mature through these stages:
    stable, such as phase plans, User Stories, manual QA handoffs, integration
    test plans, execution reports, and PR summaries.
 4. **Named skills**: turn repeatable judgment steps into skills, such as
-   pre-flight exploration, risk classification, Grill Me With Docs, docs
+   pre-flight exploration, risk classification, grill-with-docs, docs
    alignment, QA selection, adversarial review, and telemetry reporting.
 5. **Executable harness**: build a small runner that invokes the stable skills
    and templates, records gates, collects telemetry, and prepares handoff
@@ -96,11 +188,12 @@ VS Code is not the source of truth. Useful notes from editor tabs, terminals,
 or chats must be moved into the right artifact: phase plan, behavior spec,
 ADR, `CONTEXT.md`, README, or review log.
 
-### Codex
+### Builder Agent
 
-Codex is the execution agent.
+The builder agent is the tool that edits the repository. Codex is the default
+builder when available, but any capable tool can fill this role.
 
-Use Codex for:
+Use the builder agent for:
 
 - repository inspection,
 - docs-first planning,
@@ -112,17 +205,18 @@ Use Codex for:
 - branch, commit, and PR preparation,
 - code review and diff audits.
 
-Codex should produce the actual branch, files, tests, verification output, and
-PR-ready state.
+The builder agent should produce the actual branch, files, tests, verification
+output, and PR-ready state.
 
-Codex must not push, open a PR, merge, or push to `main` unless the user
-explicitly says the work is ready for that action.
+The builder agent must not commit, push, open a PR, merge, or push to `main`
+unless the user explicitly says the work is ready for that action.
 
-### Claude Code
+### Critic Agent
 
-Claude Code is the critic, design reviewer, and long-context reasoning partner.
+The critic agent reviews plans, architecture, diffs, and tradeoffs. Claude Code
+is the default critic when available, but any capable tool can fill this role.
 
-Use Claude Code for:
+Use the critic agent for:
 
 - architecture critique,
 - phase-plan review,
@@ -131,12 +225,12 @@ Use Claude Code for:
 - broad refactor analysis,
 - product and strategy stress-testing.
 
-Claude Code should produce review notes, questions, alternatives, or proposed
-plans. Codex applies accepted changes to the repo.
+The critic agent should produce review notes, questions, alternatives, or
+proposed plans. The builder agent applies accepted changes to the repo.
 
-Claude Code should not proceed from unclear objectives. If review raises
-blocking questions, answer them and update the phase plan before Codex
-implements.
+The critic agent should not proceed from unclear objectives. If review raises
+blocking questions, answer them and update the phase plan before the builder
+agent implements.
 
 ### Tool Availability Modes
 
@@ -234,15 +328,17 @@ OpenSpec does not replace product docs, ADRs, phase plans, tests, diagrams, or
 human approval. When OpenSpec is unavailable, use Markdown specs with the same
 behavior-contract intent.
 
-## Required Startup Documents
+## Full Startup Document Pack
 
-Every serious project should start with these files.
+Productized or long-lived projects should start with these files. Smaller
+projects should use the Project Tier Selector and create only the pack required
+for their risk level.
 
 ### Root Files
 
 - `README.md`: project summary, current state, setup, documentation map, first
   milestone.
-- `AGENTS.md`: Codex-facing repo instructions. Keep this repo-specific.
+- `AGENTS.md`: builder-agent repo instructions. Keep this repo-specific.
 - `CLAUDE.md` or `CODEX.md`: optional tool-specific guidance when needed.
 - `CONTEXT.md`: domain glossary only. No implementation plan or scratch notes.
 - `.gitignore`: ignores secrets, machine files, build output, local assistant
@@ -251,6 +347,7 @@ Every serious project should start with these files.
 
 ### Product And Build Documents
 
+- `docs/00-index.md`: documentation map and artifact ownership.
 - `docs/01-prd.md`: product requirements, users, scope, non-goals, metrics.
 - `docs/02-product-positioning.md`: category, buyer, wedge, competitors,
   messaging.
@@ -268,7 +365,7 @@ Every serious project should start with these files.
   hypothesis.
 - `docs/11-red-team-review.md`: product, architecture, security, and GTM
   criticism.
-- `docs/12-codex-build-guide.md`: Codex execution workflow.
+- `docs/12-agent-build-guide.md`: builder-agent execution workflow.
 - `docs/13-saas-readiness-checklist.md`: operational and launch gates when
   relevant.
 - `docs/14-document-review-log.md`: critique and revision history.
@@ -279,31 +376,20 @@ Every serious project should start with these files.
 - `docs/18-openspec-kdd-bdd.md`: behavior specs, KDD, BDD, traceability.
 - `docs/19-local-docker-development.md`: Docker-local development contract.
 - `docs/templates/phase-plan-template.md`: phase-plan template.
+- `docs/templates/execution-report-template.md`: execution report template.
 - `docs/phases/README.md`: approved phase plans.
 
 ### Diagrams
 
-Every serious project should include Mermaid diagrams under:
+Productized or architecture-sensitive projects should include Mermaid diagrams
+under:
 
 ```txt
 docs/diagrams/
-  architecture.md
-  data-structure.md
-  data-flow.md
-  process-flows.md
-  sequences.md
 ```
 
-Required diagram types:
-
-- architecture diagrams,
-- data structure diagrams,
-- data flow diagrams,
-- process flow diagrams,
-- sequence diagrams.
-
-Diagrams must evolve as the project advances. Future-state diagrams must be
-labeled as future-state.
+Use the Diagram Requirements section for the required diagram types and
+phase-end checks. Future-state diagrams must be labeled as future-state.
 
 ### ADRs
 
@@ -376,6 +462,7 @@ Use this placement by default:
 
 ```txt
 docs/
+  00-index.md                       # documentation map and artifact ownership
   03-architecture-decisions.md      # links to ADRs and architecture plan notes
   08-qa-plan.md                     # QA plan and release gates
   09-development-plan.md            # roadmap and phase order
@@ -393,6 +480,15 @@ docs/qa-plan.md
 docs/manual-test-plan.md
 docs/integration-test-plan.md
 ```
+
+Canonical ownership:
+
+- roadmap belongs in `docs/09-development-plan.md` unless split out,
+- architecture plan belongs in `docs/03-architecture-decisions.md` unless split
+  out,
+- ADRs live in `docs/adr/` and record only hard-to-reverse decisions,
+- QA plan belongs in `docs/08-qa-plan.md` unless split out,
+- manual and integration test plans live in the phase plan unless split out.
 
 Agents must read the relevant artifact before planning or coding. If an
 artifact is missing, stale, or contradictory, stop and update the documentation
@@ -486,7 +582,7 @@ A User Story lane may use specialized agent roles:
 - `backend-developer`: implements backend behavior within approved contracts.
 - `frontend-developer`: implements frontend behavior within approved contracts.
 - `qa-verifier`: runs the selected QA plan and records evidence.
-- `code-reviewer`: returns `APTO` or `NO APTO` with blocking findings.
+- `code-reviewer`: returns `Approved` or `Blocked` with blocking findings.
 - `docs-keeper`: synchronizes docs, diagrams, specs, and status.
 
 These are roles, not mandatory tools. One agent can perform several roles if
@@ -519,11 +615,11 @@ Use hard gates for risky story work:
 
 The code-review gate must produce a clear verdict:
 
-- `APTO`: the story can move to final human approval.
-- `NO APTO`: the story returns to implementation or planning.
+- `Approved`: the story can move to final human approval.
+- `Blocked`: the story returns to implementation or planning.
 
-Do not archive a story, push a branch, or open a PR for a story with a
-`NO APTO` verdict.
+Do not archive a story, commit, push a branch, or open a PR for a story with a
+`Blocked` verdict.
 
 ### Parallel Work
 
@@ -691,7 +787,7 @@ These are reusable capabilities the harness should eventually invoke.
   jobs, integrations, docs, and tests before brownfield implementation.
 - `task-risk-classifier`: choose Docs-only, Mechanical, Low-risk, Standard,
   Strict, or Release-critical mode.
-- `grill-me-with-docs`: challenge plans against repo evidence and ask blocking
+- `grill-with-docs`: challenge plans against repo evidence and ask blocking
   questions.
 - `phase-plan-generator`: create phase plans from the template.
 - `behavior-spec-author`: create or update behavior specs, scenarios,
@@ -856,7 +952,7 @@ codex/phase-2-sources
 
 ### 3. Analyze Phase
 
-Codex reads:
+The active agent reads:
 
 - `README.md`,
 - `AGENTS.md`,
@@ -886,9 +982,9 @@ Before writing the phase plan, classify the phase or task:
 If the selected mode is `Strict` or `Release-critical`, require explicit user
 approval before implementation.
 
-### 5. Grill Me With Docs Gate
+### 5. grill-with-docs Gate
 
-Before a phase plan is approved, run **Grill Me With Docs**.
+Before a phase plan is approved, run a **grill-with-docs** pass.
 
 Rules:
 
@@ -1206,6 +1302,8 @@ Open a GitHub Pull Request only after the user says the branch is ready for PR.
 
 PR must include:
 
+- what changed,
+- why the change was made,
 - phase summary,
 - sub-phases completed,
 - tests run,
@@ -1225,8 +1323,8 @@ that approval, keep PR notes local until the branch is approved for push.
 
 ### 16. Merge And Reset
 
-Never push a branch, open a PR, merge, or push to `main` until the user
-explicitly says the work is ready for that action.
+Never commit, push a branch, open a PR, merge, or push to `main` until the
+user explicitly says the work is ready for that action.
 
 After approval and merge:
 
@@ -1486,11 +1584,13 @@ session before final approval.
 - Use private repos for proprietary product work.
 - Branch from latest `main`.
 - Do not implement on `main`.
+- Commits must explain what changed and why.
+- PRs must explain what changed and why.
 - Use PRs as the review surface.
 - Require status checks once CI exists.
 - Merge only after phase exit criteria pass.
-- Never push, open a PR, or merge until the user explicitly says the work is
-  ready.
+- Never commit, push, open a PR, or merge until the user explicitly says the
+  work is ready.
 - Keep ignored local files out of commits.
 - Do not commit secrets, `.env`, assistant raw history, or local machine files.
 
@@ -1591,7 +1691,7 @@ Include KDD notes, BDD scenarios, Docker commands, unit tests, smoke test,
 integration test plan, manual test plan, regression test plan, manual test
 handoff, test evidence, exit criteria, risks, and out-of-scope items.
 
-Run a Grill Me With Docs pass against CONTEXT.md, ADRs, behavior specs, diagrams,
+Run a grill-with-docs pass against CONTEXT.md, ADRs, behavior specs, diagrams,
 docs, and source code.
 Ask one blocking question at a time and provide your recommended answer.
 
@@ -1615,7 +1715,7 @@ Run the sub-phase Docker-local verification until green.
 Update docs, behavior specs, and diagrams if behavior changed.
 Report changed files, tests run, smoke-test status, unresolved issues, proposed
 solutions, execution telemetry, and residual risk.
-Do not push, open a PR, or merge unless I explicitly say we are ready.
+Do not commit, push, open a PR, or merge unless I explicitly say we are ready.
 ```
 
 ### Brownfield Feature
@@ -1713,12 +1813,13 @@ If time is tight, create this minimum before code:
 README.md
 AGENTS.md
 CONTEXT.md
+docs/00-index.md
 docs/01-prd.md
 docs/03-architecture-decisions.md
 docs/06-technical-requirements.md
 docs/08-qa-plan.md
 docs/09-development-plan.md
-docs/12-codex-build-guide.md
+docs/12-agent-build-guide.md
 docs/17-development-workflow.md
 docs/18-openspec-kdd-bdd.md
 docs/19-local-docker-development.md
@@ -1781,6 +1882,3 @@ A phase is done when:
 Do not optimize for starting code fastest. Optimize for making every phase easy
 to understand, build, test, review, resume, and safely hand off across VS Code,
 Codex, Claude Code, Kaddo, GitHub, and future agents.
-
-[openspec]: https://github.com/Fission-AI/OpenSpec
-[kaddo]: https://github.com/Kaddo-kdd/kaddo

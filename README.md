@@ -50,6 +50,37 @@ For a new or existing project:
 6. Prepare the phase plan or brownfield feature plan.
 7. Wait for approval before implementation.
 
+## ForgeLoop Core
+
+ForgeLoop Core is the paste-in spine for `AGENTS.md`, `CLAUDE.md`, or another
+project instruction file. The canonical copy lives in
+[AI-Assisted-Development-Workflow.md](AI-Assisted-Development-Workflow.md#forgeloop-core).
+
+Use the Core when you need the reusable non-negotiables: source-of-truth order,
+phase loop, approval gates, execution modes, tool modes, and the rule that
+commits and PRs explain both what changed and why.
+
+Use the full workflow when the project needs deeper rules for brownfield work,
+QA, diagrams, OpenSpec, Kaddo, User Stories, single-tool review, or PR
+preparation.
+
+## Project Tier Selector
+
+Choose the smallest tier that fits the project.
+
+- `Throwaway/script`: disposable, local, or exploratory work.
+  Use ForgeLoop Core only. Add tests only when risk justifies them.
+- `Real project`: a repo that should be maintained, resumed, or handed to
+  agents later. Use Core plus README, `AGENTS.md`, `CONTEXT.md`, a phase or
+  feature plan, tests, and basic QA notes.
+- `Productized/SaaS`: projects with users, auth, data, payments,
+  integrations, or production risk. Use the full startup pack, phase plans,
+  behavior specs, ADRs, QA plans, manual and integration test plans, diagrams,
+  PR discipline, and regression evidence.
+
+Do not force the full pack onto small work. Do not use the small-work tier to
+avoid controls when data, users, security, or production behavior are at risk.
+
 ### Loading The Workflow Into Tools
 
 Use the same workflow with different tools by loading the project instructions
@@ -65,7 +96,8 @@ Read the repo's README, CONTEXT.md, phase plans, behavior specs, ADRs,
 diagrams, tests, and current Git state before implementation.
 
 Do not implement before the required plan or approval gate.
-Do not push, open a PR, merge, or archive unless Giuseppe explicitly approves.
+Do not commit, push, open a PR, merge, or archive unless Giuseppe explicitly
+approves.
 ```
 
 Then start Codex with a prompt like:
@@ -107,7 +139,7 @@ Use the approved ForgeLoop plan.
 Implement only the current sub-phase or vertical slice.
 Run the required verification, update docs if behavior changed, and report
 residual risk.
-Do not push or open a PR.
+Do not commit, push, or open a PR.
 ```
 
 Review prompt:
@@ -190,7 +222,7 @@ changes.
 Each phase follows the same gates:
 
 1. Read the repo.
-2. Run a Grill Me With Docs pass.
+2. Run a grill-with-docs pass.
 3. Create or update the phase plan.
 4. Create or update behavior specs and BDD scenarios.
 5. Wait for user approval.
@@ -301,18 +333,23 @@ docs, specs, tests, ADRs, diagrams, issues, and reviewed commits.
 - [AI-Assisted-Development-Workflow.md](AI-Assisted-Development-Workflow.md):
   canonical workflow, gates, tool roles, testing ladder, KDD guidance,
   optional OpenSpec and Kaddo usage, and definitions of ready and done.
+- [CONTEXT.md](CONTEXT.md): shared terms for the ForgeLoop repo.
+- [docs/00-index.md](docs/00-index.md): documentation map.
+- [docs/adr/0001-builder-and-critic-roles.md](docs/adr/0001-builder-and-critic-roles.md):
+  role-separation decision.
 - [README.md](README.md): project entrypoint and summary of how to use the
   workflow.
 
 Future repository versions should add the minimal startup pack listed in the
-workflow guide, including `AGENTS.md`, `CONTEXT.md`, `docs/`,
-`openspec/README.md`, diagrams, phase plans, and templates.
+workflow guide, including `AGENTS.md`, `openspec/README.md`, diagrams, phase
+plans, and templates.
 
 ## Current State
 
-ForgeLoop currently contains the workflow guide and this README. It is ready for
-prose refinement and workflow-shape decisions. It is not yet a full project
-scaffold for applying the workflow to another repository.
+ForgeLoop currently contains the workflow guide, README, shared context, a docs
+index, and one ADR. It is ready for prose refinement and workflow-shape
+decisions. It is not yet a full project scaffold for applying the workflow to
+another repository.
 
 Before adding implementation code, define the missing repo-local artifacts,
 especially the roadmap, architecture plan, QA plan, manual test plan, and
