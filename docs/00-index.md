@@ -19,10 +19,27 @@ Default agent load order:
   canonical workflow reference, ForgeLoop Core, gates, artifacts, tiers, and
   optional tool guidance.
 - [CONTEXT.md](../CONTEXT.md): shared terms for the ForgeLoop repo.
+- [AGENTS.md](../AGENTS.md): repo-local agent instructions for working on
+  ForgeLoop itself.
 
-## Planned Documents
+## Planning
 
-- `docs/09-development-plan.md`: Roadmap / Master Plan for ForgeLoop itself.
+- [ForgeLoop Roadmap / Master Plan](09-development-plan.md): ForgeLoop's own
+  roadmap and self-application plan.
+
+## Templates
+
+- [Roadmap / Master Plan Template](templates/master-plan-template.md)
+- [Phase Plan Template](templates/phase-plan-template.md)
+- [Architecture Plan Template](templates/architecture-plan-template.md)
+- [QA Plan Template](templates/qa-plan-template.md)
+- [Brownfield Feature Plan Template](templates/brownfield-feature-plan-template.md)
+- [Behavior Spec Template](templates/behavior-spec-template.md)
+- [Manual Test Plan Template](templates/manual-test-plan-template.md)
+- [Integration Test Plan Template](templates/integration-test-plan-template.md)
+- [Execution Report Template](templates/execution-report-template.md)
+- [Pull Request Description Template](templates/pr-description-template.md)
+- [ADR Template](templates/adr-template.md)
 
 ## Decisions
 
@@ -30,5 +47,5 @@ Default agent load order:
 
 ## Status
 
-ForgeLoop is still prose-first. Templates, skills, and harness code should come
-after the workflow language is stable.
+ForgeLoop is prose-first with a reusable template pack in place. Skills and
+harness code should come after the workflow language and templates stabilize.

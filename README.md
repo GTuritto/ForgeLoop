@@ -1,376 +1,194 @@
 # ForgeLoop
 
-ForgeLoop is a personal operating system for AI-assisted software development.
-It defines the structure around coding agents so projects stay planned,
-reviewable, testable, and resumable across tools.
+ForgeLoop is a reusable workflow standard for AI-assisted software development.
+It tells a coding agent what to read, how to plan, when to stop for approval,
+how to test, and how to hand work back to a human.
 
-The goal is simple:
+This repo is the reference package for that workflow. It is intentionally
+docs-first: the prose, templates, and operating rules come before any automated
+harness.
 
-> Use AI coding agents without letting them guess, drift, or silently create
-> unreviewable changes.
+## Why This Exists
 
-ForgeLoop is not another coding agent. In its current form, it is a workflow
-specification for an agent-agnostic harness. The harness should work with tools
-such as Codex, Claude Code, Cursor, Gemini, and future AI development agents.
+AI coding agents are useful, but they drift when the project has no durable
+source of truth. Chat history is not enough. A repo needs explicit context,
+plans, specs, test expectations, review gates, and handoff artifacts.
 
-## Evolution Path
+ForgeLoop exists to make agent work:
 
-ForgeLoop should mature in this order:
+- grounded in repository evidence,
+- reusable across future projects,
+- understandable after context is lost,
+- testable before a phase closes,
+- reviewable by humans and other tools,
+- adaptable to both greenfield and brownfield work.
 
-1. Improve the prose workflow document until the operating model is clear.
-2. Extract stable sections into reusable templates.
-3. Convert repeatable activities into named skills.
-4. Build a small harness that can run those skills and templates.
-5. Expand the harness only after the manual workflow proves useful.
+The goal is not to add ceremony everywhere. The goal is to choose the smallest
+workflow tier that keeps the work safe.
 
-The prose document comes first. It should explain the rules, tradeoffs, gates,
-and expected behavior well enough that a human or agent can follow the process
-without hidden context. Skills and automation should come later, after the prose
-stops changing quickly.
+## What This Repo Contains
+
+- [FORGELOOP_CORE.md](FORGELOOP_CORE.md): the compact operating spine to load
+  into `AGENTS.md`, `CLAUDE.md`, or another tool instruction file.
+- [AI-Assisted-Development-Workflow.md](AI-Assisted-Development-Workflow.md):
+  the full reference workflow and decision library.
+- [CONTEXT.md](CONTEXT.md): repo-local glossary, status, and working context.
+- [docs/00-index.md](docs/00-index.md): navigation map for the workflow pack.
+- [docs/09-development-plan.md](docs/09-development-plan.md): ForgeLoop's own
+  roadmap and self-application plan.
+- [docs/adr/](docs/adr/): architecture decision records for workflow choices.
+- [docs/templates/](docs/templates/): reusable templates for plans, specs, QA,
+  reports, ADRs, and PRs.
+- [AGENTS.md](AGENTS.md): repo-local agent instructions for working on
+  ForgeLoop itself.
+
+ForgeLoop is not yet an executable harness. It is the standard and template
+pack that future skills or automation should implement.
 
 ## How To Use ForgeLoop
 
-Use ForgeLoop as a workflow source, then adapt it inside each project. Do not
-copy the whole workflow blindly into every repo.
+Use ForgeLoop as a source workflow, then adapt the minimum useful parts into
+the target repo. Do not copy the full reference document into every project.
 
-For a new or existing project:
+### Default Agent Load
 
-1. Read [AI-Assisted-Development-Workflow.md](AI-Assisted-Development-Workflow.md).
-2. Create or update the repo's `AGENTS.md` with project-specific instructions.
-3. Add the minimum project context:
-   - `README.md`,
-   - `CONTEXT.md`,
-   - Roadmap / Master Plan,
-   - behavior specs or OpenSpec root,
-   - ADRs for hard-to-reverse decisions,
-   - QA, manual test, and integration test plans,
-   - Mermaid diagrams when architecture or workflows matter.
-4. Classify the work as greenfield, brownfield, or maintenance.
-5. Choose the execution mode and tool availability mode.
-6. Confirm the phase or feature fits the Roadmap / Master Plan.
-7. Prepare the phase plan or brownfield feature plan.
-8. Wait for approval before implementation.
-
-## ForgeLoop Core
-
-ForgeLoop Core is the paste-in spine for `AGENTS.md`, `CLAUDE.md`, or another
-project instruction file. The canonical copy lives in
-[FORGELOOP_CORE.md](FORGELOOP_CORE.md).
-
-Use the Core when you need the reusable non-negotiables: source-of-truth order,
-phase loop, approval gates, execution modes, tool modes, and the rule that
-commits and PRs explain both what changed and why.
-
-Use the full workflow when the project needs deeper rules for brownfield work,
-QA, diagrams, OpenSpec, Kaddo, User Stories, single-tool review, or PR
-preparation.
-
-## Token Loading Strategy
-
-Agents should not load the full workflow by default.
-
-Default load:
+For most tasks, load only:
 
 1. `FORGELOOP_CORE.md`
 2. `CONTEXT.md`
 3. `docs/00-index.md`
-4. the current Roadmap / Master Plan, phase plan, behavior spec, ADR, or test
-   plan relevant to the task
+4. the current roadmap, phase plan, behavior spec, ADR, or test plan relevant
+   to the task
 
-Load [AI-Assisted-Development-Workflow.md](AI-Assisted-Development-Workflow.md)
-only when the task needs the reference rules. Load `README.md` when the agent
-needs project orientation beyond the Core and index.
+Load `AI-Assisted-Development-Workflow.md` only when the compact files do not
+answer the process question.
 
-## Project Tier Selector
+### Add ForgeLoop To A Project
 
-Choose the smallest tier that fits the project. The canonical tier definitions
-live in [FORGELOOP_CORE.md](FORGELOOP_CORE.md#project-tiers).
+1. Copy or adapt `FORGELOOP_CORE.md` into the target repo's `AGENTS.md`,
+   `CLAUDE.md`, or equivalent tool instruction file.
+2. Create the minimum repo context:
+   - `CONTEXT.md`
+   - `docs/00-index.md`
+   - roadmap or master plan
+   - ADRs for hard-to-reverse decisions
+   - behavior specs for user-visible behavior
+   - QA, integration, smoke, manual, and regression test plans as needed
+3. Choose the project tier:
+   - `Throwaway/script`: Core only.
+   - `Real project`: Core plus minimal docs and plans.
+   - `Productized/SaaS`: full workflow pack and stricter gates.
+4. Choose the execution mode:
+   - `Docs-only`
+   - `Mechanical`
+   - `Low-risk`
+   - `Standard`
+   - `Strict`
+   - `Release-critical`
+5. Prepare the plan before implementation.
+6. Stop for approval at the required gate.
+7. Implement in small slices.
+8. Record evidence in an execution report or PR description.
 
-### Loading The Workflow Into Tools
+### Use With One Tool Or Many
 
-Use the same workflow with different tools by loading the project instructions
-and the relevant ForgeLoop section before work starts.
+ForgeLoop works when you only have one coding tool, such as Codex or Claude
+Code. Use separate passes for planning, implementation, review, and handoff.
 
-For Codex, add or update the target repo's `AGENTS.md`:
+When multiple tools are available, keep roles separate:
 
-```md
-# Project Workflow
+- one tool can build,
+- another can critique,
+- the human approves gates and manual QA.
 
-Follow ForgeLoop for docs-first, phase-gated development.
-Read the repo's README, CONTEXT.md, phase plans, behavior specs, ADRs,
-diagrams, tests, and current Git state before implementation.
+The role matters more than the vendor. The repo remains the source of truth.
 
-For normal tasks, load FORGELOOP_CORE.md first. Use the full workflow only
-when the Core does not answer the process question.
+## Example: Starting A New Product Repo
 
-Do not implement before the required plan or approval gate.
-Do not commit, push, open a PR, merge, or archive unless Giuseppe explicitly
-approves.
-```
-
-Then start Codex with a prompt like:
+Prompt the agent:
 
 ```txt
 Use ForgeLoop.
-Read AGENTS.md, README.md, CONTEXT.md, docs, behavior specs, ADRs, diagrams,
-tests, and git status.
-Classify this request as greenfield, brownfield, or maintenance.
-Select the execution mode and tool availability mode.
-Prepare the plan only. Do not implement until I approve.
+Read FORGELOOP_CORE.md, CONTEXT.md, docs/00-index.md, and git status.
+Prepare the repo workflow only. Do not implement application code.
+
+Create or update:
+- AGENTS.md
+- CONTEXT.md
+- docs/00-index.md
+- docs/09-development-plan.md from the master plan template
+- the first phase plan from the phase plan template
+
+Classify the project tier and execution mode.
+List open questions and stop for approval.
 ```
 
-For Claude Code, add or update `CLAUDE.md` with the same project rules and use
-Claude primarily for critique, planning, architecture review, or single-tool
-execution when Claude Code is the only tool available.
+Expected result:
 
-For other tools, paste the same repo-local rules into their project instruction
-file or persistent memory. If the tool has no instruction file, paste the
-startup prompt at the beginning of the session.
+- the repo has a local operating guide,
+- the roadmap is explicit,
+- the first phase has a testable plan,
+- implementation has not started,
+- the human can approve, reject, or revise the plan.
 
-### Minimal Tool Prompts
+## Example: Adding A Feature To An Existing Codebase
 
-Use these when the repo has already been prepared.
-
-Planning prompt:
+Prompt the agent:
 
 ```txt
-Use ForgeLoop. Prepare the plan only.
-Read repo evidence first.
-Classify the work, identify gates, define tests, and list open questions.
+Use ForgeLoop for brownfield work.
+Read the Core, project context, current roadmap, relevant ADRs, affected source
+files, and tests.
+
+Prepare a brownfield feature plan only.
+Identify existing behavior, affected boundaries, migration risk, required
+tests, manual checks, and rollback notes.
 Do not implement until I approve.
 ```
 
-Implementation prompt:
+For a feature that touches data, auth, contracts, or production workflows, use
+the stricter templates:
 
-```txt
-Use the approved ForgeLoop plan.
-Implement only the current sub-phase or vertical slice.
-Run the required verification, update docs if behavior changed, and report
-residual risk.
-Do not commit, push, or open a PR.
-```
+- [docs/templates/brownfield-feature-plan-template.md](docs/templates/brownfield-feature-plan-template.md)
+- [docs/templates/integration-test-plan-template.md](docs/templates/integration-test-plan-template.md)
+- [docs/templates/manual-test-plan-template.md](docs/templates/manual-test-plan-template.md)
+- [docs/templates/execution-report-template.md](docs/templates/execution-report-template.md)
+- [docs/templates/pr-description-template.md](docs/templates/pr-description-template.md)
 
-Review prompt:
+## Template Pack
 
-```txt
-Review this branch against the approved plan, behavior specs, ADRs, tests,
-docs, diagrams, and current code.
-Lead with bugs, missing tests, security issues, contract drift, and behavior
-mismatches.
-Do not summarize first.
-```
+Use the templates as starting points, not as paperwork to fill blindly.
 
-## What ForgeLoop Protects
+- `master-plan-template.md`: roadmap and phase strategy.
+- `phase-plan-template.md`: scoped phase plan with QA expectations.
+- `brownfield-feature-plan-template.md`: existing-code feature plan.
+- `behavior-spec-template.md`: behavior and acceptance criteria.
+- `qa-plan-template.md`: overall QA structure.
+- `integration-test-plan-template.md`: real boundary test plan.
+- `manual-test-plan-template.md`: human verification plan.
+- `execution-report-template.md`: evidence after work is completed.
+- `pr-description-template.md`: PR summary with what changed and why.
+- `architecture-plan-template.md`: architecture direction and constraints.
+- `adr-template.md`: durable decision record.
 
-ForgeLoop keeps every project anchored in repository evidence:
+## Commit And PR Standard
 
-- documented product intent,
-- explicit decisions and tradeoffs,
-- approved phase plans,
-- behavior specs,
-- tests and smoke checks,
-- current Git state,
-- reviewable pull requests.
+Commits and PRs must explain both:
 
-The workflow blocks implementation until the plan is clear. It also requires
-tests, documentation, diagrams, and manual handoff notes before a phase can
-close.
+- what changed,
+- why the change was made.
 
-## Source Of Truth
+The "why" matters because future agents will read the repo instead of the chat.
 
-Use repo artifacts in this order when an agent, reviewer, or human needs
-project context:
+## Current Project Status
 
-1. Current code, tests, and Git state.
-2. Approved phase plan.
-3. Behavior specs, OpenSpecs if used, and BDD scenarios.
-4. ADRs and architecture notes.
-5. Product, technical, QA, and Roadmap / Master Plan documents.
-6. README and project status.
-7. Agent chat history or memory.
+ForgeLoop is in prose-and-template evolution. The current work is focused on:
 
-If chat memory conflicts with repository files, the repository wins. If the
-repository is unclear, update the right document before implementation.
+- making the workflow easier to load with fewer tokens,
+- applying ForgeLoop to its own repo,
+- adding reusable templates before creating skills,
+- keeping optional tools such as OpenSpec and Kaddo supportive, not mandatory,
+- supporting brownfield projects as first-class cases.
 
-## Knowledge Driven Development
-
-ForgeLoop treats Knowledge Driven Development as a workflow discipline, not a
-tool requirement.
-
-KDD means durable project knowledge stays in the repository:
-
-- `CONTEXT.md` for domain language,
-- ADRs for hard-to-reverse decisions,
-- behavior specs, using OpenSpec or Markdown,
-- phase plans for approved work,
-- diagrams for system shape and flows,
-- tests for executable expectations,
-- review logs and execution reports for evidence.
-
-Tools such as OpenSpec and Kaddo may help structure, scan, package, or validate
-that knowledge. They should remain optional. If a tool is unavailable, use
-Markdown equivalents and document the substitution.
-
-## Core Workflow
-
-```txt
-Idea -> Documents -> Decisions -> Roadmap / Master Plan
-     -> Behavior Spec -> Phase Plan -> Branch -> Tests -> Code
-     -> Smoke Test -> PR -> Merge
-```
-
-This flow applies to both new and existing projects, but the entry point
-changes.
-
-- Greenfield work starts by creating the product, architecture, workflow, and
-  runtime foundation.
-- Brownfield work starts by reading the current codebase, mapping the affected
-  behavior, identifying existing seams, and proving the change can land without
-  breaking current users.
-
-Each phase follows the same gates:
-
-1. Read the repo.
-2. Run a grill-with-docs pass.
-3. Create or update the phase plan.
-4. Create or update behavior specs and BDD scenarios.
-5. Wait for user approval.
-6. Implement one sub-phase at a time.
-7. Run the required verification.
-8. Update docs and diagrams.
-9. Prepare manual test handoff.
-10. Open a PR only after explicit approval.
-
-## Execution Model
-
-ForgeLoop should adapt its rigor to the work instead of treating every change
-as release-critical.
-
-Default execution modes:
-
-- `Docs-only`: documentation changes with no runtime behavior.
-- `Mechanical`: renames, formatting, generated updates, and safe migrations.
-- `Low-risk`: small localized behavior changes.
-- `Standard`: normal product or platform work.
-- `Strict`: auth, data, contracts, migrations, permissions, payments, or
-  concurrency.
-- `Release-critical`: final release, broad regression, or production-sensitive
-  work.
-
-Every task should record the selected mode, required tests, skipped checks,
-human time, machine time, token use when available, retries, defects found, and
-artifacts changed.
-
-Tool availability also changes how the workflow runs:
-
-- `Single-tool`: one LLM or coding tool does planning, implementation, review,
-  and handoff in separate passes.
-- `Multi-tool`: one tool implements and another critiques plans, diffs, and
-  architecture.
-- `Human-plus-tool`: the human performs review or manual QA that another tool
-  would otherwise perform.
-
-The gates do not disappear in single-tool mode. The same agent must change
-mode explicitly: first planner, then implementer, then reviewer, then docs
-keeper. Do not let one continuous answer replace the review gate.
-
-## First-Class Artifacts
-
-ForgeLoop treats these planning and review documents as first-class artifacts,
-not optional notes:
-
-- `Roadmap / Master Plan`: project-level sequencing, milestones, dependencies,
-  phase order, release intent, and explicit deferrals.
-- `Architecture Plan`: system shape, module boundaries, deployment assumptions,
-  and hard-to-reverse technical decisions.
-- `QA Plan`: test strategy, acceptance rules, regression expectations, and
-  release gates.
-- `Manual Test Plan`: exact human test paths, expected results, seed data, and
-  known limitations.
-- `Integration Test Plan`: external boundaries, database behavior, service
-  contracts, and Docker-local verification.
-
-These artifacts may live as standalone files or sections inside the startup
-document pack. They must be easy to find before implementation starts.
-
-The planning hierarchy is:
-
-```txt
-Product Intent
-  -> Roadmap / Master Plan
-    -> Phase Plan
-      -> User Story or Vertical Slice
-        -> Task or Sub-phase
-```
-
-User Stories can be execution units inside the workflow, but they are not the
-source of truth by themselves. A User Story should link back to the relevant
-Roadmap / Master Plan item, behavior spec, acceptance criteria, architecture
-notes, tests, and phase plan.
-
-When a phase is delivered through User Stories, ForgeLoop should use a concrete
-delivery lane:
-
-```txt
-Select User Story -> SDD/Behavior Spec -> Human Gate -> Contract Freeze
-     -> TDD RED -> Implementation -> QA -> Code Review -> Docs
-     -> Human Gate -> Archive/PR Prep
-```
-
-This lane gives each User Story clear roles, artifacts, gates, timing, and test
-evidence while preserving the broader phase workflow.
-
-For brownfield feature work, add a discovery pass before the User Story lane:
-
-```txt
-Codebase Discovery -> Impact Map -> Compatibility Plan -> Behavior Spec
-     -> Vertical Slice -> Regression Evidence -> PR Prep
-```
-
-This prevents the workflow from assuming a clean slate. Existing behavior,
-contracts, migrations, data, integrations, and user workflows must be protected
-before the new feature is built.
-
-## Recommended Skills
-
-ForgeLoop can later expose its own skills, but these external AI Hero skills
-are useful references now:
-
-- `grill-with-docs`: align vocabulary, plan, and hard decisions before build.
-- `to-prd`: turn settled context into a PRD.
-- `to-issues`: split a PRD or spec into vertical-slice issues.
-- `tdd`: build one behavior at a time through red-green-refactor.
-- `handoff`: preserve live context between long agent sessions.
-- `prototype`: answer one design question with disposable code.
-- `improve-codebase-architecture`: find brownfield module-depth opportunities.
-- `triage`: verify and classify existing backlog items before agents build.
-
-Treat these as optional helpers. The durable workflow still lives in repository
-docs, specs, tests, ADRs, diagrams, issues, and reviewed commits.
-
-## Documentation Map
-
-- [AI-Assisted-Development-Workflow.md](AI-Assisted-Development-Workflow.md):
-  canonical workflow, gates, tool roles, testing ladder, KDD guidance,
-  optional OpenSpec and Kaddo usage, and definitions of ready and done.
-- [CONTEXT.md](CONTEXT.md): shared terms for the ForgeLoop repo.
-- [docs/00-index.md](docs/00-index.md): documentation map.
-- [docs/adr/0001-builder-and-critic-roles.md](docs/adr/0001-builder-and-critic-roles.md):
-  role-separation decision.
-- [README.md](README.md): project entrypoint and summary of how to use the
-  workflow.
-
-Future repository versions should add the minimal startup pack listed in the
-workflow guide, including `AGENTS.md`, `openspec/README.md`, diagrams, phase
-plans, and templates.
-
-## Current State
-
-ForgeLoop currently contains the workflow guide, README, shared context, a docs
-index, and one ADR. It is ready for prose refinement and workflow-shape
-decisions. It is not yet a full project scaffold for applying the workflow to
-another repository.
-
-Before adding implementation code, define the missing repo-local artifacts,
-especially the Roadmap / Master Plan, architecture plan, QA plan, manual test
-plan, and integration test plan.
+The next expected evolution after the template pack is to identify the
+repeatable workflow activities that should become skills or automation.

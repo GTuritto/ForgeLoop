@@ -338,8 +338,19 @@ for their risk level.
   process.
 - `docs/18-openspec-kdd-bdd.md`: behavior specs, KDD, BDD, traceability.
 - `docs/19-local-docker-development.md`: Docker-local development contract.
+- `docs/templates/master-plan-template.md`: Roadmap / Master Plan template.
 - `docs/templates/phase-plan-template.md`: phase-plan template.
+- `docs/templates/architecture-plan-template.md`: architecture plan template.
+- `docs/templates/qa-plan-template.md`: QA plan template.
+- `docs/templates/brownfield-feature-plan-template.md`: brownfield feature
+  plan template.
+- `docs/templates/behavior-spec-template.md`: behavior spec template.
+- `docs/templates/manual-test-plan-template.md`: manual test plan template.
+- `docs/templates/integration-test-plan-template.md`: integration test plan
+  template.
 - `docs/templates/execution-report-template.md`: execution report template.
+- `docs/templates/pr-description-template.md`: PR description template.
+- `docs/templates/adr-template.md`: ADR template.
 - `docs/phases/README.md`: approved phase plans.
 
 ### Diagrams
@@ -971,17 +982,19 @@ codex/phase-2-sources
 
 The active agent reads:
 
-- `README.md`,
+- `FORGELOOP_CORE.md`,
 - `AGENTS.md`,
 - `CONTEXT.md`,
+- `docs/00-index.md`,
 - Roadmap / Master Plan,
-- relevant docs,
-- relevant ADRs,
-- relevant behavior specs,
-- diagrams,
+- approved phase plan or brownfield feature plan if one exists,
+- relevant behavior specs, ADRs, diagrams, and test plans,
 - current code,
 - current tests,
 - `git status`.
+
+Load `README.md` or this full workflow only when the compact load does not
+answer the process question.
 
 If files or commands can answer a question, inspect them before asking.
 
@@ -1693,9 +1706,11 @@ Every phase must have a smoke test with:
 ### New Phase
 
 ```txt
-Read README.md, AGENTS.md, CONTEXT.md, docs/09-development-plan.md,
-docs/17-development-workflow.md, docs/18-openspec-kdd-bdd.md, diagrams, and
-relevant ADRs.
+Read FORGELOOP_CORE.md, AGENTS.md, CONTEXT.md, docs/00-index.md,
+docs/09-development-plan.md, git status, and only the specs, ADRs, diagrams,
+tests, or source files relevant to this phase.
+Load this full workflow only when the compact load does not answer the process
+question.
 
 Prepare Phase N only.
 Confirm the phase exists in the Roadmap / Master Plan or explain the approved
@@ -1726,8 +1741,8 @@ Do not implement until I approve the plan.
 ```txt
 Implement Phase N, Sub-Phase X from the approved plan.
 Set this as the active goal for the agent.
-Before editing, inspect git status, docs, behavior specs, diagrams, tests, nearby
-code, and the full source context relevant to this sub-phase.
+Before editing, inspect git status plus only the docs, behavior specs,
+diagrams, tests, nearby code, and source context relevant to this sub-phase.
 For brownfield work, also inspect the impact map, existing behavior, compatibility
 plan, migrations, contracts, and regression target before editing.
 Resolve all blocking questions before implementation.
@@ -1747,9 +1762,10 @@ Do not commit, push, open a PR, or merge unless I explicitly say we are ready.
 Prepare a brownfield feature plan for the requested change.
 Start from the current repo, not from an ideal architecture.
 
-Inspect current code, tests, Git state, docs, behavior specs, ADRs, diagrams,
-runtime entry points, data model, contracts, migrations, integrations, auth,
-permissions, jobs, and known issues.
+Inspect current code, tests, Git state, and only the docs, behavior specs, ADRs,
+diagrams, runtime entry points, data model, contracts, migrations,
+integrations, auth, permissions, jobs, and known issues relevant to this
+feature.
 
 Produce:
 - brownfield discovery note,
@@ -1846,8 +1862,17 @@ docs/12-agent-build-guide.md
 docs/17-development-workflow.md
 docs/18-openspec-kdd-bdd.md
 docs/19-local-docker-development.md
+docs/templates/master-plan-template.md
 docs/templates/phase-plan-template.md
+docs/templates/architecture-plan-template.md
+docs/templates/qa-plan-template.md
+docs/templates/brownfield-feature-plan-template.md
+docs/templates/behavior-spec-template.md
+docs/templates/manual-test-plan-template.md
+docs/templates/integration-test-plan-template.md
 docs/templates/execution-report-template.md
+docs/templates/pr-description-template.md
+docs/templates/adr-template.md
 docs/diagrams/
 docs/adr/
 openspec/README.md
