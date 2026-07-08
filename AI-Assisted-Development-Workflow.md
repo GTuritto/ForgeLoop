@@ -138,6 +138,47 @@ Claude Code should not proceed from unclear objectives. If review raises
 blocking questions, answer them and update the phase plan before Codex
 implements.
 
+### Tool Availability Modes
+
+ForgeLoop works with one tool or many tools. Tool count changes execution
+shape, not quality gates.
+
+- `Single-tool`: one LLM or coding tool handles planning, implementation,
+  review, docs, and handoff in separate passes.
+- `Multi-tool`: one tool builds and another critiques plans, diffs,
+  architecture, and tradeoffs.
+- `Human-plus-tool`: one tool builds and the user performs review, manual QA,
+  or final judgment that a second tool would otherwise support.
+
+Use single-tool mode when only Codex, only Claude Code, Cursor, Gemini, or one
+agent-capable IDE is available.
+
+Single-tool mode requires explicit role separation:
+
+1. Planner pass: read repo evidence and produce or update the plan.
+2. Spec pass: update behavior specs, acceptance criteria, and test plan.
+3. Implementation pass: make the smallest approved change.
+4. Verification pass: run tests, smoke checks, and manual handoff preparation.
+5. Reviewer pass: re-read the diff against the plan, specs, docs, tests, and
+   risks.
+6. Docs pass: update docs, diagrams, ADRs, and execution evidence.
+
+The same chat can perform several passes, but each pass must state its role and
+stop at required gates. A single continuous implementation answer does not
+replace the review pass.
+
+When a second tool is unavailable, strengthen review by:
+
+- starting a fresh chat or fresh goal for review,
+- asking the same tool to review its own diff from a code-review stance,
+- running deterministic tests instead of relying on explanation,
+- comparing the diff against the approved plan and behavior spec,
+- using GitHub PR review as the durable review record when a PR exists,
+- asking the user for manual QA on workflows the agent cannot verify.
+
+Do not weaken approval gates, test evidence, or manual handoff because only one
+tool is available.
+
 ### Knowledge Driven Development
 
 Knowledge Driven Development is a workflow discipline, not a tool requirement.
@@ -495,6 +536,109 @@ Parallelize only when dependencies are explicit:
 If parallel work creates conflicting changes, stop and let the orchestrator
 resolve the conflict before continuing.
 
+## Brownfield Feature Workflow
+
+ForgeLoop must support existing codebases, not only new projects. Brownfield
+work starts from current behavior and existing constraints, then adds the new
+feature without damaging what already works.
+
+Use the brownfield workflow when the repo already has meaningful code,
+production behavior, customer data, migrations, integrations, or established
+tests.
+
+```txt
+Codebase Discovery -> Impact Map -> Compatibility Plan -> Behavior Spec
+     -> Vertical Slice Plan -> Human Gate -> TDD RED -> Implementation
+     -> Regression Evidence -> Code Review -> Docs -> Human Gate -> PR Prep
+```
+
+### Brownfield Discovery
+
+Before planning implementation, inspect:
+
+- current code, tests, and Git state,
+- runtime entry points,
+- existing user workflows,
+- domain language in `CONTEXT.md`,
+- ADRs and architecture docs,
+- API, schema, event, provider, or file contracts,
+- migrations and seed data,
+- background jobs and queues,
+- auth, permissions, and tenant boundaries,
+- open issues, recent PRs, and known defects,
+- production or release constraints if documented.
+
+The output is a short discovery note that says what exists, what must not
+break, and where the new behavior can attach.
+
+### Impact Map
+
+Every brownfield feature must map the affected surface before code changes.
+
+Include:
+
+- modules and ownership boundaries,
+- public APIs, routes, commands, events, schemas, and SDKs,
+- data model and migration impact,
+- UI flows and state transitions,
+- external providers and adapters,
+- jobs, queues, schedulers, and retries,
+- tests that already cover the area,
+- docs and diagrams that must change,
+- compatibility risks,
+- rollback or expand-contract needs.
+
+If the impact map is broad or uncertain, split the work before implementation.
+
+### Compatibility Plan
+
+Brownfield work must protect existing behavior. The plan should state whether
+the change is:
+
+- additive,
+- behavior-changing,
+- migration-backed,
+- contract-breaking,
+- behind a feature flag,
+- expand-contract,
+- temporary compatibility shim,
+- rollbackable.
+
+Contract-breaking changes require explicit approval and a migration or
+deprecation path.
+
+### Vertical Slice Plan
+
+Prefer one thin path through the existing system over horizontal layer work. A
+good slice is demoable or testable by itself and touches only the boundaries
+needed to prove the behavior.
+
+For wide refactors that cannot fit a vertical slice, use expand-contract:
+
+1. Expand: add the new form beside the old one.
+2. Migrate: move callers in reviewed batches while tests stay green.
+3. Contract: remove the old form after no callers remain.
+
+Keep the repo green between batches unless the user approves a temporary
+integration branch.
+
+### Brownfield QA
+
+Brownfield QA must prove both the new behavior and the old behavior.
+
+Required evidence for non-trivial brownfield work:
+
+- focused tests for the new behavior,
+- regression tests for the affected existing behavior,
+- integration tests for changed boundaries,
+- migration tests when schema or data changes,
+- contract tests when APIs, events, SDKs, or provider ports change,
+- manual test plan for changed user workflows,
+- rollback or recovery notes when production data is involved.
+
+If no regression test exists for the affected behavior, either add one or state
+why manual evidence is the only practical option.
+
 ## Adaptive Execution Modes
 
 Not every task needs the same ceremony. Classify the work before planning or
@@ -541,6 +685,10 @@ These are reusable capabilities the harness should eventually invoke.
 
 - `repo-preflight-exploration`: inspect docs, specs, ADRs, diagrams, tests,
   source, and Git state.
+- `brownfield-codebase-discovery`: inspect an existing codebase before feature
+  planning and identify current behavior, seams, risks, and regression needs.
+- `impact-map-generator`: map the affected modules, contracts, data, UI flows,
+  jobs, integrations, docs, and tests before brownfield implementation.
 - `task-risk-classifier`: choose Docs-only, Mechanical, Low-risk, Standard,
   Strict, or Release-critical mode.
 - `grill-me-with-docs`: challenge plans against repo evidence and ask blocking
@@ -590,12 +738,49 @@ are mandatory for that repository.
   implementation when the plan, vocabulary, or hard decisions are not settled.
   It asks one question at a time, writes resolved terms to `CONTEXT.md`, and
   records rare hard-to-reverse decisions as ADRs.
+- [`to-prd`](https://www.aihero.dev/skills-to-prd): use after the conversation,
+  domain language, and plan are settled. It turns known context into a PRD with
+  problem, solution, user stories, implementation decisions, testing decisions,
+  and out-of-scope items.
+- [`to-issues`](https://www.aihero.dev/skills-to-issues): use after a PRD,
+  behavior spec, or phase plan exists. It splits work into vertical-slice
+  issues in dependency order and handles wide refactors with expand-contract
+  sequencing.
+- [`tdd`](https://www.aihero.dev/skills-tdd): use during implementation when a
+  concrete behavior is ready to build. It should run one red-green cycle at a
+  time, with tests named for behavior and expected values taken from the spec.
+- [`handoff`](https://www.aihero.dev/skills-handoff): use when a session is
+  long, context is at risk, or another agent will continue. It should reference
+  PRDs, issues, ADRs, plans, and diffs instead of copying settled artifacts.
+- [`prototype`](https://www.aihero.dev/skills-prototype): use when one design
+  question is hard to settle on paper. Prototype code must be disposable; keep
+  the answer, then delete or absorb the code.
+- [`improve-codebase-architecture`](https://www.aihero.dev/skills-improve-codebase-architecture):
+  use as a brownfield architecture health check. It is most useful when a
+  mature codebase feels shallow, scattered, or hard to change safely.
+- [`triage`](https://www.aihero.dev/burn-through-your-backlog-with-my-triage-skill):
+  use when existing tracker items need verification, categorization, and a
+  ready-for-agent brief before implementation.
 
 Install when the project uses AI Hero skills:
 
 ```sh
 npx skills add mattpocock/skills --skill=grill-with-docs
+npx skills add mattpocock/skills --skill=to-prd
+npx skills add mattpocock/skills --skill=to-issues
+npx skills add mattpocock/skills --skill=tdd
+npx skills add mattpocock/skills --skill=handoff
+npx skills add mattpocock/skills --skill=prototype
+npx skills add mattpocock/skills --skill=improve-codebase-architecture
+npx skills add mattpocock/skills --skill=triage
 npx skills update grill-with-docs
+npx skills update to-prd
+npx skills update to-issues
+npx skills update tdd
+npx skills update handoff
+npx skills update prototype
+npx skills update improve-codebase-architecture
+npx skills update triage
 ```
 
 ## Architecture Defaults
@@ -738,6 +923,10 @@ The plan must include:
 - tasks per sub-phase,
 - User Stories if used,
 - selected execution mode,
+- greenfield, brownfield, or maintenance classification,
+- brownfield discovery note if the codebase already exists,
+- impact map for changed behavior,
+- compatibility and migration plan when existing behavior may be affected,
 - User Story delivery lane if used,
 - behavior spec changes,
 - Kaddo notes if used,
@@ -752,6 +941,7 @@ The plan must include:
 - diagram updates,
 - manual test handoff,
 - test evidence required,
+- regression evidence for affected existing behavior,
 - story artifacts and gates if using User Stories,
 - exit criteria,
 - risks and deferred work.
@@ -781,8 +971,10 @@ docs-only or mechanical changes.
 Approval means:
 
 - scope is correct,
+- greenfield, brownfield, or maintenance classification is correct,
 - sub-phases are acceptable,
 - execution mode is acceptable,
+- impact map and compatibility plan are sufficient for brownfield work,
 - User Story delivery lane is acceptable if used,
 - testing plan is sufficient,
 - manual test plan is sufficient,
@@ -808,12 +1000,14 @@ For each sub-phase:
    - relevant source tree,
    - tests,
    - nearby ownership boundaries.
-4. Resolve all blocking questions before coding.
-5. Implement the smallest coherent unit.
-6. Add or update tests.
-7. Run the sub-phase test suite until green.
-8. Update docs, behavior specs, and diagrams if behavior changed.
-9. Review the diff.
+4. For brownfield work, re-check the impact map, compatibility plan, migration
+   plan, and regression target before editing.
+5. Resolve all blocking questions before coding.
+6. Implement the smallest coherent unit.
+7. Add or update tests.
+8. Run the sub-phase test suite until green.
+9. Update docs, behavior specs, and diagrams if behavior changed.
+10. Review the diff.
 
 Do not continue to the next sub-phase while the current one has failing tests,
 unresolved blocking questions, or unclear objectives.
@@ -1188,8 +1382,11 @@ Recommended cadence:
 
 ## Codex And Claude Code Collaboration
 
-Use VS Code as the shared cockpit, Codex as the builder, and Claude Code as the
-critic or design reviewer.
+Use this section when both Codex and Claude Code are available. If only one
+tool is available, use Single-Tool Phase Flow below.
+
+In multi-tool mode, use VS Code as the shared cockpit, Codex as the builder,
+and Claude Code as the critic or design reviewer.
 
 Default loop:
 
@@ -1241,6 +1438,36 @@ The objective should include:
 17. Use VS Code for manual smoke testing.
 18. Use GitHub PR as the final review record only after the user says it is
     ready.
+
+### Recommended Single-Tool Phase Flow
+
+Use this flow when only one LLM or coding tool is available.
+
+1. Start with a planning pass. Read repo evidence, classify the work, and
+   produce the phase plan or brownfield feature plan.
+2. Stop for user approval when the workflow requires it.
+3. Start a separate implementation pass. Re-read the approved plan, specs,
+   tests, docs, and relevant code before editing.
+4. Implement one sub-phase, story, or vertical slice at a time.
+5. Run the required verification until green or report the blocker.
+6. Start a separate review pass. Ask the same tool to review its own diff as if
+   it did not write the code.
+7. Fix accepted review findings and rerun the relevant checks.
+8. Start a docs pass. Update behavior specs, diagrams, ADRs, phase status,
+   execution evidence, and manual handoff.
+9. Stop for final human approval before commit, push, PR, archive, or merge.
+
+Single-tool mode should use stronger prompts:
+
+- "Review this diff only. Lead with bugs, missing tests, security issues, and
+  spec mismatches."
+- "Assume the implementation may be wrong. Compare it against the approved
+  plan and current code."
+- "Do not continue implementation during review."
+- "List residual risk and skipped verification explicitly."
+
+For `Strict` or `Release-critical` work, prefer a fresh chat or separate review
+session before final approval.
 
 ### Conflict Rules
 
@@ -1351,10 +1578,14 @@ docs/17-development-workflow.md, docs/18-openspec-kdd-bdd.md, diagrams, and
 relevant ADRs.
 
 Prepare Phase N only.
+Classify the phase as greenfield, brownfield, or maintenance.
 Classify the phase risk and select the execution mode.
 Create docs/phases/phase-N-short-name.md from the phase plan template.
 If the phase is delivered through User Stories, include the User Story delivery
 lane, hard gates, agent roles, parallel steps, and expected story artifacts.
+If the phase changes an existing codebase, include a brownfield discovery note,
+impact map, compatibility plan, migration or expand-contract plan, and
+regression evidence plan.
 Create or update behavior specs and Mermaid diagrams for this phase.
 Include KDD notes, BDD scenarios, Docker commands, unit tests, smoke test,
 integration test plan, manual test plan, regression test plan, manual test
@@ -1374,6 +1605,8 @@ Implement Phase N, Sub-Phase X from the approved plan.
 Set this as the active goal for the agent.
 Before editing, inspect git status, docs, behavior specs, diagrams, tests, nearby
 code, and the full source context relevant to this sub-phase.
+For brownfield work, also inspect the impact map, existing behavior, compatibility
+plan, migrations, contracts, and regression target before editing.
 Resolve all blocking questions before implementation.
 Confirm the selected execution mode and required verification.
 Keep changes scoped.
@@ -1383,6 +1616,31 @@ Update docs, behavior specs, and diagrams if behavior changed.
 Report changed files, tests run, smoke-test status, unresolved issues, proposed
 solutions, execution telemetry, and residual risk.
 Do not push, open a PR, or merge unless I explicitly say we are ready.
+```
+
+### Brownfield Feature
+
+```txt
+Prepare a brownfield feature plan for the requested change.
+Start from the current repo, not from an ideal architecture.
+
+Inspect current code, tests, Git state, docs, behavior specs, ADRs, diagrams,
+runtime entry points, data model, contracts, migrations, integrations, auth,
+permissions, jobs, and known issues.
+
+Produce:
+- brownfield discovery note,
+- impact map,
+- compatibility plan,
+- behavior spec update,
+- vertical slice plan,
+- migration or expand-contract plan if needed,
+- QA plan with regression evidence,
+- manual test plan for changed workflows,
+- docs and diagram update list,
+- open questions and recommended answers.
+
+Do not implement until I approve the plan.
 ```
 
 ### Review

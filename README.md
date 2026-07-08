@@ -28,6 +28,98 @@ and expected behavior well enough that a human or agent can follow the process
 without hidden context. Skills and automation should come later, after the prose
 stops changing quickly.
 
+## How To Use ForgeLoop
+
+Use ForgeLoop as a workflow source, then adapt it inside each project. Do not
+copy the whole workflow blindly into every repo.
+
+For a new or existing project:
+
+1. Read [AI-Assisted-Development-Workflow.md](AI-Assisted-Development-Workflow.md).
+2. Create or update the repo's `AGENTS.md` with project-specific instructions.
+3. Add the minimum project context:
+   - `README.md`,
+   - `CONTEXT.md`,
+   - roadmap or phase plan,
+   - behavior specs or OpenSpec root,
+   - ADRs for hard-to-reverse decisions,
+   - QA, manual test, and integration test plans,
+   - Mermaid diagrams when architecture or workflows matter.
+4. Classify the work as greenfield, brownfield, or maintenance.
+5. Choose the execution mode and tool availability mode.
+6. Prepare the phase plan or brownfield feature plan.
+7. Wait for approval before implementation.
+
+### Loading The Workflow Into Tools
+
+Use the same workflow with different tools by loading the project instructions
+and the relevant ForgeLoop section before work starts.
+
+For Codex, add or update the target repo's `AGENTS.md`:
+
+```md
+# Project Workflow
+
+Follow ForgeLoop for docs-first, phase-gated development.
+Read the repo's README, CONTEXT.md, phase plans, behavior specs, ADRs,
+diagrams, tests, and current Git state before implementation.
+
+Do not implement before the required plan or approval gate.
+Do not push, open a PR, merge, or archive unless Giuseppe explicitly approves.
+```
+
+Then start Codex with a prompt like:
+
+```txt
+Use ForgeLoop.
+Read AGENTS.md, README.md, CONTEXT.md, docs, behavior specs, ADRs, diagrams,
+tests, and git status.
+Classify this request as greenfield, brownfield, or maintenance.
+Select the execution mode and tool availability mode.
+Prepare the plan only. Do not implement until I approve.
+```
+
+For Claude Code, add or update `CLAUDE.md` with the same project rules and use
+Claude primarily for critique, planning, architecture review, or single-tool
+execution when Claude Code is the only tool available.
+
+For other tools, paste the same repo-local rules into their project instruction
+file or persistent memory. If the tool has no instruction file, paste the
+startup prompt at the beginning of the session.
+
+### Minimal Tool Prompts
+
+Use these when the repo has already been prepared.
+
+Planning prompt:
+
+```txt
+Use ForgeLoop. Prepare the plan only.
+Read repo evidence first.
+Classify the work, identify gates, define tests, and list open questions.
+Do not implement until I approve.
+```
+
+Implementation prompt:
+
+```txt
+Use the approved ForgeLoop plan.
+Implement only the current sub-phase or vertical slice.
+Run the required verification, update docs if behavior changed, and report
+residual risk.
+Do not push or open a PR.
+```
+
+Review prompt:
+
+```txt
+Review this branch against the approved plan, behavior specs, ADRs, tests,
+docs, diagrams, and current code.
+Lead with bugs, missing tests, security issues, contract drift, and behavior
+mismatches.
+Do not summarize first.
+```
+
 ## What ForgeLoop Protects
 
 ForgeLoop keeps every project anchored in repository evidence:
@@ -86,6 +178,15 @@ Idea -> Documents -> Decisions -> Roadmap -> Behavior Spec -> Phase Plan
      -> Branch -> Tests -> Code -> Smoke Test -> PR -> Merge
 ```
 
+This flow applies to both new and existing projects, but the entry point
+changes.
+
+- Greenfield work starts by creating the product, architecture, workflow, and
+  runtime foundation.
+- Brownfield work starts by reading the current codebase, mapping the affected
+  behavior, identifying existing seams, and proving the change can land without
+  breaking current users.
+
 Each phase follows the same gates:
 
 1. Read the repo.
@@ -118,6 +219,19 @@ Default execution modes:
 Every task should record the selected mode, required tests, skipped checks,
 human time, machine time, token use when available, retries, defects found, and
 artifacts changed.
+
+Tool availability also changes how the workflow runs:
+
+- `Single-tool`: one LLM or coding tool does planning, implementation, review,
+  and handoff in separate passes.
+- `Multi-tool`: one tool implements and another critiques plans, diffs, and
+  architecture.
+- `Human-plus-tool`: the human performs review or manual QA that another tool
+  would otherwise perform.
+
+The gates do not disappear in single-tool mode. The same agent must change
+mode explicitly: first planner, then implementer, then reviewer, then docs
+keeper. Do not let one continuous answer replace the review gate.
 
 ## First-Class Artifacts
 
@@ -153,6 +267,34 @@ Select User Story -> SDD/Behavior Spec -> Human Gate -> Contract Freeze
 
 This lane gives each User Story clear roles, artifacts, gates, timing, and test
 evidence while preserving the broader phase workflow.
+
+For brownfield feature work, add a discovery pass before the User Story lane:
+
+```txt
+Codebase Discovery -> Impact Map -> Compatibility Plan -> Behavior Spec
+     -> Vertical Slice -> Regression Evidence -> PR Prep
+```
+
+This prevents the workflow from assuming a clean slate. Existing behavior,
+contracts, migrations, data, integrations, and user workflows must be protected
+before the new feature is built.
+
+## Recommended Skills
+
+ForgeLoop can later expose its own skills, but these external AI Hero skills
+are useful references now:
+
+- `grill-with-docs`: align vocabulary, plan, and hard decisions before build.
+- `to-prd`: turn settled context into a PRD.
+- `to-issues`: split a PRD or spec into vertical-slice issues.
+- `tdd`: build one behavior at a time through red-green-refactor.
+- `handoff`: preserve live context between long agent sessions.
+- `prototype`: answer one design question with disposable code.
+- `improve-codebase-architecture`: find brownfield module-depth opportunities.
+- `triage`: verify and classify existing backlog items before agents build.
+
+Treat these as optional helpers. The durable workflow still lives in repository
+docs, specs, tests, ADRs, diagrams, issues, and reviewed commits.
 
 ## Documentation Map
 
