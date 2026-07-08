@@ -9,16 +9,12 @@ support the workflow, but they are not hard requirements.
 ## Core Rule
 
 Do not start from vibes, loose chat history, or an agent's memory. Start from
-the current repository state:
+the current repository state.
 
-```txt
-Idea -> Documents -> Decisions -> Roadmap / Master Plan
-     -> Behavior Spec -> Phase Plan -> Branch -> Tests -> Code
-     -> Smoke Test -> PR -> Merge
-```
-
-The source of truth is always the repo: docs, behavior specs, ADRs, current
-code, tests, and Git state.
+The canonical Core loop and source-of-truth order live in
+[FORGELOOP_CORE.md](FORGELOOP_CORE.md). This reference guide expands the Core
+with detailed gates, artifacts, prompts, testing rules, optional tool support,
+and brownfield guidance.
 
 ## Navigation
 
@@ -774,21 +770,9 @@ why manual evidence is the only practical option.
 
 ## Adaptive Execution Modes
 
-Not every task needs the same ceremony. Classify the work before planning or
-implementation and choose the minimum safe execution mode.
-
-- `Docs-only`: docs, prompts, plans, templates. Requires Markdown lint or a
-  structural check.
-- `Mechanical`: renames, formatting, generated updates. Requires diff review
-  plus targeted checks.
-- `Low-risk`: small localized behavior changes. Requires focused tests and a
-  smoke check.
-- `Standard`: normal feature or platform work. Requires unit tests, smoke, and
-  docs alignment.
-- `Strict`: auth, data, contracts, migrations, permissions. Requires
-  integration tests and review.
-- `Release-critical`: release, production-sensitive, or broad changes. Requires
-  the full phase or regression suite.
+Not every task needs the same ceremony. The canonical execution-mode list
+lives in [FORGELOOP_CORE.md](FORGELOOP_CORE.md). This section defines when to
+escalate mode and how those modes affect verification depth.
 
 Escalate the mode when work touches:
 
