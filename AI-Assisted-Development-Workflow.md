@@ -1,10 +1,9 @@
 # AI-Assisted Development Workflow
 
 This guide defines Giuseppe's standard workflow for building projects with VS
-Code, Codex, Claude Code, GitHub, [OpenSpec](https://github.com/Fission-AI/OpenSpec), Knowledge Driven Development,
-Behaviour Driven Development, [Kaddo](https://github.com/Kaddo-kdd/kaddo),
-tests, Mermaid diagrams, and local Docker
-development.
+Code, Codex, Claude Code, GitHub, [OpenSpec][openspec], Knowledge Driven
+Development, Behaviour Driven Development, [Kaddo][kaddo], tests, Mermaid
+diagrams, and local Docker development.
 
 ## Core Rule
 
@@ -12,11 +11,58 @@ Do not start from vibes, loose chat history, or an agent's memory. Start from
 the current repository state:
 
 ```txt
-Idea -> Documents -> Decisions -> OpenSpec -> Phase Plan -> Branch -> Tests -> Code -> Smoke Test -> PR -> Merge
+Idea -> Documents -> Decisions -> Roadmap -> OpenSpec -> Phase Plan
+     -> Branch -> Tests -> Code -> Smoke Test -> PR -> Merge
 ```
 
 The source of truth is always the repo: docs, OpenSpecs, ADRs, current code,
 tests, and Git state.
+
+## Workflow Spec Versus Harness
+
+This document is the workflow specification. It defines the rules, gates,
+artifacts, prompts, and operating model.
+
+A harness is the executable or semi-executable system that enforces this
+workflow. A future ForgeLoop harness should:
+
+1. Read the repository state.
+2. Accept a task, phase, or User Story.
+3. Run pre-flight exploration.
+4. Classify task risk.
+5. Select an execution mode.
+6. Generate or update specs and plans.
+7. Stop for human approval when required.
+8. Run implementation, verification, review, and docs loops.
+9. Collect telemetry.
+10. Produce PR notes and handoff artifacts.
+
+Until that exists, treat this repository as a harness specification, not the
+harness itself.
+
+## Document Evolution Strategy
+
+Improve this document before extracting templates, skills, or harness code. The
+prose is the source material for everything that comes later.
+
+The document should mature through these stages:
+
+1. **Clear workflow prose**: explain the operating model, source-of-truth rules,
+   gates, roles, artifacts, testing expectations, and PR discipline.
+2. **Stable specification**: remove contradictions, define terms, sharpen
+   examples, and make the phase loop usable without extra explanation.
+3. **Reusable templates**: extract repeated structures only after the prose is
+   stable, such as phase plans, User Stories, manual QA handoffs, integration
+   test plans, execution reports, and PR summaries.
+4. **Named skills**: turn repeatable judgment steps into skills, such as
+   pre-flight exploration, risk classification, Grill Me With Docs, docs
+   alignment, QA selection, adversarial review, and telemetry reporting.
+5. **Executable harness**: build a small runner that invokes the stable skills
+   and templates, records gates, collects telemetry, and prepares handoff
+   artifacts.
+
+Do not automate unclear prose. If a rule is hard to explain in the document, it
+will be harder to encode safely in a harness.
 
 ## Tool Roles
 
@@ -91,10 +137,30 @@ Claude Code should not proceed from unclear objectives. If review raises
 blocking questions, answer them and update the phase plan before Codex
 implements.
 
+### Knowledge Driven Development
+
+Knowledge Driven Development is a workflow discipline, not a tool requirement.
+ForgeLoop uses KDD to keep durable project knowledge in repository artifacts
+instead of chat memory.
+
+KDD keeps these artifacts current:
+
+- `CONTEXT.md` for domain language, glossary, and bounded meanings,
+- ADRs for hard-to-reverse decisions and tradeoffs,
+- OpenSpecs or Markdown specs for behavior contracts,
+- phase plans for approved work and exit criteria,
+- diagrams for architecture, data, flows, processes, and sequences,
+- tests for executable expectations,
+- review logs and execution reports for evidence,
+- README and status notes for orientation.
+
+Agents must read these artifacts before planning or coding. If repository
+knowledge is missing, stale, or contradictory, update the knowledge artifact
+before implementation.
+
 ### Kaddo
 
-[Kaddo](https://github.com/Kaddo-kdd/kaddo) is a Knowledge Driven Development
-support layer.
+[Kaddo](https://github.com/Kaddo-kdd/kaddo) is an optional KDD support tool.
 
 Use Kaddo for:
 
@@ -154,6 +220,175 @@ Every serious project should start with these files.
 - `docs/19-local-docker-development.md`: Docker-local development contract.
 - `docs/templates/phase-plan-template.md`: phase-plan template.
 - `docs/phases/README.md`: approved phase plans.
+
+## First-Class Planning Artifacts
+
+ForgeLoop treats planning and review artifacts as executable context for agents.
+They are not loose notes and they do not live only in chat history.
+
+Every serious project should make these artifacts explicit before
+implementation:
+
+- `Roadmap`: ordered milestones, release intent, sequencing, dependencies, and
+  deferrals.
+- `Architecture Plan`: system boundaries, module boundaries, data ownership,
+  deployment assumptions, integration boundaries, and hard-to-reverse technical
+  decisions.
+- `QA Plan`: verification strategy, acceptance criteria, regression scope,
+  release gates, and risk-based test depth.
+- `Manual Test Plan`: human test paths, local commands, test accounts or seed
+  data, expected results, cleanup, known limitations, and feedback requested
+  from the user.
+- `Integration Test Plan`: database, auth, storage, background jobs, external
+  adapters, Docker services, contracts, and failure paths that must be tested
+  across real boundaries.
+
+These artifacts may be standalone files or clearly labeled sections inside the
+startup document pack. The format can vary by project, but the location must be
+obvious from `README.md` or `docs/00-index.md`.
+
+Use this placement by default:
+
+```txt
+docs/
+  03-architecture-decisions.md      # links to ADRs and architecture plan notes
+  08-qa-plan.md                     # QA plan and release gates
+  09-development-plan.md            # roadmap and phase order
+  phases/
+    phase-N-short-name.md           # phase-specific scope and test handoff
+```
+
+Use separate files when an artifact becomes large enough to need ownership,
+review history, or independent updates:
+
+```txt
+docs/roadmap.md
+docs/architecture-plan.md
+docs/qa-plan.md
+docs/manual-test-plan.md
+docs/integration-test-plan.md
+```
+
+Agents must read the relevant artifact before planning or coding. If an
+artifact is missing, stale, or contradictory, stop and update the documentation
+before implementation.
+
+## User Stories
+
+User Stories are useful execution units inside the phase workflow. They should
+not replace product docs, OpenSpecs, ADRs, phase plans, tests, or code.
+
+Use User Stories when they help:
+
+- slice MVP work,
+- order backlog items,
+- pick the next executable unit,
+- measure progress,
+- run one harness cycle per item,
+- generate PR summaries,
+- track tests and defects per feature,
+- compare machine time with human supervision time.
+
+Every executable User Story should include:
+
+- user goal,
+- business value,
+- acceptance criteria,
+- linked roadmap item,
+- linked OpenSpec or behavior spec,
+- affected domain and modules,
+- risk level,
+- selected execution mode,
+- required tests,
+- dependencies,
+- telemetry fields,
+- PR or branch linkage.
+
+Do not let a User Story stand alone as the source of truth. If it conflicts
+with OpenSpecs, ADRs, current code, tests, or the approved phase plan, stop and
+resolve the conflict before implementation.
+
+## Adaptive Execution Modes
+
+Not every task needs the same ceremony. Classify the work before planning or
+implementation and choose the minimum safe execution mode.
+
+- `Docs-only`: docs, prompts, plans, templates. Requires Markdown lint or a
+  structural check.
+- `Mechanical`: renames, formatting, generated updates. Requires diff review
+  plus targeted checks.
+- `Low-risk`: small localized behavior changes. Requires focused tests and a
+  smoke check.
+- `Standard`: normal feature or platform work. Requires unit tests, smoke, and
+  docs alignment.
+- `Strict`: auth, data, contracts, migrations, permissions. Requires
+  integration tests and review.
+- `Release-critical`: release, production-sensitive, or broad changes. Requires
+  the full phase or regression suite.
+
+Escalate the mode when work touches:
+
+- security,
+- authorization,
+- data ownership,
+- persistence,
+- migrations,
+- external contracts,
+- concurrency,
+- payments,
+- pricing,
+- tenant boundaries,
+- production operations.
+
+De-escalate only when repo evidence proves the change is narrow and reversible.
+State the selected mode in the phase plan, task notes, or execution report.
+
+## Harness-Native Skills And Supporting Tools
+
+ForgeLoop combines harness-native skills with external or project-specific
+tools. Not every item must be installed in every project.
+
+### Harness-Native Skills
+
+These are reusable capabilities the harness should eventually invoke.
+
+- `repo-preflight-exploration`: inspect docs, specs, ADRs, diagrams, tests,
+  source, and Git state.
+- `task-risk-classifier`: choose Docs-only, Mechanical, Low-risk, Standard,
+  Strict, or Release-critical mode.
+- `grill-me-with-docs`: challenge plans against repo evidence and ask blocking
+  questions.
+- `phase-plan-generator`: create phase plans from the template.
+- `openspec-author`: create or update behavior specs, scenarios, contracts, and
+  acceptance criteria.
+- `bdd-scenario-writer`: convert expected behavior into Given/When/Then
+  scenarios.
+- `implementation-planner`: break approved work into smallest coherent
+  sub-phases.
+- `subphase-implementer`: implement one approved sub-phase at a time.
+- `test-strategy-selector`: select required tests from risk and execution mode.
+- `qa-runner`: run verification, report failures, and classify blockers.
+- `adversarial-code-reviewer`: review implementation against specs,
+  architecture, tests, security, and docs.
+- `docs-alignment-reviewer`: check README, docs, OpenSpecs, ADRs, diagrams, and
+  phase plans.
+- `diagram-maintainer`: maintain Mermaid architecture, data, flow, process, and
+  sequence diagrams.
+- `telemetry-reporter`: capture time, tokens, retries, tests, defects,
+  artifacts, and verdict.
+- `manual-qa-handoff`: produce exact local testing instructions for the user.
+- `pr-summary-writer`: generate PR summaries, risks, tests, and deferred work.
+
+### Supporting Tools
+
+- OpenSpec: behavior specs and acceptance criteria.
+- Kaddo: optional Knowledge Driven Development support and drift checks.
+- GitHub CLI: branches, PRs, checks, and review surface.
+- Mermaid: living diagrams.
+- Docker or Docker Compose: reproducible local runtime.
+
+Project-specific `AGENTS.md`, `CLAUDE.md`, and `docs/` files decide which tools
+are mandatory for that repository.
 
 ### Diagrams
 
@@ -306,7 +541,22 @@ Codex reads:
 
 If files or commands can answer a question, inspect them before asking.
 
-### 4. Grill Me With Docs Gate
+### 4. Classify Risk And Execution Mode
+
+Before writing the phase plan, classify the phase or task:
+
+- selected execution mode,
+- why that mode is sufficient,
+- required tests,
+- skipped tests and rationale,
+- required docs and diagrams,
+- human approval gates,
+- expected manual QA.
+
+If the selected mode is `Strict` or `Release-critical`, require explicit user
+approval before implementation.
+
+### 5. Grill Me With Docs Gate
 
 Before a phase plan is approved, run **Grill Me With Docs**.
 
@@ -323,7 +573,7 @@ Rules:
 The phase is not ready for implementation until every blocking question is
 answered and the objective is clear.
 
-### 5. Create Phase Plan
+### 6. Create Phase Plan
 
 Create:
 
@@ -341,6 +591,8 @@ The plan must include:
 - open questions,
 - sub-phases,
 - tasks per sub-phase,
+- User Stories if used,
+- selected execution mode,
 - OpenSpec changes,
 - Kaddo notes if used,
 - KDD notes,
@@ -356,7 +608,7 @@ The plan must include:
 
 No implementation before user approval.
 
-### 6. Create Or Update OpenSpecs
+### 7. Create Or Update OpenSpecs
 
 OpenSpecs are the behavior contract.
 
@@ -373,12 +625,13 @@ Define:
 Use OpenSpecs for observable behavior changes. Skip only for trivial docs-only
 or mechanical changes.
 
-### 7. User Approval Gate
+### 8. User Approval Gate
 
 Approval means:
 
 - scope is correct,
 - sub-phases are acceptable,
+- execution mode is acceptable,
 - testing plan is sufficient,
 - diagram plan is sufficient,
 - manual test handoff is clear,
@@ -386,7 +639,7 @@ Approval means:
 
 If scope changes, update the plan before coding.
 
-### 8. Implement One Sub-Phase At A Time
+### 9. Implement One Sub-Phase At A Time
 
 For each sub-phase:
 
@@ -412,7 +665,7 @@ For each sub-phase:
 Do not continue to the next sub-phase while the current one has failing tests,
 unresolved blocking questions, or unclear objectives.
 
-### 9. Testing Ladder
+### 10. Testing Ladder
 
 Always:
 
@@ -444,7 +697,7 @@ At the end of the phase:
 - report every failure,
 - offer concrete solution options before proceeding.
 
-### 10. Phase Documentation Gate
+### 11. Phase Documentation Gate
 
 Before a phase can close, update project documentation so a future human or
 agent can understand the current state.
@@ -480,7 +733,7 @@ The docs must answer:
 
 Do not close a phase if docs describe an older project state.
 
-### 11. Manual Test Handoff
+### 12. Manual Test Handoff
 
 Before asking the user to test, provide:
 
@@ -493,7 +746,7 @@ Before asking the user to test, provide:
 - known limitations,
 - what feedback is needed.
 
-### 12. Process Feedback
+### 13. Process Feedback
 
 Every user comment becomes one of:
 
@@ -504,7 +757,38 @@ Every user comment becomes one of:
 
 Do not start the next phase until current phase exit criteria are met.
 
-### 13. Pull Request
+### 14. Execution Report
+
+At the end of a sub-phase, phase, or User Story, produce an execution report.
+Use exact values when tooling can provide them. Otherwise mark values as
+unknown.
+
+```txt
+Phase or User Story:
+Branch:
+Execution mode:
+Human time:
+Machine time:
+Tokens:
+Retries:
+Tests added:
+Tests run:
+Tests passing:
+Defects found by QA:
+Defects found by review:
+Docs updated:
+Diagrams updated:
+Artifacts changed:
+Skipped checks:
+Residual risk:
+Verdict:
+```
+
+This report helps evaluate whether the workflow is slow, expensive, effective,
+or over-engineered. Do not optimize for raw machine speed if doing so removes
+the gates that prevent rework.
+
+### 15. Pull Request
 
 Open a GitHub Pull Request only after the user says the branch is ready for PR.
 
@@ -521,12 +805,13 @@ PR must include:
 - manual test notes,
 - OpenSpecs updated,
 - Kaddo notes if used,
+- execution report,
 - risks and deferred work.
 
 If the user explicitly approves an early review branch, use a draft PR. Without
 that approval, keep PR notes local until the branch is approved for push.
 
-### 14. Merge And Reset
+### 16. Merge And Reset
 
 Never push a branch, open a PR, merge, or push to `main` until the user
 explicitly says the work is ready for that action.
@@ -605,9 +890,10 @@ At phase end, verify:
 - new workflows appear in process-flow diagrams,
 - non-trivial interactions appear in sequence diagrams.
 
-## Kaddo Workflow
+## Optional Kaddo Workflow
 
-Use Kaddo as optional KDD support, especially after Phase 0.
+Use Kaddo as optional KDD support, especially after Phase 0. The workflow must
+remain usable without it.
 
 Recommended first pass:
 
@@ -622,11 +908,13 @@ npx @kaddo/cli understand
 Rules:
 
 - do not globally install Kaddo by default,
+- treat KDD as the method and Kaddo as one possible tool,
 - inspect generated `.kaddo/` and `knowledge/` artifacts before committing,
 - do not let Kaddo overwrite `AGENTS.md` or `CLAUDE.md` without review,
 - map approved phase plans to Kaddo Work Items if useful,
 - use Kaddo Guard as a drift signal, not as a test replacement,
 - keep OpenSpecs as the behavior source of truth.
+- when Kaddo is unavailable, use Markdown docs and manual drift checks.
 
 Recommended cadence:
 
@@ -648,7 +936,9 @@ critic or design reviewer.
 Default loop:
 
 ```txt
-VS Code opens repo -> Codex inspects and edits -> Docker/tests run -> Claude Code reviews plan or diff -> Codex applies accepted changes -> GitHub PR records the result
+VS Code opens repo -> Codex inspects and edits -> Docker/tests run
+     -> Claude Code reviews plan or diff -> Codex applies accepted changes
+     -> GitHub PR records the result
 ```
 
 Do not ask both agents to implement the same change in parallel.
@@ -680,15 +970,17 @@ The objective should include:
 4. Decide which Claude Code feedback is accepted.
 5. Use Codex to update the phase plan and docs.
 6. Approve the phase plan.
-7. Use Codex to gather full context at each sub-phase start.
-8. Use Codex to implement one sub-phase at a time.
-9. Require the sub-phase test suite to pass green before continuing.
-10. Use Claude Code for review after meaningful milestones or before PR.
-11. Use Codex to apply accepted fixes and run verification.
-12. At phase end, run current phase tests plus previous phase regressions.
-13. Update project documentation and diagrams before phase close.
-14. Use VS Code for manual smoke testing.
-15. Use GitHub PR as the final review record only after the user says it is
+7. Classify task risk and select the execution mode.
+8. Use Codex to gather full context at each sub-phase start.
+9. Use Codex to implement one sub-phase at a time.
+10. Require the sub-phase test suite to pass green before continuing.
+11. Use Claude Code for review after meaningful milestones or before PR.
+12. Use Codex to apply accepted fixes and run verification.
+13. At phase end, run current phase tests plus previous phase regressions.
+14. Update project documentation and diagrams before phase close.
+15. Produce the execution report.
+16. Use VS Code for manual smoke testing.
+17. Use GitHub PR as the final review record only after the user says it is
     ready.
 
 ### Conflict Rules
@@ -744,6 +1036,11 @@ native commands. The important part is reproducibility.
 
 ## Testing Standards
 
+Match test depth to the execution mode. A `Docs-only` change should not require
+a full Docker suite unless the docs change operational commands. A `Strict` or
+`Release-critical` change should not skip integration, regression, or smoke
+checks without an explicit reason.
+
 Unit tests cover:
 
 - domain logic,
@@ -795,6 +1092,7 @@ docs/17-development-workflow.md, docs/18-openspec-kdd-bdd.md, diagrams, and
 relevant ADRs.
 
 Prepare Phase N only.
+Classify the phase risk and select the execution mode.
 Create docs/phases/phase-N-short-name.md from the phase plan template.
 Create or update OpenSpecs and Mermaid diagrams for this phase.
 Include KDD notes, BDD scenarios, Docker commands, unit tests, smoke test,
@@ -816,12 +1114,13 @@ Set this as the active goal for the agent.
 Before editing, inspect git status, docs, OpenSpecs, diagrams, tests, nearby
 code, and the full source context relevant to this sub-phase.
 Resolve all blocking questions before implementation.
+Confirm the selected execution mode and required verification.
 Keep changes scoped.
 Add or update tests.
 Run the sub-phase Docker-local verification until green.
 Update docs, OpenSpecs, and diagrams if behavior changed.
 Report changed files, tests run, smoke-test status, unresolved issues, proposed
-solutions, and residual risk.
+solutions, execution telemetry, and residual risk.
 Do not push, open a PR, or merge unless I explicitly say we are ready.
 ```
 
@@ -871,7 +1170,7 @@ history, and smoke evidence.
 Best lesson: use PR discipline as the review surface, but create the PR only
 after the user explicitly approves pushing the branch.
 
-### Kaddo
+### Kaddo Project
 
 Best lesson: keep project knowledge close to the code and let agents work from
 structured context instead of repeated exploration.
@@ -905,6 +1204,7 @@ docs/17-development-workflow.md
 docs/18-openspec-kdd-bdd.md
 docs/19-local-docker-development.md
 docs/templates/phase-plan-template.md
+docs/templates/execution-report-template.md
 docs/diagrams/
 docs/adr/
 openspec/README.md
@@ -929,6 +1229,7 @@ A project is ready to start implementation when:
 - starter Mermaid diagrams exist or are explicitly deferred,
 - Phase 0 plan is drafted,
 - Phase 0 testing plan exists,
+- execution modes and report template exist,
 - user has approved the Phase 0 plan.
 
 Before user approval, the project is ready to plan, not ready to code.
@@ -950,6 +1251,7 @@ A phase is done when:
 - integration tests pass where required,
 - smoke test passes,
 - manual test handoff was completed,
+- execution report is complete,
 - user feedback was processed,
 - PR is reviewed,
 - branch is merged to `main`,
@@ -960,3 +1262,6 @@ A phase is done when:
 Do not optimize for starting code fastest. Optimize for making every phase easy
 to understand, build, test, review, resume, and safely hand off across VS Code,
 Codex, Claude Code, Kaddo, GitHub, and future agents.
+
+[openspec]: https://github.com/Fission-AI/OpenSpec
+[kaddo]: https://github.com/Kaddo-kdd/kaddo
