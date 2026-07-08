@@ -30,7 +30,9 @@ is not a coding agent and not yet an executable harness.
 
 - `FORGELOOP_CORE.md`: compact agent-loading layer.
 - `README.md`: project entrypoint and usage guide.
+- `AGENTS.md`: repo-local agent instructions for working on ForgeLoop itself.
 - `AI-Assisted-Development-Workflow.md`: canonical workflow reference.
-- `docs/09-development-plan.md`: future Roadmap / Master Plan location.
+- `docs/09-development-plan.md`: ForgeLoop Roadmap / Master Plan.
+- `docs/templates/`: reusable template pack.
 - `docs/00-index.md`: documentation map.
 - `docs/adr/0001-builder-and-critic-roles.md`: role-separation decision.
