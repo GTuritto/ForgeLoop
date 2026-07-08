@@ -135,23 +135,25 @@ The user owns:
 - final merge approval,
 - decisions that change scope, architecture, security, cost, or business model.
 
-### VS Code
+### Example Control Room: VS Code
 
-VS Code is the project control room.
+The control room is the local workspace where the user reviews files, diffs,
+terminals, logs, and manual test results. VS Code is the default example, but
+any editor, terminal, or IDE can fill this role.
 
-Use it for:
+Use the control room for:
 
 - keeping the active repo visible,
 - reviewing diffs,
 - reading docs and behavior specs side by side,
 - running terminals,
 - observing Docker logs,
-- comparing Codex and Claude Code outputs,
+- comparing builder and critic outputs,
 - running manual smoke tests.
 
-VS Code is not the source of truth. Useful notes from editor tabs, terminals,
-or chats must be moved into the right artifact: phase plan, behavior spec,
-ADR, `CONTEXT.md`, README, or review log.
+The control room is not the source of truth. Useful notes from editor tabs,
+terminals, or chats must be moved into the right artifact: phase plan, behavior
+spec, ADR, `CONTEXT.md`, README, or review log.
 
 ### Builder Agent
 
@@ -1504,19 +1506,20 @@ Recommended cadence:
 - before commit or PR: `kaddo guard`,
 - when unsure what is stale: `kaddo explain` or `kaddo understand`.
 
-## Codex And Claude Code Collaboration
+## Example Multi-Tool Setup: Codex And Claude Code
 
-Use this section when both Codex and Claude Code are available. If only one
-tool is available, use Single-Tool Phase Flow below.
+Use this section as one reference instantiation when both Codex and Claude Code
+are available. If only one tool is available, use Single-Tool Phase Flow below.
+Other capable tools can fill the same builder and critic roles.
 
-In multi-tool mode, use VS Code as the shared cockpit, Codex as the builder,
-and Claude Code as the critic or design reviewer.
+In this example setup, use the local control room to review the repo, Codex as
+the builder, and Claude Code as the critic or design reviewer.
 
 Default loop:
 
 ```txt
-VS Code opens repo -> Codex inspects and edits -> Docker/tests run
-     -> Claude Code reviews plan or diff -> Codex applies accepted changes
+Control room opens repo -> Builder inspects and edits -> Docker/tests run
+     -> Critic reviews plan or diff -> Builder applies accepted changes
      -> GitHub PR records the result
 ```
 
@@ -1524,12 +1527,14 @@ Do not ask both agents to implement the same change in parallel.
 
 ### Agent Goals
 
-Every phase and sub-phase starts with an explicit agent objective.
+Every phase and sub-phase starts with an explicit objective for the active
+tool role.
 
-For Codex, use a Goal when work is multi-step or needs persistence.
+For a builder tool with goal support, use a Goal when work is multi-step or
+needs persistence.
 
-For Claude Code, use the closest equivalent: a clear session objective, stopping
-conditions, approval gates, and expected output.
+For a critic tool, use the closest equivalent: a clear session objective,
+stopping conditions, approval gates, and expected output.
 
 The objective should include:
 
@@ -1543,23 +1548,23 @@ The objective should include:
 
 ### Recommended Multi-Agent Phase Flow
 
-1. Use Codex to prepare the phase plan and behavior specs.
-2. Review the plan in VS Code.
-3. Send the phase plan to Claude Code for adversarial critique.
-4. Decide which Claude Code feedback is accepted.
-5. Use Codex to update the phase plan and docs.
+1. Use the builder to prepare the phase plan and behavior specs.
+2. Review the plan in the control room.
+3. Send the phase plan to the critic for adversarial critique.
+4. Decide which critic feedback is accepted.
+5. Use the builder to update the phase plan and docs.
 6. Approve the phase plan.
 7. Classify task risk and select the execution mode.
 8. Use the User Story delivery lane when the phase is story-driven.
-9. Use Codex to gather full context at each sub-phase or story start.
-10. Use Codex to implement one sub-phase or story step at a time.
+9. Use the builder to gather full context at each sub-phase or story start.
+10. Use the builder to implement one sub-phase or story step at a time.
 11. Require the relevant test suite to pass green before continuing.
-12. Use Claude Code for review after meaningful milestones or before PR.
-13. Use Codex to apply accepted fixes and run verification.
+12. Use the critic for review after meaningful milestones or before PR.
+13. Use the builder to apply accepted fixes and run verification.
 14. At phase end, run current phase tests plus previous phase regressions.
 15. Update project documentation and diagrams before phase close.
 16. Produce the execution report.
-17. Use VS Code for manual smoke testing.
+17. Use the control room for manual smoke testing.
 18. Use GitHub PR as the final review record only after the user says it is
     ready.
 
@@ -1595,14 +1600,14 @@ session before final approval.
 
 ### Conflict Rules
 
-- If Codex and Claude Code disagree, repo docs, behavior specs, ADRs, current code,
-  and tests win over chat memory.
+- If builder and critic outputs disagree, repo docs, behavior specs, ADRs,
+  current code, and tests win over chat memory.
 - If docs are unclear, update docs before implementation.
 - If both agents propose different architectures, capture the tradeoff in the
   phase plan or ADR before coding.
-- If Claude Code suggests broad refactors outside the phase, defer them unless
+- If the critic suggests broad refactors outside the phase, defer them unless
   needed for phase exit criteria.
-- If Codex finds code contradicts the plan, stop and revise the plan.
+- If the builder finds code contradicts the plan, stop and revise the plan.
 - If tests fail, report the failure, likely cause, and solution options.
 
 ## GitHub Rules
@@ -1921,5 +1926,6 @@ A phase is done when:
 ## Final Operating Rule
 
 Do not optimize for starting code fastest. Optimize for making every phase easy
-to understand, build, test, review, resume, and safely hand off across VS Code,
-Codex, Claude Code, Kaddo, GitHub, and future agents.
+to understand, build, test, review, resume, and safely hand off across local
+editors, builder tools, critic tools, optional KDD tools, GitHub, and future
+agents.

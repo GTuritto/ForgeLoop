@@ -99,7 +99,10 @@ Every phase below must link back to this plan.
 - Depends on: none.
 - Execution mode: `Docs-only`.
 - Status: Complete.
-- Phase plan: not yet backfilled.
+- Phase plan: pre-roadmap consolidation. The accepted artifacts are
+  `FORGELOOP_CORE.md`, `AI-Assisted-Development-Workflow.md`, `CONTEXT.md`,
+  `docs/00-index.md`, and ADR 0001. Do not backfill a separate plan unless a
+  future review finds missing decision evidence.
 
 ### Phase 1: Planning Template Pack
 
@@ -107,7 +110,9 @@ Every phase below must link back to this plan.
 - Depends on: Phase 0.
 - Execution mode: `Docs-only`.
 - Status: Complete.
-- Phase plan: to be created if this grows beyond template edits.
+- Phase plan: pre-roadmap consolidation. The initial planning templates are the
+  execution evidence for this docs-only phase. Backfill a separate plan only if
+  planning templates change materially.
 
 ### Phase 2: QA And Brownfield Template Pack
 
@@ -116,7 +121,9 @@ Every phase below must link back to this plan.
 - Depends on: Phase 1.
 - Execution mode: `Docs-only`.
 - Status: Complete.
-- Phase plan: TBD.
+- Phase plan: pre-roadmap consolidation. The merged template pack is the
+  execution evidence for this docs-only phase. Backfill a separate plan only if
+  templates change materially.
 
 ### Phase 2.5: Documentation Consistency Pass
 
@@ -133,7 +140,7 @@ Every phase below must link back to this plan.
 - Depends on: Phase 2.5.
 - Execution mode: `Docs-only`.
 - Status: Draft.
-- Phase plan: TBD.
+- Phase plan: required before creating or installing ForgeLoop-specific skills.
 
 ## Dependency Map
 
@@ -242,3 +249,7 @@ ForgeLoop is a docs-only repo today.
   - Change: completed a documentation consistency pass for canonical concept
     homes.
   - Why: reduce drift before extracting skills from the workflow.
+- Date: 2026-07-08
+  - Change: resolved pre-roadmap phase-plan notes and reframed tool-specific
+    workflow sections as examples.
+  - Why: keep ForgeLoop self-consistent and role-first before skill extraction.
