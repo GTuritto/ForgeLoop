@@ -76,6 +76,14 @@ Every phase below must link back to this plan.
   the full reference guide.
 - Status: Complete
 
+### M2.5: Canonical Concept Homes
+
+- Purpose: reduce duplication across Core, README, index, roadmap, and the full
+  reference workflow.
+- Target signal: README and index point to one canonical home for each repeated
+  concept.
+- Status: Complete
+
 ### M3: Skill Candidates
 
 - Purpose: identify stable repeated actions that should become agent skills.
@@ -110,10 +118,19 @@ Every phase below must link back to this plan.
 - Status: Complete.
 - Phase plan: TBD.
 
+### Phase 2.5: Documentation Consistency Pass
+
+- Goal: reduce duplicate definitions and assign each repeated concept to a
+  canonical file.
+- Depends on: Phase 2.
+- Execution mode: `Docs-only`.
+- Status: Complete.
+- Phase plan: inline in this roadmap unless the work expands.
+
 ### Phase 3: Skill Extraction
 
 - Goal: identify and define skill candidates from stable templates.
-- Depends on: Phase 2.
+- Depends on: Phase 2.5.
 - Execution mode: `Docs-only`.
 - Status: Draft.
 - Phase plan: TBD.
@@ -123,8 +140,10 @@ Every phase below must link back to this plan.
 - Phase 1 depends on Phase 0 because templates need stable Core terminology.
 - Phase 2 depends on Phase 1 because QA templates should link to phase and
   execution report templates.
-- Phase 3 depends on Phase 2 because skills should automate stable templates,
-  not unstable prose.
+- Phase 2.5 depends on Phase 2 because canonicalization should happen after
+  the initial template pack exists.
+- Phase 3 depends on Phase 2.5 because skills should automate stable,
+  de-duplicated docs, not overlapping prose.
 
 ## Scope Boundaries
 
@@ -219,3 +238,7 @@ ForgeLoop is a docs-only repo today.
 - Date: 2026-07-08
   - Change: added architecture and QA templates for first-class artifacts.
   - Why: close the remaining template gaps before skill extraction.
+- Date: 2026-07-08
+  - Change: completed a documentation consistency pass for canonical concept
+    homes.
+  - Why: reduce drift before extracting skills from the workflow.

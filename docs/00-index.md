@@ -27,6 +27,22 @@ Default agent load order:
 - [ForgeLoop Roadmap / Master Plan](09-development-plan.md): ForgeLoop's own
   roadmap and self-application plan.
 
+## Canonical Concept Homes
+
+- Usage entrypoint, examples, and repo package overview:
+  [README.md](../README.md)
+- Default load order, source-of-truth order, core loop, tiers, execution modes,
+  tool modes, and commit/PR rule: [FORGELOOP_CORE.md](../FORGELOOP_CORE.md)
+- Detailed workflow rules, gates, optional tools, brownfield flow, testing
+  ladder, and prompts:
+  [AI-Assisted-Development-Workflow.md](../AI-Assisted-Development-Workflow.md)
+- Glossary and current canonical file list: [CONTEXT.md](../CONTEXT.md)
+- Roadmap, milestones, phase sequencing, and change log:
+  [docs/09-development-plan.md](09-development-plan.md)
+- Template inventory: this index, under [Templates](#templates)
+- Builder/critic role decision:
+  [ADR 0001](adr/0001-builder-and-critic-roles.md)
+
 ## Templates
 
 - [Roadmap / Master Plan Template](templates/master-plan-template.md)

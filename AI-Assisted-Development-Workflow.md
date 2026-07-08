@@ -43,7 +43,9 @@ library.
 
 ## Project Tier Selector
 
-Choose the project tier before deciding how much of ForgeLoop to apply.
+Choose the project tier before deciding how much of ForgeLoop to apply. The
+compact canonical tier list lives in [FORGELOOP_CORE.md](FORGELOOP_CORE.md);
+this section expands those tiers for reference.
 
 - `Throwaway/script`: disposable, local, or exploratory work.
   Use ForgeLoop Core only. Add tests only when risk justifies them.
@@ -121,6 +123,11 @@ will be harder to encode safely in a harness.
 
 ## Tool Roles
 
+These are role definitions, not vendor requirements. The role-separation
+decision lives in
+[ADR 0001](docs/adr/0001-builder-and-critic-roles.md); this section shows one
+reference instantiation of those roles.
+
 ### User
 
 The user owns:
@@ -197,7 +204,9 @@ agent implements.
 ### Tool Availability Modes
 
 ForgeLoop works with one tool or many tools. Tool count changes execution
-shape, not quality gates.
+shape, not quality gates. The compact canonical mode list lives in
+[FORGELOOP_CORE.md](FORGELOOP_CORE.md); this section expands the modes for
+operational use.
 
 - `Single-tool`: one LLM or coding tool handles planning, implementation,
   review, docs, and handoff in separate passes.
