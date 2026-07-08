@@ -598,11 +598,14 @@ The plan must include:
 - KDD notes,
 - BDD scenarios,
 - unit test plan,
-- smoke test plan,
 - integration test plan,
+- smoke test plan,
+- manual test plan,
+- regression test plan,
 - Docker commands,
 - diagram updates,
 - manual test handoff,
+- test evidence required,
 - exit criteria,
 - risks and deferred work.
 
@@ -633,6 +636,7 @@ Approval means:
 - sub-phases are acceptable,
 - execution mode is acceptable,
 - testing plan is sufficient,
+- manual test plan is sufficient,
 - diagram plan is sufficient,
 - manual test handoff is clear,
 - out-of-scope list is accepted.
@@ -682,6 +686,72 @@ Add when relevant:
 - migration tests for schema changes,
 - AI eval fixtures for LLM behavior,
 - security tests for tenant boundaries and secret handling.
+
+Every non-trivial phase must define a phase QA plan:
+
+```txt
+## Phase QA Plan
+### Unit Test Plan
+### Integration Test Plan
+### Smoke Test Plan
+### Manual Test Plan
+### Regression Test Plan
+### Test Evidence Required
+```
+
+### Integration Test Plan
+
+The Integration Test Plan defines which real system boundaries must be verified
+together.
+
+It should include:
+
+- database behavior,
+- migrations,
+- auth or session behavior,
+- API boundaries,
+- background jobs,
+- file or storage boundaries,
+- external provider adapters,
+- Docker-local service wiring,
+- contract or schema validation,
+- test data setup and teardown,
+- commands required to run the tests,
+- expected success signal.
+
+Integration tests should use real local dependencies where practical. Use fakes
+when external services would make the test slow, flaky, expensive, or unsafe.
+
+### Manual Test Plan
+
+The Manual Test Plan defines what the human must verify before accepting the
+phase.
+
+It should include:
+
+- branch name,
+- local startup commands,
+- required seed data or test accounts,
+- URL or command entry point,
+- exact steps,
+- expected results,
+- negative cases,
+- known limitations,
+- what feedback is needed,
+- screenshots or logs to capture when useful.
+
+Manual testing is not a substitute for automated tests. It validates usability,
+workflow coherence, and end-to-end behavior from the human perspective.
+
+### Manual Test Plan Versus Handoff
+
+Manual Test Plan and Manual Test Handoff are related but different:
+
+- Manual Test Plan defines what human testing is required.
+- Manual Test Handoff gives the exact instructions to run that testing now.
+
+The plan belongs in the phase plan. The handoff is the current, executable
+message to the user before they test the branch.
 
 At the end of each sub-phase:
 
@@ -1096,8 +1166,8 @@ Classify the phase risk and select the execution mode.
 Create docs/phases/phase-N-short-name.md from the phase plan template.
 Create or update OpenSpecs and Mermaid diagrams for this phase.
 Include KDD notes, BDD scenarios, Docker commands, unit tests, smoke test,
-integration tests if needed, manual test handoff, exit criteria, risks, and
-out-of-scope items.
+integration test plan, manual test plan, regression test plan, manual test
+handoff, test evidence, exit criteria, risks, and out-of-scope items.
 
 Run a Grill Me With Docs pass against CONTEXT.md, ADRs, OpenSpecs, diagrams,
 docs, and source code.
