@@ -69,15 +69,15 @@ KDD means durable project knowledge stays in the repository:
 
 - `CONTEXT.md` for domain language,
 - ADRs for hard-to-reverse decisions,
-- OpenSpecs or Markdown specs for behavior,
+- behavior specs, using OpenSpec or Markdown,
 - phase plans for approved work,
 - diagrams for system shape and flows,
 - tests for executable expectations,
 - review logs and execution reports for evidence.
 
-Tools such as Kaddo may help scan, package, or validate that knowledge. They
-should remain optional. If a tool is unavailable, use Markdown equivalents and
-document the substitution.
+Tools such as OpenSpec and Kaddo may help structure, scan, package, or validate
+that knowledge. They should remain optional. If a tool is unavailable, use
+Markdown equivalents and document the substitution.
 
 ## Core Workflow
 
@@ -158,7 +158,7 @@ evidence while preserving the broader phase workflow.
 
 - [AI-Assisted-Development-Workflow.md](AI-Assisted-Development-Workflow.md):
   canonical workflow, gates, tool roles, testing ladder, KDD guidance,
-  optional Kaddo usage, and definitions of ready and done.
+  optional OpenSpec and Kaddo usage, and definitions of ready and done.
 - [README.md](README.md): project entrypoint and summary of how to use the
   workflow.
 

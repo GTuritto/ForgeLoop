@@ -148,7 +148,7 @@ KDD keeps these artifacts current:
 
 - `CONTEXT.md` for domain language, glossary, and bounded meanings,
 - ADRs for hard-to-reverse decisions and tradeoffs,
-- OpenSpecs or Markdown specs for behavior contracts,
+- behavior specs, using OpenSpec or Markdown,
 - phase plans for approved work and exit criteria,
 - diagrams for architecture, data, flows, processes, and sequences,
 - tests for executable expectations,
@@ -174,6 +174,24 @@ Use Kaddo for:
 
 Kaddo does not replace behavior specs, phase plans, tests, GitHub PRs, or human
 review.
+
+### OpenSpec
+
+[OpenSpec](https://github.com/Fission-AI/OpenSpec) is an optional tool for
+writing behavior specs, scenarios, contracts, proposals, and task lists.
+
+Use OpenSpec for:
+
+- behavior specs,
+- change proposals,
+- design notes,
+- acceptance criteria,
+- scenario and contract files,
+- traceability from approved work to implementation.
+
+OpenSpec does not replace product docs, ADRs, phase plans, tests, diagrams, or
+human approval. When OpenSpec is unavailable, use Markdown specs with the same
+behavior-contract intent.
 
 ## Required Startup Documents
 
@@ -565,6 +583,20 @@ These are reusable capabilities the harness should eventually invoke.
 
 Project-specific `AGENTS.md`, `CLAUDE.md`, and `docs/` files decide which tools
 are mandatory for that repository.
+
+### Recommended External Skills
+
+- [`grill-with-docs`](https://www.aihero.dev/grill-with-docs): use before
+  implementation when the plan, vocabulary, or hard decisions are not settled.
+  It asks one question at a time, writes resolved terms to `CONTEXT.md`, and
+  records rare hard-to-reverse decisions as ADRs.
+
+Install when the project uses AI Hero skills:
+
+```sh
+npx skills add mattpocock/skills --skill=grill-with-docs
+npx skills update grill-with-docs
+```
 
 ## Architecture Defaults
 
@@ -1076,6 +1108,46 @@ At phase end, verify:
 - new workflows appear in process-flow diagrams,
 - non-trivial interactions appear in sequence diagrams.
 
+## Optional OpenSpec Workflow
+
+Use OpenSpec as optional support for behavior specs, especially when a change
+needs proposals, design notes, scenarios, contracts, and task tracking. The
+workflow must remain usable without it.
+
+Recommended first pass:
+
+```sh
+npm install -g @fission-ai/openspec@latest
+openspec init
+```
+
+Recommended structure:
+
+```txt
+openspec/
+  README.md
+  changes/<change-id>/
+    proposal.md
+    design.md
+    spec.md
+    tasks.md
+```
+
+Rules:
+
+- treat behavior specs as the method and OpenSpec as one possible tool,
+- use OpenSpec when the project benefits from structured proposals and tasks,
+- keep specs aligned with phase plans, ADRs, tests, and implementation,
+- do not let OpenSpec-generated files expand scope without user approval,
+- when OpenSpec is unavailable, use Markdown specs with the same contract.
+
+Recommended cadence:
+
+- before implementation: create or update the behavior spec,
+- before user approval: review proposal, design notes, scenarios, and tasks,
+- during implementation: keep tasks and contracts aligned with code,
+- before PR: confirm specs match delivered behavior.
+
 ## Optional Kaddo Workflow
 
 Use Kaddo as optional KDD support, especially after Phase 0. The workflow must
@@ -1099,7 +1171,7 @@ Rules:
 - do not let Kaddo overwrite `AGENTS.md` or `CLAUDE.md` without review,
 - map approved phase plans to Kaddo Work Items if useful,
 - use Kaddo Guard as a drift signal, not as a test replacement,
-- keep behavior specs as the behavior source of truth.
+- keep behavior specs as the behavior source of truth,
 - when Kaddo is unavailable, use Markdown docs and manual drift checks.
 
 Recommended cadence:
