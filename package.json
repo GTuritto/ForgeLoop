@@ -1,0 +1,34 @@
+{
+  "name": "@gturitto/forgeloop",
+  "version": "0.1.0",
+  "description": "Docs-first workflow standard and installer for AI-assisted software delivery.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GTuritto/ForgeLoop.git"
+  },
+  "bin": {
+    "forgeloop": "bin/forgeloop.js"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "docs/templates/",
+    "FORGELOOP_CORE.md",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test",
+    "forgeloop": "node bin/forgeloop.js"
+  },
+  "keywords": [
+    "ai",
+    "workflow",
+    "agent",
+    "codex",
+    "claude"
+  ],
+  "license": "UNLICENSED"
+}
