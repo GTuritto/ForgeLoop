@@ -2,7 +2,13 @@ const path = require("node:path");
 const readline = require("node:readline/promises");
 const { stdin: input, stdout: output } = require("node:process");
 const { version } = require("../package.json");
-const { buildInstallPlan, executePlan, summarizePlan } = require("./installer");
+const {
+  buildGlobalInstallPlan,
+  buildInstallPlan,
+  defaultGlobalSourceDir,
+  executePlan,
+  summarizePlan,
+} = require("./installer");
 const { listToolNames } = require("./tool-adapters");
 
 async function runCli(argv) {
@@ -13,7 +19,33 @@ async function runCli(argv) {
     return;
   }
 
-  if (parsed.help || parsed.command !== "init") {
+  if (parsed.help) {
+    printHelp();
+    return;
+  }
+
+  if (parsed.command === "install-global") {
+    const answers = parsed.yes || !process.stdin.isTTY ? parsed : await askGlobalInstallQuestions(parsed);
+    const plan = buildGlobalInstallPlan({
+      globalSourceDir: answers.globalSourceDir,
+    });
+    const dryRun = !answers.write || answers.dryRun;
+    const results = executePlan(plan, { dryRun });
+
+    if (answers.json) {
+      console.log(JSON.stringify({ dryRun, plan: { ...plan, actions: results } }, null, 2));
+      return;
+    }
+
+    console.log(dryRun ? "ForgeLoop global source dry run\n" : "ForgeLoop global source install\n");
+    console.log(summarizePlan(plan, results));
+    if (dryRun) {
+      console.log("\nNo files were changed. Re-run with --write to install the global source.");
+    }
+    return;
+  }
+
+  if (parsed.command !== "init") {
     printHelp();
     return;
   }
@@ -22,6 +54,7 @@ async function runCli(argv) {
   const plan = buildInstallPlan({
     targetDir: answers.targetDir,
     mode: answers.mode,
+    globalSourceDir: answers.globalSourceDir,
     tools: answers.tools,
     tier: answers.tier,
     workType: answers.workType,
@@ -47,6 +80,7 @@ function parseArgs(argv) {
   const parsed = {
     command: argv[0] || "init",
     targetDir: process.cwd(),
+    globalSourceDir: defaultGlobalSourceDir(),
     mode: "copy",
     tools: ["codex"],
     tier: "real",
@@ -60,9 +94,13 @@ function parseArgs(argv) {
     version: false,
   };
 
-  let index = parsed.command === "init" ? 1 : 0;
+  let index = parsed.command === "init" || parsed.command === "install-global" ? 1 : 0;
   if (argv[index] && !argv[index].startsWith("-")) {
-    parsed.targetDir = path.resolve(argv[index]);
+    if (parsed.command === "install-global") {
+      parsed.globalSourceDir = path.resolve(argv[index]);
+    } else {
+      parsed.targetDir = path.resolve(argv[index]);
+    }
     index += 1;
   }
 
@@ -86,6 +124,9 @@ function parseArgs(argv) {
       parsed.json = true;
     } else if (arg === "--mode") {
       parsed.mode = requireValue(arg, next);
+      index += 1;
+    } else if (arg === "--global-source") {
+      parsed.globalSourceDir = path.resolve(requireValue(arg, next));
       index += 1;
     } else if (arg === "--tools") {
       parsed.tools = splitList(requireValue(arg, next));
@@ -116,10 +157,24 @@ async function askQuestions(parsed) {
       ...parsed,
       targetDir: await ask(rl, "Target directory", parsed.targetDir),
       mode: await ask(rl, "Install mode: copy, symlink, or hybrid", parsed.mode),
+      globalSourceDir: await ask(rl, "Global source directory for symlink or hybrid mode", parsed.globalSourceDir),
       tools: splitList(await ask(rl, `Tools (${listToolNames().join(", ")})`, parsed.tools.join(","))),
       tier: await ask(rl, "Project tier: throwaway, real, or productized", parsed.tier),
       workType: await ask(rl, "Work type: greenfield, brownfield, or maintenance", parsed.workType || "brownfield"),
       write: /^y/i.test(await ask(rl, "Write files now? Dry run is safer first: y/N", "N")),
+    };
+  } finally {
+    rl.close();
+  }
+}
+
+async function askGlobalInstallQuestions(parsed) {
+  const rl = readline.createInterface({ input, output });
+  try {
+    return {
+      ...parsed,
+      globalSourceDir: await ask(rl, "Global source directory", parsed.globalSourceDir),
+      write: /^y/i.test(await ask(rl, "Install global source now? Dry run is safer first: y/N", "N")),
     };
   } finally {
     rl.close();
@@ -151,12 +206,14 @@ function printHelp() {
 
 Usage:
   forgeloop init [target-dir] [options]
+  forgeloop install-global [global-source-dir] [options]
 
 Options:
   --dry-run                 Plan changes only. This is the default.
   --write                   Apply safe creates and write review patches.
   --yes, -y                 Use defaults without prompts.
   --mode copy|symlink|hybrid
+  --global-source PATH      Stable ForgeLoop source for symlink or hybrid mode.
   --tools codex,claude-code
   --tier throwaway|real|productized
   --work-type greenfield|brownfield|maintenance
@@ -166,8 +223,9 @@ Options:
   --help, -h
 
 Examples:
+  npx github:GTuritto/ForgeLoop install-global --write
   npx github:GTuritto/ForgeLoop init . --dry-run
-  npx forgeloop init . --tools codex,claude-code --work-type brownfield
+  npx forgeloop init . --mode hybrid --tools codex,claude-code --work-type brownfield
 `);
 }
 

@@ -24,3 +24,25 @@ test("parses init options for NPX usage", () => {
   assert.equal(parsed.workType, "brownfield");
   assert.equal(parsed.targetDir, "/tmp/example");
 });
+
+test("parses global source options", () => {
+  const parsed = parseArgs([
+    "init",
+    "/tmp/example",
+    "--mode",
+    "hybrid",
+    "--global-source",
+    "/tmp/forgeloop-source",
+  ]);
+
+  assert.equal(parsed.mode, "hybrid");
+  assert.equal(parsed.globalSourceDir, "/tmp/forgeloop-source");
+});
+
+test("parses install-global command target", () => {
+  const parsed = parseArgs(["install-global", "/tmp/forgeloop-source", "--write"]);
+
+  assert.equal(parsed.command, "install-global");
+  assert.equal(parsed.globalSourceDir, "/tmp/forgeloop-source");
+  assert.equal(parsed.write, true);
+});
