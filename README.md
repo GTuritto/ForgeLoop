@@ -108,6 +108,38 @@ Apply the planned setup only after reviewing the output:
 npx github:GTuritto/ForgeLoop init /path/to/project --write
 ```
 
+This is a direct project install. By default it copies the selected ForgeLoop
+templates into the target repo.
+
+If you want projects to share templates from one stable local ForgeLoop source,
+install that source first:
+
+```sh
+npx github:GTuritto/ForgeLoop install-global --dry-run
+npx github:GTuritto/ForgeLoop install-global --write
+```
+
+The default global source path is:
+
+```txt
+~/.forgeloop/source
+```
+
+After the global source exists, use `symlink` or `hybrid` mode:
+
+```sh
+npx github:GTuritto/ForgeLoop init /path/to/project --dry-run \
+  --mode symlink
+```
+
+Use `--global-source` when you want a different shared source directory:
+
+```sh
+npx github:GTuritto/ForgeLoop init /path/to/project --dry-run \
+  --mode hybrid \
+  --global-source /path/to/forgeloop-source
+```
+
 After ForgeLoop is published to npm, the shorter command will be:
 
 ```sh
@@ -138,15 +170,16 @@ npx github:GTuritto/ForgeLoop init /path/to/project --dry-run \
 
 Installer options:
 
-| Option | Purpose | Default |
-| --- | --- | --- |
-| `--dry-run` | Preview the plan without writing files. | yes |
-| `--write` | Apply safe creates and write review patches. | no |
-| `--tools` | Comma-separated tool adapters. | `codex` |
-| `--tier` | `throwaway`, `real`, or `productized`. | `real` |
-| `--work-type` | `greenfield`, `brownfield`, or `maintenance`. | inferred |
-| `--mode` | `copy`, `symlink`, or `hybrid`. | `copy` |
-| `--other-file` | Add a custom instruction file path. | none |
+- `--dry-run`: preview the plan without writing files. Default: yes.
+- `--write`: apply safe creates and write review patches. Default: no.
+- `--tools`: comma-separated tool adapters. Default: `codex`.
+- `--tier`: `throwaway`, `real`, or `productized`. Default: `real`.
+- `--work-type`: `greenfield`, `brownfield`, or `maintenance`. Default:
+  inferred.
+- `--mode`: `copy`, `symlink`, or `hybrid`. Default: `copy`.
+- `--global-source`: stable source for `symlink` or `hybrid` mode. Default:
+  `~/.forgeloop/source`.
+- `--other-file`: add a custom instruction file path. Default: none.
 
 Supported tool adapters:
 
@@ -172,7 +205,8 @@ The installer is conservative:
 - existing instruction files are preserved,
 - review patches are written for existing files,
 - copy mode is the default,
-- symlink and hybrid modes are explicit choices.
+- symlink and hybrid modes are explicit choices,
+- symlink and hybrid modes require a stable global source.
 
 ### What The Installer Adds
 
@@ -188,6 +222,18 @@ Depending on the selected tools, tier, and work type, the installer can add:
 
 Existing files are not overwritten silently. If an instruction file already
 exists, the installer writes a review patch under `.forgeloop/review/`.
+
+### Install Modes
+
+- `copy`: copies templates into the target project. This is the best default
+  for reviewable repo history.
+- `symlink`: links templates from the global ForgeLoop source into the target
+  project.
+- `hybrid`: creates project instruction files locally and links reusable
+  templates from the global source.
+
+`symlink` and `hybrid` mode intentionally refuse to run unless the global
+source exists. This avoids durable project links pointing into an NPX cache.
 
 ### Manual Install Fallback
 

@@ -3,7 +3,11 @@ const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
 const test = require("node:test");
-const { buildInstallPlan, executePlan } = require("../src/installer");
+const {
+  buildGlobalInstallPlan,
+  buildInstallPlan,
+  executePlan,
+} = require("../src/installer");
 
 const forgeLoopRoot = path.resolve(__dirname, "..");
 
@@ -79,6 +83,73 @@ test("dry run does not write files", () => {
   assert.equal(fs.existsSync(path.join(targetDir, "AGENTS.md")), false);
 });
 
+test("symlink mode requires a stable global source", () => {
+  const targetDir = makeTempRepo();
+  const globalSourceDir = path.join(makeTempRepo(), "missing-global-source");
+
+  assert.throws(
+    () =>
+      buildInstallPlan({
+        forgeLoopRoot,
+        targetDir,
+        globalSourceDir,
+        mode: "symlink",
+        tools: ["codex"],
+        tier: "real",
+        workType: "greenfield",
+      }),
+    /requires a stable ForgeLoop global source/
+  );
+});
+
+test("symlink mode uses the stable global source for templates", () => {
+  const targetDir = makeTempRepo();
+  const globalSourceDir = makeTempRepo();
+  createMinimalGlobalSource(globalSourceDir);
+
+  const plan = buildInstallPlan({
+    forgeLoopRoot,
+    targetDir,
+    globalSourceDir,
+    mode: "symlink",
+    tools: ["codex"],
+    tier: "real",
+    workType: "greenfield",
+  });
+
+  const symlink = plan.actions.find(
+    (action) => action.type === "symlink" && action.path.endsWith("docs/templates/master-plan-template.md")
+  );
+  assert.ok(symlink);
+  assert.equal(symlink.source, path.join(globalSourceDir, "docs/templates/master-plan-template.md"));
+});
+
+test("global install plan copies ForgeLoop package files into a stable source", () => {
+  const globalSourceDir = makeTempRepo();
+  const plan = buildGlobalInstallPlan({ forgeLoopRoot, globalSourceDir });
+
+  assert.equal(plan.kind, "global-source");
+  assert.equal(
+    plan.actions.some((action) => action.type === "copy" && action.path.endsWith("FORGELOOP_CORE.md")),
+    true
+  );
+  assert.equal(
+    plan.actions.some((action) => action.type === "copy" && action.path.endsWith("docs/templates/master-plan-template.md")),
+    true
+  );
+});
+
 function makeTempRepo() {
   return fs.mkdtempSync(path.join(os.tmpdir(), "forgeloop-test-"));
+}
+
+function createMinimalGlobalSource(globalSourceDir) {
+  const templatesDir = path.join(globalSourceDir, "docs/templates");
+  fs.mkdirSync(templatesDir, { recursive: true });
+
+  for (const file of fs.readdirSync(path.join(forgeLoopRoot, "docs/templates"))) {
+    if (file.endsWith(".md")) {
+      fs.copyFileSync(path.join(forgeLoopRoot, "docs/templates", file), path.join(templatesDir, file));
+    }
+  }
 }

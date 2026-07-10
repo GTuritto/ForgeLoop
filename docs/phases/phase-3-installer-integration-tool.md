@@ -106,6 +106,7 @@ entrypoint:
 
 ```txt
 forgeloop init [target-dir]
+forgeloop install-global [global-source-dir]
 ```
 
 The intended future install shape is:
@@ -118,6 +119,13 @@ Until the package is published to npm, the GitHub-backed NPX command is:
 
 ```txt
 npx github:GTuritto/ForgeLoop init
+npx github:GTuritto/ForgeLoop install-global
+```
+
+Default global source path:
+
+```txt
+~/.forgeloop/source
 ```
 
 The first version stays JavaScript-only to avoid build tooling before the
@@ -208,6 +216,8 @@ Brownfield setup should include Module / Component Map guidance by default.
 - Create or update only the minimum required files.
 - Never overwrite user content without an explicit confirmation.
 - Write a summary of created, changed, skipped, and deferred files.
+- Refuse `symlink` and `hybrid` modes when the global source is missing.
+- Allow overriding the global source path with `--global-source`.
 - Run link and markdown checks when possible.
 
 ## Target Files
@@ -243,6 +253,7 @@ the current conventions for each tool before writing files.
 - Keep generated ForgeLoop sections clearly marked.
 - Preserve target repo tone and existing workflow rules.
 - Treat symlinks as advanced mode.
+- Do not create symlinks to an NPX cache or other temporary package path.
 - Do not create secrets, tokens, or environment files.
 
 ## Sub-Phases
