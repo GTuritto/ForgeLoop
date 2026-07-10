@@ -14,6 +14,8 @@ is not a coding agent and not yet an executable harness.
   competing definitions.
 - `Roadmap / Master Plan`: the project-level sequencing document above phase
   plans, User Stories, vertical slices, and tasks.
+- `Module / Component Map`: a planning artifact that identifies modules,
+  components, responsibilities, dependencies, tests, and uncertain boundaries.
 - `Builder agent`: the tool that edits the repository, runs commands, and
   prepares branches, commits, and PR-ready work.
 - `Critic agent`: the tool or pass that reviews plans, architecture, diffs,

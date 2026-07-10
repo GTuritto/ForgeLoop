@@ -478,6 +478,10 @@ implementation:
 - `Architecture Plan`: system boundaries, module boundaries, data ownership,
   deployment assumptions, integration boundaries, and hard-to-reverse technical
   decisions.
+- `Module / Component Map`: current or planned modules, components,
+  responsibilities, dependencies, ownership, tests, and uncertainty. In
+  brownfield projects, create this map from evidence before assuming the
+  architecture is already clean.
 - `QA Plan`: verification strategy, acceptance criteria, regression scope,
   release gates, and risk-based test depth.
 - `Manual Test Plan`: human test paths, local commands, test accounts or seed
@@ -510,6 +514,7 @@ review history, or independent updates:
 docs/roadmap.md
 docs/master-plan.md
 docs/architecture-plan.md
+docs/module-map.md
 docs/qa-plan.md
 docs/manual-test-plan.md
 docs/integration-test-plan.md
@@ -521,6 +526,7 @@ Canonical ownership:
   out,
 - architecture plan belongs in `docs/03-architecture-decisions.md` unless split
   out,
+- module map belongs in the architecture plan unless split out,
 - ADRs live in `docs/adr/` and record only hard-to-reverse decisions,
 - QA plan belongs in `docs/08-qa-plan.md` unless split out,
 - manual and integration test plans live in the phase plan unless split out.
@@ -678,9 +684,10 @@ production behavior, customer data, migrations, integrations, or established
 tests.
 
 ```txt
-Codebase Discovery -> Impact Map -> Compatibility Plan -> Behavior Spec
-     -> Vertical Slice Plan -> Human Gate -> TDD RED -> Implementation
-     -> Regression Evidence -> Code Review -> Docs -> Human Gate -> PR Prep
+Codebase Discovery -> Module Discovery -> Impact Map -> Compatibility Plan
+     -> Behavior Spec -> Vertical Slice Plan -> Human Gate -> TDD RED
+     -> Implementation -> Regression Evidence -> Code Review -> Docs
+     -> Human Gate -> PR Prep
 ```
 
 ### Brownfield Discovery
@@ -702,13 +709,43 @@ Before planning implementation, inspect:
 The output is a short discovery note that says what exists, what must not
 break, and where the new behavior can attach.
 
+### Module Discovery
+
+Do not assume a brownfield codebase has clean or named modules. Many existing
+projects grew around routes, screens, services, scripts, or folders before
+module boundaries were explicit.
+
+Before impact mapping, create a tentative Module / Component Map when module
+boundaries are unclear. Use evidence from:
+
+- directories and package boundaries,
+- runtime entry points,
+- routes, controllers, screens, commands, or jobs,
+- domain entities and data ownership,
+- service classes, adapters, providers, or repositories,
+- tests and fixtures,
+- migrations and schemas,
+- imports, dependency direction, and shared utilities,
+- docs, diagrams, ADRs, and recent PRs.
+
+Classify findings as:
+
+- `confirmed`: supported by docs, code, and tests,
+- `inferred`: supported by code shape but not documented,
+- `uncertain`: needs human review before planning depends on it,
+- `missing`: no clear owner or boundary exists.
+
+The output should name tentative modules, components inside each module,
+dependencies between them, tests that protect them, and the uncertainty that
+must be resolved before implementation.
+
 ### Impact Map
 
 Every brownfield feature must map the affected surface before code changes.
 
 Include:
 
-- modules and ownership boundaries,
+- modules, components, and ownership boundaries,
 - public APIs, routes, commands, events, schemas, and SDKs,
 - data model and migration impact,
 - UI flows and state transitions,

@@ -57,9 +57,19 @@ For each sub-phase:
 
 - Name:
 - Goal:
-- Files or modules:
+- Files, modules, or components:
 - Tests:
 - Exit signal:
+
+## Module / Component Plan
+
+- Module map location:
+- Modules touched or created:
+- Components touched or created:
+- Boundaries affected:
+- Dependencies affected:
+- Uncertain boundaries:
+- Human review needed:
 
 ## QA Plan For This Phase
 
