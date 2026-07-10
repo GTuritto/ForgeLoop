@@ -1,10 +1,14 @@
 {
-  "name": "@gturitto/forgeloop",
+  "name": "forgeloop",
   "version": "0.1.0",
   "description": "Docs-first workflow standard and installer for AI-assisted software delivery.",
   "repository": {
     "type": "git",
     "url": "https://github.com/GTuritto/ForgeLoop.git"
+  },
+  "homepage": "https://github.com/GTuritto/ForgeLoop#readme",
+  "bugs": {
+    "url": "https://github.com/GTuritto/ForgeLoop/issues"
   },
   "bin": {
     "forgeloop": "bin/forgeloop.js"

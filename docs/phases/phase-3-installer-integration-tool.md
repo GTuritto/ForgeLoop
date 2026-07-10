@@ -111,7 +111,13 @@ forgeloop init [target-dir]
 The intended future install shape is:
 
 ```txt
-npx @gturitto/forgeloop init
+npx forgeloop init
+```
+
+Until the package is published to npm, the GitHub-backed NPX command is:
+
+```txt
+npx github:GTuritto/ForgeLoop init
 ```
 
 The first version stays JavaScript-only to avoid build tooling before the

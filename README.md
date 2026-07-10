@@ -49,8 +49,12 @@ and early setup CLI that future skills or automation should build on.
 
 ## How To Use ForgeLoop
 
-Use ForgeLoop as a source workflow, then adapt the minimum useful parts into
-the target repo. Do not copy the full reference document into every project.
+Use the installer first. It plans the minimum ForgeLoop files for a target repo
+and defaults to a dry run so you can review the setup before anything changes.
+
+Use the manual path only when you need precise hand control or the installer
+does not support the target tool yet. Do not copy the full reference document
+into every project.
 
 ### Concept Authority
 
@@ -80,7 +84,114 @@ For most tasks, load only:
 Load `AI-Assisted-Development-Workflow.md` only when the compact files do not
 answer the process question.
 
-### Add ForgeLoop To A Project
+### Install ForgeLoop In A Project
+
+Current status: ForgeLoop is not published to the npm registry yet, but NPX can
+run it directly from GitHub.
+
+Prerequisite:
+
+- Node.js 20 or newer
+
+Preview setup for another project:
+
+```sh
+npx github:GTuritto/ForgeLoop init /path/to/project --dry-run
+```
+
+Dry run is the default. The output lists every file that would be created,
+copied, linked, skipped, or written as a review patch.
+
+Apply the planned setup only after reviewing the output:
+
+```sh
+npx github:GTuritto/ForgeLoop init /path/to/project --write
+```
+
+After ForgeLoop is published to npm, the shorter command will be:
+
+```sh
+npx forgeloop init /path/to/project --dry-run
+```
+
+Common examples:
+
+```sh
+# Brownfield repo using Codex and Claude Code
+npx github:GTuritto/ForgeLoop init /path/to/project --write \
+  --tools codex,claude-code \
+  --work-type brownfield
+
+# Cursor and GitHub Copilot project
+npx github:GTuritto/ForgeLoop init /path/to/project --dry-run \
+  --tools cursor,github-copilot
+
+# Productized project with central template symlinks
+npx github:GTuritto/ForgeLoop init /path/to/project --dry-run \
+  --tier productized \
+  --mode hybrid
+
+# Custom tool instruction file
+npx github:GTuritto/ForgeLoop init /path/to/project --dry-run \
+  --other-file docs/agent-instructions.md
+```
+
+Installer options:
+
+| Option | Purpose | Default |
+| --- | --- | --- |
+| `--dry-run` | Preview the plan without writing files. | yes |
+| `--write` | Apply safe creates and write review patches. | no |
+| `--tools` | Comma-separated tool adapters. | `codex` |
+| `--tier` | `throwaway`, `real`, or `productized`. | `real` |
+| `--work-type` | `greenfield`, `brownfield`, or `maintenance`. | inferred |
+| `--mode` | `copy`, `symlink`, or `hybrid`. | `copy` |
+| `--other-file` | Add a custom instruction file path. | none |
+
+Supported tool adapters:
+
+- `codex`
+- `claude-code`
+- `antigravity`
+- `cursor`
+- `github-copilot`
+- `gemini-cli`
+- `opencode`
+- `cline`
+- `roo-code`
+- `continue`
+- `windsurf-devin`
+- `aider`
+- `amazon-q`
+- `jetbrains`
+- `replit`
+
+The installer is conservative:
+
+- dry run is the default,
+- existing instruction files are preserved,
+- review patches are written for existing files,
+- copy mode is the default,
+- symlink and hybrid modes are explicit choices.
+
+### What The Installer Adds
+
+Depending on the selected tools, tier, and work type, the installer can add:
+
+- tool instruction files such as `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`,
+  `.cursor/rules/forgeloop.mdc`, or `.github/copilot-instructions.md`,
+- `CONTEXT.md`,
+- `docs/00-index.md`,
+- `docs/09-development-plan.md`,
+- `docs/module-map.md` for brownfield setup,
+- `docs/templates/`.
+
+Existing files are not overwritten silently. If an instruction file already
+exists, the installer writes a review patch under `.forgeloop/review/`.
+
+### Manual Install Fallback
+
+Use this path when you need to adapt ForgeLoop by hand.
 
 1. Copy or adapt `FORGELOOP_CORE.md` into the target repo's `AGENTS.md`,
    `CLAUDE.md`, or equivalent tool instruction file.
@@ -98,29 +209,20 @@ answer the process question.
 6. Implement in small slices.
 7. Record evidence in an execution report or PR description.
 
-### Use The Installer
+### Use The Installer Locally While Developing It
 
-From this repo:
-
-```sh
-npm run forgeloop -- init /path/to/project --dry-run
-```
-
-Apply the planned setup only after reviewing the output:
+From this repo checkout, run the installer against a temporary target:
 
 ```sh
-npm run forgeloop -- init /path/to/project --write \
-  --tools codex,claude-code \
-  --work-type brownfield
+tmpdir="$(mktemp -d /tmp/forgeloop-demo-XXXXXX)"
+npm run forgeloop -- init "$tmpdir" --dry-run
 ```
 
-The installer is conservative:
+Run the test suite:
 
-- dry run is the default,
-- existing instruction files are preserved,
-- review patches are written for existing files,
-- copy mode is the default,
-- symlink and hybrid modes are explicit choices.
+```sh
+npm test
+```
 
 ### Use With One Tool Or Many
 
