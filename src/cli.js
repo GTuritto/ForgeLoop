@@ -1,11 +1,17 @@
 const path = require("node:path");
 const readline = require("node:readline/promises");
 const { stdin: input, stdout: output } = require("node:process");
+const { version } = require("../package.json");
 const { buildInstallPlan, executePlan, summarizePlan } = require("./installer");
 const { listToolNames } = require("./tool-adapters");
 
 async function runCli(argv) {
   const parsed = parseArgs(argv);
+
+  if (parsed.version) {
+    console.log(version);
+    return;
+  }
 
   if (parsed.help || parsed.command !== "init") {
     printHelp();
@@ -51,6 +57,7 @@ function parseArgs(argv) {
     yes: false,
     json: false,
     help: false,
+    version: false,
   };
 
   let index = parsed.command === "init" ? 1 : 0;
@@ -65,6 +72,8 @@ function parseArgs(argv) {
 
     if (arg === "--help" || arg === "-h") {
       parsed.help = true;
+    } else if (arg === "--version" || arg === "-v") {
+      parsed.version = true;
     } else if (arg === "--write") {
       parsed.write = true;
       parsed.dryRun = false;
@@ -153,7 +162,12 @@ Options:
   --work-type greenfield|brownfield|maintenance
   --other-file PATH         Add a custom tool instruction file.
   --json                    Print machine-readable output.
+  --version, -v             Print the ForgeLoop version.
   --help, -h
+
+Examples:
+  npx github:GTuritto/ForgeLoop init . --dry-run
+  npx forgeloop init . --tools codex,claude-code --work-type brownfield
 `);
 }
 
