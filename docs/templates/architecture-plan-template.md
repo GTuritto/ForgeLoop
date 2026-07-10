@@ -28,10 +28,13 @@ Describe the architecture in one paragraph.
 For each module:
 
 - Module:
+- Components:
 - Responsibility:
 - Owns:
 - Must not own:
 - Depends on:
+- Status: `planned` | `confirmed` | `inferred` | `uncertain`
+- Module map:
 
 ## Data Ownership
 

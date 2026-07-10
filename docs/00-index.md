@@ -48,6 +48,7 @@ Default agent load order:
 - [Roadmap / Master Plan Template](templates/master-plan-template.md)
 - [Phase Plan Template](templates/phase-plan-template.md)
 - [Architecture Plan Template](templates/architecture-plan-template.md)
+- [Module / Component Map Template](templates/module-map-template.md)
 - [QA Plan Template](templates/qa-plan-template.md)
 - [Brownfield Feature Plan Template](templates/brownfield-feature-plan-template.md)
 - [Behavior Spec Template](templates/behavior-spec-template.md)

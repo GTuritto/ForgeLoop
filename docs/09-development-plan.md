@@ -253,3 +253,7 @@ ForgeLoop is a docs-only repo today.
   - Change: resolved pre-roadmap phase-plan notes and reframed tool-specific
     workflow sections as examples.
   - Why: keep ForgeLoop self-consistent and role-first before skill extraction.
+- Date: 2026-07-10
+  - Change: added Module / Component Map guidance and template.
+  - Why: support brownfield discovery when module boundaries are not obvious
+    and improve greenfield phase sizing.

@@ -141,6 +141,8 @@ Use this section when the project already has meaningful implementation or
 users.
 
 - Existing behavior to protect:
+- Module map location:
+- Modules or components with unclear ownership:
 - Compatibility constraints:
 - Migration constraints:
 - Contracts that must not break:

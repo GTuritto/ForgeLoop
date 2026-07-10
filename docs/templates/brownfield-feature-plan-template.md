@@ -25,9 +25,22 @@ State the feature goal in one paragraph.
 - Existing tests:
 - Known defects or limitations:
 
+## Module Discovery
+
+Use this section when module boundaries are unclear.
+
+- Module map location:
+- Confirmed modules:
+- Inferred modules:
+- Uncertain modules:
+- Components discovered:
+- Missing owners or boundaries:
+- Questions for human review:
+
 ## Impact Map
 
 - Modules:
+- Components:
 - Public APIs, routes, commands, or events:
 - Data model and migrations:
 - UI flows:
@@ -60,7 +73,7 @@ For each slice:
 
 - Slice:
 - User-visible behavior:
-- Files or modules:
+- Files, modules, or components:
 - Tests:
 - Exit signal:
 
