@@ -1,7 +1,8 @@
 # ForgeLoop Context
 
 ForgeLoop is a workflow specification for AI-assisted software development. It
-is not a coding agent and not yet an executable harness.
+now includes an early installer CLI for applying the workflow to target
+projects, but it is not a coding agent or orchestration harness.
 
 ## Terms
 
@@ -16,6 +17,8 @@ is not a coding agent and not yet an executable harness.
   plans, User Stories, vertical slices, and tasks.
 - `Module / Component Map`: a planning artifact that identifies modules,
   components, responsibilities, dependencies, tests, and uncertain boundaries.
+- `Installer CLI`: the `forgeloop init` command that plans or applies
+  ForgeLoop files to a target project.
 - `Builder agent`: the tool that edits the repository, runs commands, and
   prepares branches, commits, and PR-ready work.
 - `Critic agent`: the tool or pass that reviews plans, architecture, diffs,
@@ -41,3 +44,4 @@ is not a coding agent and not yet an executable harness.
 - `docs/templates/`: reusable template pack.
 - `docs/00-index.md`: documentation map.
 - `docs/adr/0001-builder-and-critic-roles.md`: role-separation decision.
+- `bin/forgeloop.js` and `src/`: early installer CLI.

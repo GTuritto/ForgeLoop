@@ -5,8 +5,9 @@ It tells a coding agent what to read, how to plan, when to stop for approval,
 how to test, and how to hand work back to a human.
 
 This repo is the reference package for that workflow. It is intentionally
-docs-first: the prose, templates, and operating rules come before any automated
-harness.
+docs-first: the prose, templates, and operating rules come before automation.
+It now includes an early safe installer for applying ForgeLoop to a target
+repo.
 
 ## Why This Exists
 
@@ -41,9 +42,10 @@ workflow tier that keeps the work safe.
   reports, ADRs, and PRs.
 - [AGENTS.md](AGENTS.md): repo-local agent instructions for working on
   ForgeLoop itself.
+- [bin/forgeloop.js](bin/forgeloop.js): early installer CLI.
 
-ForgeLoop is not yet an executable harness. It is the standard and template
-pack that future skills or automation should implement.
+ForgeLoop is not an orchestration harness. It is the standard, template pack,
+and early setup CLI that future skills or automation should build on.
 
 ## How To Use ForgeLoop
 
@@ -95,6 +97,30 @@ answer the process question.
 5. Stop for approval at the required gate.
 6. Implement in small slices.
 7. Record evidence in an execution report or PR description.
+
+### Use The Installer
+
+From this repo:
+
+```sh
+npm run forgeloop -- init /path/to/project --dry-run
+```
+
+Apply the planned setup only after reviewing the output:
+
+```sh
+npm run forgeloop -- init /path/to/project --write \
+  --tools codex,claude-code \
+  --work-type brownfield
+```
+
+The installer is conservative:
+
+- dry run is the default,
+- existing instruction files are preserved,
+- review patches are written for existing files,
+- copy mode is the default,
+- symlink and hybrid modes are explicit choices.
 
 ### Use With One Tool Or Many
 
@@ -174,14 +200,16 @@ read the repo instead of the chat.
 
 ## Current Project Status
 
-ForgeLoop is in prose-and-template evolution. The current work is focused on:
+ForgeLoop is in prose, template, and setup-tool evolution. The current work is
+focused on:
 
 - making the workflow easier to load with fewer tokens,
 - applying ForgeLoop to its own repo,
 - adding reusable templates before creating skills,
 - reducing duplicate definitions across entrypoint docs,
 - keeping optional tools such as OpenSpec and Kaddo supportive, not mandatory,
-- supporting brownfield projects as first-class cases.
+- supporting brownfield projects as first-class cases,
+- validating the installer before publishing or extracting skills.
 
-The next expected evolution after the template pack is to identify the
-repeatable workflow activities that should become skills or automation.
+The next expected evolution after the installer is to identify the repeatable
+workflow activities that should become skills or automation.

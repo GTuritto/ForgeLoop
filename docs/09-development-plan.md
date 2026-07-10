@@ -33,9 +33,9 @@ work without relying on chat memory.
 
 - Greenfield, brownfield, or maintenance: maintenance of a docs-first workflow
   repo.
-- Existing implementation: no harness code.
+- Existing implementation: early installer CLI. No orchestration harness.
 - Existing docs: Core, README, workflow reference, context, docs index, ADR 0001.
-- Existing tests: markdown lint and `git diff --check`.
+- Existing tests: Node installer tests, markdown lint, and `git diff --check`.
 - Known constraints: keep token load low and avoid duplicating canonical rules.
 - Known risks: over-process, duplicated guidance, and stale template references.
 
@@ -84,11 +84,19 @@ Every phase below must link back to this plan.
   concept.
 - Status: Complete
 
-### M3: Skill Candidates
+### M3: Installer / Integration Tool
+
+- Purpose: define and build a safe setup tool that applies ForgeLoop to target
+  projects.
+- Target signal: a user can choose install scope, selected tools, project tier,
+  and work type, then run a dry run before any files change.
+- Status: In Progress
+
+### M4: Skill Candidates
 
 - Purpose: identify stable repeated actions that should become agent skills.
-- Target signal: candidate skills map to stable templates and recurring review
-  steps.
+- Target signal: candidate skills map to stable templates, installer behavior,
+  and recurring review steps.
 - Status: Draft
 
 ## Phase Sequence
@@ -134,10 +142,20 @@ Every phase below must link back to this plan.
 - Status: Complete.
 - Phase plan: inline in this roadmap unless the work expands.
 
-### Phase 3: Skill Extraction
+### Phase 3: Installer / Integration Tool
 
-- Goal: identify and define skill candidates from stable templates.
+- Goal: define and build a safe setup tool that applies ForgeLoop to target
+  projects.
 - Depends on: Phase 2.5.
+- Execution mode: `Standard`.
+- Status: In Progress.
+- Phase plan: `docs/phases/phase-3-installer-integration-tool.md`.
+
+### Phase 4: Skill Extraction
+
+- Goal: identify and define skill candidates from stable templates and
+  installer behavior.
+- Depends on: Phase 3.
 - Execution mode: `Docs-only`.
 - Status: Draft.
 - Phase plan: required before creating or installing ForgeLoop-specific skills.
@@ -149,8 +167,10 @@ Every phase below must link back to this plan.
   execution report templates.
 - Phase 2.5 depends on Phase 2 because canonicalization should happen after
   the initial template pack exists.
-- Phase 3 depends on Phase 2.5 because skills should automate stable,
+- Phase 3 depends on Phase 2.5 because the installer should apply stable,
   de-duplicated docs, not overlapping prose.
+- Phase 4 depends on Phase 3 because skill extraction should build on real
+  setup behavior and validated templates.
 
 ## Scope Boundaries
 
@@ -163,13 +183,14 @@ Every phase below must link back to this plan.
 
 ### Out Of Scope
 
-- Harness runtime code.
+- Orchestration harness runtime code.
 - Plugin packaging.
 - Automating skills before template structure stabilizes.
 
 ### Explicit Deferrals
 
-- Harness code: revisit after templates and skill candidates stabilize.
+- Orchestration harness code: revisit after installer behavior and skill
+  candidates stabilize.
 - Full diagram pack: revisit when architecture becomes more than docs-only.
 - OpenSpec or Kaddo setup inside ForgeLoop: revisit if the repo starts using
   those tools directly.
@@ -190,8 +211,10 @@ Every phase below must link back to this plan.
 
 ## Quality Strategy
 
-- Minimum test level: markdown lint for touched docs.
-- Required integration boundaries: none until harness code exists.
+- Minimum test level: markdown lint for touched docs and Node tests for
+  installer behavior.
+- Required integration boundaries: installer fixture repos for dry-run,
+  no-overwrite, copy, symlink, and multi-tool behavior.
 - Manual QA expectations: review whether a future agent can follow the Core and
   index without loading the full workflow.
 - Regression expectations: no dangling references to missing template files.
@@ -199,7 +222,7 @@ Every phase below must link back to this plan.
 
 ## Brownfield Protection
 
-ForgeLoop is a docs-only repo today.
+ForgeLoop is a prose-first repo with an early installer CLI.
 
 - Existing behavior to protect: Core-first token-loading strategy.
 - Compatibility constraints: existing links in README, index, and workflow must
@@ -227,6 +250,10 @@ ForgeLoop is a docs-only repo today.
   - Location: `docs/templates/`
   - Owner: Giuseppe
   - Status: Active
+- Artifact: Installer CLI
+  - Location: `bin/forgeloop.js`, `src/`
+  - Owner: Giuseppe
+  - Status: Experimental
 
 ## Decision Log
 
@@ -257,3 +284,10 @@ ForgeLoop is a docs-only repo today.
   - Change: added Module / Component Map guidance and template.
   - Why: support brownfield discovery when module boundaries are not obvious
     and improve greenfield phase sizing.
+- Date: 2026-07-10
+  - Change: added Phase 3 installer / integration tool plan.
+  - Why: make ForgeLoop easy to apply to projects while preserving explicit
+    setup choices and safe file operations.
+- Date: 2026-07-10
+  - Change: started Phase 3 installer / integration tool implementation.
+  - Why: validate setup automation before publishing or extracting skills.

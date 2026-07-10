@@ -21,11 +21,15 @@ Default agent load order:
 - [CONTEXT.md](../CONTEXT.md): shared terms for the ForgeLoop repo.
 - [AGENTS.md](../AGENTS.md): repo-local agent instructions for working on
   ForgeLoop itself.
+- [package.json](../package.json): npm package and CLI entrypoint metadata.
 
 ## Planning
 
 - [ForgeLoop Roadmap / Master Plan](09-development-plan.md): ForgeLoop's own
   roadmap and self-application plan.
+- [Phase 3: Installer / Integration Tool Plan](phases/phase-3-installer-integration-tool.md):
+  plan for applying ForgeLoop to target projects.
+- Installer CLI: `bin/forgeloop.js` with implementation under `src/`.
 
 ## Canonical Concept Homes
 
@@ -39,6 +43,8 @@ Default agent load order:
 - Glossary and current canonical file list: [CONTEXT.md](../CONTEXT.md)
 - Roadmap, milestones, phase sequencing, and change log:
   [docs/09-development-plan.md](09-development-plan.md)
+- Installer behavior and accepted setup decisions:
+  [Phase 3 plan](phases/phase-3-installer-integration-tool.md)
 - Template inventory: this index, under [Templates](#templates)
 - Builder/critic role decision:
   [ADR 0001](adr/0001-builder-and-critic-roles.md)
@@ -64,5 +70,6 @@ Default agent load order:
 
 ## Status
 
-ForgeLoop is prose-first with a reusable template pack in place. Skills and
-harness code should come after the workflow language and templates stabilize.
+ForgeLoop is prose-first with a reusable template pack and an early safe
+installer CLI. Skills and orchestration harness code should come after the
+installer behavior is validated.
