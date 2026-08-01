@@ -34,6 +34,9 @@ Default agent load order:
 - [Phase 3.5: Quality Model Consolidation](phases/phase-3-5-quality-model-consolidation.md):
   plan for consolidating risk-adaptive quality, human-control, and smart
   verification rules.
+- [Phase 4: Skills And Gauntlet Extraction](phases/phase-4-skills-and-gauntlet-extraction.md):
+  plan for extracting stable quality workflows into future skills and evidence
+  artifacts.
 - Installer CLI: `bin/forgeloop.js` with implementation under `src/`.
 
 ## Canonical Concept Homes
@@ -67,9 +70,12 @@ Default agent load order:
 - [Manual Test Plan Template](templates/manual-test-plan-template.md)
 - [Integration Test Plan Template](templates/integration-test-plan-template.md)
 - [Acceptance-Evidence Matrix Template](templates/acceptance-evidence-matrix-template.md)
+- [Verification Contract Template](templates/verification-contract-template.md)
 - [Performance Test Plan Template](templates/performance-test-plan-template.md)
 - [Resilience Experiment Template](templates/resilience-experiment-template.md)
 - [Production Rollout Plan Template](templates/production-rollout-plan-template.md)
+- [Quality Envelope HTML Report Template](templates/quality-envelope-report-template.html)
+- [Quality Envelope JSON Schema Template](templates/quality-envelope-schema-template.json)
 - [Execution Report Template](templates/execution-report-template.md)
 - [Pull Request Description Template](templates/pr-description-template.md)
 - [ADR Template](templates/adr-template.md)
@@ -82,4 +88,5 @@ Default agent load order:
 
 ForgeLoop is prose-first with a reusable template pack and an early safe
 installer CLI. Skills and orchestration harness code should come after the
-installer behavior and Phase 3.5 quality model are validated.
+installer behavior, Phase 3.5 quality model, and Phase 4 skill-extraction plan
+are validated.

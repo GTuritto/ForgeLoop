@@ -1099,6 +1099,8 @@ These are reusable capabilities the harness should eventually invoke.
   before implementation.
 - `smart-test-selector`: select checks from diff, impact, contracts,
   dependencies, risk, and test history.
+- `verification-contract-author`: define functional, craft, and contextual
+  verification criteria before high-assurance implementation.
 - `acceptance-evidence-auditor`: verify that requirements trace to scenarios,
   tests, evidence, and residual risk.
 - `integration-recovery-designer`: design integration failure and recovery test
@@ -1109,6 +1111,15 @@ These are reusable capabilities the harness should eventually invoke.
   chaos experiments with guardrails.
 - `quality-gate-evaluator`: classify verification results and release
   readiness.
+- `gauntlet-mode-runner`: run the
+  `SPEC -> RED -> GREEN -> REFACTOR -> GAUNTLET -> EVIDENCE` loop for strict,
+  release-critical, or otherwise high-risk changes.
+- `quality-envelope-reporter`: produce a self-contained HTML evidence report
+  and JSON sidecar for complexity, coverage, CRAP or another
+  complexity-plus-coverage risk score, mutation, load, performance,
+  operational safety, commands, and residual risk.
+- `clean-code-reviewer`: check naming, function shape, duplication,
+  abstraction level, error handling, tests, and concurrency risks.
 - `implementation-planner`: break approved work into smallest coherent
   sub-phases.
 - `subphase-implementer`: implement one approved sub-phase at a time.
@@ -1129,6 +1140,8 @@ These are reusable capabilities the harness should eventually invoke.
 
 - OpenSpec: optional behavior specs and acceptance criteria.
 - Kaddo: optional Knowledge Driven Development support and drift checks.
+- Semantic code tools: optional symbol-aware code retrieval and refactoring
+  support for brownfield work when text search is too weak for the change.
 - GitHub CLI: branches, PRs, checks, and review surface.
 - Mermaid: living diagrams.
 - Docker or Docker Compose: reproducible local runtime.
@@ -1563,6 +1576,87 @@ Every non-trivial phase must define a phase QA plan with:
 - manual test plan,
 - regression test plan,
 - test evidence required.
+
+### Gauntlet Mode
+
+Use Gauntlet Mode for strict, release-critical, or high-risk changes involving
+auth, money, data loss, concurrency, public contracts, migrations, production
+operations, or other hard-to-reverse behavior.
+
+Gauntlet Mode moves trust from line-by-line inspection into a pre-approved
+verification contract and a post-implementation evidence report.
+
+The loop is:
+
+```txt
+SPEC -> RED -> GREEN -> REFACTOR -> GAUNTLET -> EVIDENCE
+```
+
+The SPEC is the verification contract. It must define:
+
+- functional checks: what the change must do,
+- craft checks: whether the implementation is maintainable,
+- contextual checks: whether the change fits the real system,
+- required commands,
+- expected evidence artifacts,
+- residual-risk policy.
+
+The GAUNTLET selects only layers justified by risk, but skipped layers must be
+explicit:
+
+- full test suite,
+- static types,
+- lint and format,
+- changed-line or branch coverage,
+- mutation testing or sampled manual mutation,
+- property-based testing for invariant-heavy logic,
+- complexity budget,
+- real execution outside the test harness,
+- supply-chain and secret checks,
+- load, stress, or performance comparison,
+- resilience, rollback, or recovery checks.
+
+The EVIDENCE artifact should include the execution report, acceptance-evidence
+matrix when required, and a Quality Envelope report when the work has measurable
+quality, performance, load, or operational risk.
+
+Quality Envelope reports are HTML-first human artifacts with JSON sidecars for
+agents and CI. Use a static, self-contained HTML file so the report can be
+opened locally, archived, or attached to a PR without a hosted service.
+
+Use the same level scale for each measured dimension:
+
+- `0 - unknown`: not measured.
+- `1 - stated`: expected but not tested.
+- `2 - measured`: tool output exists.
+- `3 - compared`: checked against a baseline or previous runs.
+- `4 - stressed`: pushed to a limit or observed failure mode.
+- `5 - gated`: enforced in CI, release, or another repeatable gate.
+
+At minimum, the Quality Envelope should cover:
+
+- cyclomatic and cognitive complexity,
+- test coverage,
+- CRAP or another complexity-plus-coverage risk score for changed functions,
+- mutation strength,
+- maximum tested load and observed failure mode,
+- performance compared with the previous five comparable runs when available,
+- rollback, observability, external-dependency failure, secrets, and supply
+  chain checks,
+- commands and evidence locations,
+- skipped checks and residual risk.
+
+CRAP is a useful default derived score when per-function complexity and test
+coverage are available. Use this formula:
+
+```txt
+CRAP = complexity^2 * (1 - coverage)^3 + complexity
+```
+
+Coverage is a decimal from `0` to `1`. Treat the result as a hotspot signal,
+not a universal quality score. A common starting threshold is `CRAP > 30`, but
+projects should tune the threshold to their language, test tooling, and risk
+tolerance.
 
 ### Integration Test Plan
 
@@ -2076,8 +2170,16 @@ Single-tool mode should use stronger prompts:
 - "Do not continue implementation during review."
 - "List residual risk and skipped verification explicitly."
 
-For `Strict` or `Release-critical` work, prefer a fresh chat or separate review
-session before final approval.
+For `Strict` or `Release-critical` work, use a fresh chat, separate review
+session, or separate critic tool before final approval. The reviewer must start
+from repo evidence, the approved plan, and the diff, not from the builder's
+working assumptions.
+
+When a session becomes long enough that context quality is at risk, stop and
+write a handoff before continuing. The handoff should point to durable
+artifacts, current Git state, open decisions, verification already run, and the
+next safe action. Continue in a fresh context for review or implementation
+rather than stretching a stale session.
 
 ### Conflict Rules
 

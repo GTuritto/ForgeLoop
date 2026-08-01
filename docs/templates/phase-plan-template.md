@@ -143,12 +143,22 @@ For each sub-phase:
 
 - TBD
 
+### Verification Contract
+
+- Required: `yes` | `no`
+- Location:
+- Approval evidence:
+- Functional criteria covered:
+- Craft criteria covered:
+- Contextual criteria covered:
+
 ### Complexity Evidence
 
 - Required: `yes` | `no`
 - Tool or source:
 - Cyclomatic complexity result:
 - Cognitive complexity result:
+- CRAP or complexity-plus-coverage result:
 - Hotspots and rationale:
 - Refactor required before close: `yes` | `no`
 
@@ -157,6 +167,19 @@ For each sub-phase:
 - Matrix required: `yes` | `no`
 - Matrix location:
 - Release decision owner:
+
+### Quality Envelope
+
+- Required: `yes` | `no`
+- HTML report:
+- JSON sidecar:
+- Complexity level:
+- Coverage level:
+- CRAP or change-risk level:
+- Mutation level:
+- Load level:
+- Performance regression level:
+- Operational safety level:
 
 ## Docs And Diagram Updates
 

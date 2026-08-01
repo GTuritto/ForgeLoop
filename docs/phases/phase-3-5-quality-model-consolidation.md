@@ -165,7 +165,9 @@ For each sub-phase:
   - Mitigation: keep taxonomies in the full workflow and templates.
 - Deferred work:
   - Smart-test-selector implementation waits for future harness or skills.
-  - Skill extraction waits until Phase 3.5 is reviewed.
+  - Skill extraction follows
+    `docs/phases/phase-4-skills-and-gauntlet-extraction.md` after Phase 3.5
+    is reviewed.
 
 ## Approval Gates
 

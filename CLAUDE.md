@@ -4,7 +4,8 @@ Follow [FORGELOOP_CORE.md](FORGELOOP_CORE.md) first.
 
 ForgeLoop is a workflow specification, template pack, and setup CLI. It is not
 an orchestration harness. Keep skills and harness work deferred until installer
-behavior and the Phase 3.5 quality model are validated.
+behavior, the Phase 3.5 quality model, and the Phase 4 skill-extraction plan
+are validated.
 
 Default load order:
 
@@ -25,7 +26,8 @@ only when the Core and task-specific files do not answer the process question.
   execution mode, use smart test selection, and produce sufficient evidence for
   the change's risk.
 - Do not add harness code or extract skills before the Roadmap / Master Plan,
-  installer behavior, templates, and Phase 3.5 quality model are validated.
+  installer behavior, templates, Phase 3.5 quality model, and Phase 4
+  skill-extraction plan are validated.
 - Prefer small docs-only edits.
 - Run markdown lint on touched Markdown files.
 - Do not commit, push, open a PR, or merge unless Giuseppe explicitly asks.

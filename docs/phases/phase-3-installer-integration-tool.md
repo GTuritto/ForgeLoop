@@ -227,6 +227,22 @@ claude-code,cursor
 The final dry-run summary must list every selected target, every skipped target,
 and every provisional adapter that needs review.
 
+### Future Skill Installation
+
+Phase 3 installs ForgeLoop instruction files and templates only. Phase 4 may
+define a later skill-install flow after Gauntlet Mode, Quality Envelope
+reporting, and skill candidates are validated.
+
+Future skill installation should:
+
+- detect local agents and IDEs before proposing skill targets,
+- show every selected agent, IDE, file, and skill directory before writing,
+- offer install-all-detected and explicit subset selection,
+- keep a plain terminal fallback,
+- confirm third-party skill sources explicitly,
+- keep dry run as the default,
+- install ForgeLoop-owned skills before recommending community skill packs.
+
 ### Tool Adapter Targets
 
 The installer should treat each selected tool as an adapter with its own file

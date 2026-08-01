@@ -105,8 +105,9 @@ Every phase below must link back to this plan.
 ### M4: Skill Candidates
 
 - Purpose: identify stable repeated actions that should become agent skills.
-- Target signal: candidate skills map to stable templates, installer behavior,
-  the quality model, and recurring review steps.
+- Target signal: candidate skills map to stable templates, Gauntlet Mode,
+  Quality Envelope reporting, installer behavior, the quality model, and
+  recurring review steps.
 - Status: Draft
 
 ## Phase Sequence
@@ -172,12 +173,14 @@ Every phase below must link back to this plan.
 
 ### Phase 4: Skill Extraction
 
-- Goal: identify and define skill candidates from stable templates and
-  installer behavior.
+- Goal: identify and define skill candidates from stable templates, installer
+  behavior, Gauntlet Mode, verification contracts, and Quality Envelope
+  reporting.
 - Depends on: Phase 3.5.
 - Execution mode: `Docs-only`.
 - Status: Draft.
-- Phase plan: required before creating or installing ForgeLoop-specific skills.
+- Phase plan:
+  `docs/phases/phase-4-skills-and-gauntlet-extraction.md`.
 
 ## Dependency Map
 
@@ -202,12 +205,15 @@ Every phase below must link back to this plan.
 - Repo-local context, index, ADRs, and templates.
 - Markdown verification.
 - Risk-adaptive quality, testing, human-control, and evidence models.
+- Gauntlet Mode, verification contracts, Quality Envelope reports, and
+  skill-candidate definitions.
 
 ### Out Of Scope
 
 - Orchestration harness runtime code.
 - Plugin packaging.
 - Automating skills before template structure stabilizes.
+- Runtime HTML report generation before the report contract is validated.
 
 ### Explicit Deferrals
 
@@ -218,6 +224,8 @@ Every phase below must link back to this plan.
   those tools directly.
 - Full smart-test-selection harness: revisit after the quality model and
   skill candidates stabilize.
+- Quality Envelope generator: revisit after the HTML and JSON report contracts
+  are validated by hand.
 
 ## Risk Register
 
@@ -247,6 +255,11 @@ Every phase below must link back to this plan.
   risk, not by a blanket requirement to run every test or fill every template.
 - Traceability expectation: strict and release-critical work can trace
   requirements to scenarios, tests, evidence, and residual risk.
+- Quality-envelope expectation: strict, release-critical, or performance-risk
+  work can state measured levels for complexity, coverage, mutation strength,
+  CRAP or another complexity-plus-coverage risk score, load envelope,
+  performance regression against prior runs, operational safety, and residual
+  risk.
 
 ## Brownfield Protection
 
@@ -278,6 +291,16 @@ ForgeLoop is a prose-first repo with an early installer CLI.
   - Location: `docs/templates/`
   - Owner: Giuseppe
   - Status: Active
+- Artifact: Quality Envelope templates
+  - Location:
+    `docs/templates/quality-envelope-report-template.html`,
+    `docs/templates/quality-envelope-schema-template.json`
+  - Owner: Giuseppe
+  - Status: Draft
+- Artifact: Phase 4 skill-extraction plan
+  - Location: `docs/phases/phase-4-skills-and-gauntlet-extraction.md`
+  - Owner: Giuseppe
+  - Status: Draft
 - Artifact: Installer CLI
   - Location: `bin/forgeloop.js`, `src/`
   - Owner: Giuseppe
@@ -324,3 +347,8 @@ ForgeLoop is a prose-first repo with an early installer CLI.
   - Why: incorporate risk-adaptive specifications, smart verification,
     delegated human control, and acceptance-to-evidence traceability before
     extracting skills.
+- Date: 2026-08-01
+  - Change: added the Phase 4 skills and Gauntlet extraction plan plus
+    verification contract and Quality Envelope report templates.
+  - Why: prepare skill extraction and HTML-first evidence reports without
+    adding harness code.

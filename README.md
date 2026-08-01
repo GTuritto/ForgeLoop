@@ -349,9 +349,12 @@ the stricter templates:
 - [docs/templates/brownfield-feature-plan-template.md](docs/templates/brownfield-feature-plan-template.md)
 - [docs/templates/integration-test-plan-template.md](docs/templates/integration-test-plan-template.md)
 - [docs/templates/acceptance-evidence-matrix-template.md](docs/templates/acceptance-evidence-matrix-template.md)
+- [docs/templates/verification-contract-template.md](docs/templates/verification-contract-template.md)
 - [docs/templates/performance-test-plan-template.md](docs/templates/performance-test-plan-template.md)
 - [docs/templates/resilience-experiment-template.md](docs/templates/resilience-experiment-template.md)
 - [docs/templates/production-rollout-plan-template.md](docs/templates/production-rollout-plan-template.md)
+- [docs/templates/quality-envelope-report-template.html](docs/templates/quality-envelope-report-template.html)
+- [docs/templates/quality-envelope-schema-template.json](docs/templates/quality-envelope-schema-template.json)
 - [docs/templates/manual-test-plan-template.md](docs/templates/manual-test-plan-template.md)
 - [docs/templates/execution-report-template.md](docs/templates/execution-report-template.md)
 - [docs/templates/pr-description-template.md](docs/templates/pr-description-template.md)
@@ -370,9 +373,17 @@ future capabilities, not installed runtime code.
 
 The current skill candidate set includes quality-model capabilities such as
 human-control recommendation, smart test selection, acceptance-evidence audit,
-integration recovery design, performance test design, resilience experiment
-design, and quality-gate evaluation. Skill extraction should wait until Phase
-3.5 is reviewed.
+verification-contract authoring, Gauntlet Mode execution, Quality Envelope HTML
+reporting, CRAP or complexity-plus-coverage risk scoring, integration recovery
+design, performance test design, resilience experiment design, clean-code
+review, and quality-gate evaluation. Skill extraction should follow the Phase 4
+plan after the Phase 3.5 model is reviewed.
+
+Quality Envelope reports are HTML-first human artifacts with JSON sidecars for
+agents and CI. The HTML report should be static and self-contained so it can be
+attached to PRs, archived with execution evidence, or opened locally without a
+hosted dashboard. The report should include CRAP or another derived risk score
+when the project can combine per-function complexity with coverage.
 
 ## Commit And PR Standard
 
@@ -393,8 +404,10 @@ focused on:
 - supporting brownfield projects as first-class cases,
 - consolidating risk-adaptive quality, smart verification, and human-control
   modes,
+- preparing Gauntlet Mode, verification contracts, Quality Envelope reports,
+  and clean-code skill candidates,
 - validating the installer before publishing or extracting skills.
 
 The next expected evolution after installer validation and quality-model
-consolidation is to identify the repeatable workflow activities that should
-become skills or automation.
+consolidation is Phase 4: extracting repeatable workflow activities into
+skills and evidence artifacts before building harness automation.

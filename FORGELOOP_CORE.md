@@ -43,6 +43,9 @@ Idea -> Documents -> Decisions -> Roadmap / Master Plan
 - Run the smallest sufficient verification set for the change and risk. Use
   change-aware, dependency-aware, and impact-aware selection. Untouched files
   are not automatically unaffected.
+- For strict, release-critical, or high-risk work, use a verification contract
+  before implementation and a Quality Envelope report when quality,
+  performance, load, or operational evidence must be summarized for review.
 - Update docs, diagrams, specs, ADRs, and handoff notes when behavior changes.
 - Review the diff against the approved plan and current repo evidence.
 - Commit, push, open PRs, archive, and merge only after explicit approval.
@@ -70,6 +73,18 @@ Do not define healthy testing as running every test on every change. Start with
 cheap, high-signal checks, then escalate through focused tests, affected
 regressions, subsystem verification, and system or quality-attribute checks
 when impact justifies them.
+
+For strict, release-critical, or high-risk changes, escalate to Gauntlet Mode
+when the full workflow or phase plan requires it:
+
+```txt
+SPEC -> RED -> GREEN -> REFACTOR -> GAUNTLET -> EVIDENCE
+```
+
+Use the Quality Envelope to summarize measured levels such as complexity,
+coverage, CRAP or another complexity-plus-coverage risk score, mutation
+strength, load, performance regression, operational safety, commands, skipped
+checks, and residual risk.
 
 ## Project Tiers
 

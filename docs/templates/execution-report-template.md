@@ -39,6 +39,8 @@ Explain what changed and why.
 - Integration tests:
 - Performance tests:
 - Resilience tests:
+- Quality Envelope HTML:
+- Quality Envelope JSON:
 - Smoke test:
 - Manual test:
 - Regression checks:

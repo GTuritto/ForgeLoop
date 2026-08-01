@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ForgeLoop Quality Envelope</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f8fa;
+      --panel: #ffffff;
+      --text: #1f2937;
+      --muted: #5f6b7a;
+      --border: #d9dee7;
+      --good: #146c43;
+      --warn: #8a5a00;
+      --bad: #b42318;
+      --accent: #184c99;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+
+    header {
+      margin-bottom: 24px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0 0 12px;
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: 32px;
+    }
+
+    h2 {
+      font-size: 22px;
+      margin-top: 28px;
+    }
+
+    h3 {
+      font-size: 17px;
+      margin-top: 18px;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    section,
+    details {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 18px;
+      margin: 16px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--border);
+      padding: 9px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    code,
+    pre {
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 13px;
+    }
+
+    pre {
+      overflow-x: auto;
+      background: #eef1f5;
+      border-radius: 6px;
+      padding: 12px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .metric {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      background: #fbfcfe;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 20px;
+    }
+
+    .status {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .status.pass {
+      background: #dff3e8;
+      color: var(--good);
+    }
+
+    .status.warn {
+      background: #fff2cc;
+      color: var(--warn);
+    }
+
+    .status.fail {
+      background: #fde2df;
+      color: var(--bad);
+    }
+
+    .level-scale {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    a {
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>ForgeLoop Quality Envelope</h1>
+      <p>
+        Project: <strong>{{project}}</strong> |
+        Phase or story: <strong>{{phase_or_story}}</strong> |
+        Commit: <strong>{{commit}}</strong> |
+        Date: <strong>{{date}}</strong>
+      </p>
+      <p class="level-scale">
+        Level scale: 0 unknown, 1 stated, 2 measured, 3 compared, 4 stressed,
+        5 gated.
+      </p>
+    </header>
+
+    <section>
+      <h2>Executive Summary</h2>
+      <p><span class="status warn">{{release_decision}}</span></p>
+      <p>{{summary}}</p>
+      <div class="summary-grid">
+        <div class="metric">
+          <span>Complexity level</span>
+          <strong>{{complexity_level}}</strong>
+        </div>
+        <div class="metric">
+          <span>Coverage level</span>
+          <strong>{{coverage_level}}</strong>
+        </div>
+        <div class="metric">
+          <span>Change-risk level</span>
+          <strong>{{change_risk_level}}</strong>
+        </div>
+        <div class="metric">
+          <span>Mutation level</span>
+          <strong>{{mutation_level}}</strong>
+        </div>
+        <div class="metric">
+          <span>Load level</span>
+          <strong>{{load_level}}</strong>
+        </div>
+        <div class="metric">
+          <span>Performance level</span>
+          <strong>{{performance_level}}</strong>
+        </div>
+        <div class="metric">
+          <span>Operational safety level</span>
+          <strong>{{operational_safety_level}}</strong>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Quality Measures</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Dimension</th>
+            <th>Level</th>
+            <th>Result</th>
+            <th>Threshold or Baseline</th>
+            <th>Decision</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Cyclomatic / Cognitive Complexity</td>
+            <td>{{complexity_level}}</td>
+            <td>{{complexity_result}}</td>
+            <td>{{complexity_threshold}}</td>
+            <td>{{complexity_decision}}</td>
+          </tr>
+          <tr>
+            <td>Test Coverage</td>
+            <td>{{coverage_level}}</td>
+            <td>{{coverage_result}}</td>
+            <td>{{coverage_threshold}}</td>
+            <td>{{coverage_decision}}</td>
+          </tr>
+          <tr>
+            <td>CRAP / Change Risk</td>
+            <td>{{change_risk_level}}</td>
+            <td>{{change_risk_result}}</td>
+            <td>{{change_risk_threshold}}</td>
+            <td>{{change_risk_decision}}</td>
+          </tr>
+          <tr>
+            <td>Mutation Strength</td>
+            <td>{{mutation_level}}</td>
+            <td>{{mutation_result}}</td>
+            <td>{{mutation_threshold}}</td>
+            <td>{{mutation_decision}}</td>
+          </tr>
+          <tr>
+            <td>Load Envelope</td>
+            <td>{{load_level}}</td>
+            <td>{{load_result}}</td>
+            <td>{{load_environment}}</td>
+            <td>{{load_decision}}</td>
+          </tr>
+          <tr>
+            <td>Performance vs Previous 5 Runs</td>
+            <td>{{performance_level}}</td>
+            <td>{{performance_result}}</td>
+            <td>{{performance_baseline}}</td>
+            <td>{{performance_decision}}</td>
+          </tr>
+          <tr>
+            <td>Operational Safety</td>
+            <td>{{operational_safety_level}}</td>
+            <td>{{operational_safety_result}}</td>
+            <td>{{operational_safety_threshold}}</td>
+            <td>{{operational_safety_decision}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <details open>
+      <summary><strong>Evidence Commands</strong></summary>
+      <pre>{{commands}}</pre>
+    </details>
+
+    <details>
+      <summary><strong>Hotspots And Gaps</strong></summary>
+      <h3>Complexity Hotspots</h3>
+      <pre>{{complexity_hotspots}}</pre>
+      <h3>Untested Critical Paths</h3>
+      <pre>{{untested_critical_paths}}</pre>
+      <h3>Change-Risk Hotspots</h3>
+      <pre>{{change_risk_hotspots}}</pre>
+      <h3>Skipped Checks</h3>
+      <pre>{{skipped_checks}}</pre>
+    </details>
+
+    <section>
+      <h2>Residual Risk</h2>
+      <p>{{residual_risk}}</p>
+    </section>
+
+    <section>
+      <h2>Follow-Up</h2>
+      <p>{{follow_up}}</p>
+    </section>
+  </main>
+</body>
+</html>

@@ -55,6 +55,14 @@ projects, but it is not a coding agent or orchestration harness.
 - `docs/templates/`: reusable template pack.
 - `docs/templates/acceptance-evidence-matrix-template.md`: traceability
   template for strict and release-critical work.
+- `docs/templates/verification-contract-template.md`: pre-code agreement that
+  defines functional, craft, and contextual verification.
+- `docs/templates/quality-envelope-report-template.html`: static HTML report
+  for complexity, coverage, CRAP or another complexity-plus-coverage risk
+  score, mutation, load, performance, operational safety, evidence commands,
+  and residual risk.
+- `docs/templates/quality-envelope-schema-template.json`: machine-readable
+  sidecar for Quality Envelope reports.
 - `docs/templates/performance-test-plan-template.md`: risk-triggered
   performance test planning template.
 - `docs/templates/resilience-experiment-template.md`: risk-triggered
@@ -63,4 +71,6 @@ projects, but it is not a coding agent or orchestration harness.
   and rollback planning template.
 - `docs/00-index.md`: documentation map.
 - `docs/adr/0001-builder-and-critic-roles.md`: role-separation decision.
+- `docs/phases/phase-4-skills-and-gauntlet-extraction.md`: draft plan for
+  Gauntlet Mode, Quality Envelope reporting, and skill extraction.
 - `bin/forgeloop.js` and `src/`: early installer CLI.

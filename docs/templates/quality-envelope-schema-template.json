@@ -1,0 +1,92 @@
+{
+  "schema_version": "forgeloop-quality-envelope-v0.1",
+  "metadata": {
+    "project": "",
+    "phase_or_story": "",
+    "branch": "",
+    "commit": "",
+    "date": "",
+    "execution_mode": "",
+    "human_control_mode": "",
+    "tool_mode": "",
+    "generated_by": ""
+  },
+  "verdict": {
+    "status": "unknown",
+    "summary": "",
+    "release_decision": "needs-review",
+    "residual_risk": ""
+  },
+  "level_scale": {
+    "0": "unknown",
+    "1": "stated",
+    "2": "measured",
+    "3": "compared",
+    "4": "stressed",
+    "5": "gated"
+  },
+  "measures": {
+    "complexity": {
+      "level": 0,
+      "tool": "",
+      "max_cyclomatic_changed": null,
+      "max_cognitive_changed": null,
+      "threshold": null,
+      "hotspots": []
+    },
+    "coverage": {
+      "level": 0,
+      "tool": "",
+      "changed_line_percent": null,
+      "branch_percent": null,
+      "critical_paths_untested": []
+    },
+    "change_risk": {
+      "level": 0,
+      "tool": "",
+      "formula": "CRAP = complexity^2 * (1 - coverage)^3 + complexity",
+      "coverage_scale": "0_to_1",
+      "threshold": 30,
+      "max_crap_changed": null,
+      "functions_above_threshold": []
+    },
+    "mutation": {
+      "level": 0,
+      "tool": "",
+      "mutants_killed": null,
+      "mutants_total": null,
+      "survivors": []
+    },
+    "load_envelope": {
+      "level": 0,
+      "tool": "",
+      "environment": "",
+      "max_tested_throughput": null,
+      "throughput_unit": "",
+      "failure_mode": "",
+      "p95_latency_ms": null,
+      "error_rate_percent": null
+    },
+    "performance_regression": {
+      "level": 0,
+      "tool": "",
+      "baseline_runs": [],
+      "previous_run_count": 0,
+      "median_delta_percent": null,
+      "worst_delta_percent": null,
+      "tolerance_percent": null,
+      "decision": "unknown"
+    },
+    "operational_safety": {
+      "level": 0,
+      "rollback_tested": null,
+      "observability_verified": null,
+      "external_dependency_failure_tested": null,
+      "secrets_or_supply_chain_checked": null
+    }
+  },
+  "commands": [],
+  "evidence_links": [],
+  "skipped_checks": [],
+  "follow_up": []
+}

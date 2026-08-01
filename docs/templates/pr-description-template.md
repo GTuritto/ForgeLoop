@@ -40,6 +40,8 @@ Use this template when the user explicitly approves opening a PR.
 - Integration tests:
 - Performance tests:
 - Resilience tests:
+- Quality Envelope HTML:
+- Quality Envelope JSON:
 - Smoke test:
 - Manual test:
 - Regression checks:
