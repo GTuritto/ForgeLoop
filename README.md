@@ -345,6 +345,19 @@ the stricter templates:
 Use the templates as starting points, not as paperwork to fill blindly. The
 canonical template inventory lives in [docs/00-index.md](docs/00-index.md).
 
+## Skills And Harness Status
+
+ForgeLoop is still a workflow specification and setup CLI, not an orchestration
+harness. The harness-native skills listed in
+[AI-Assisted-Development-Workflow.md](AI-Assisted-Development-Workflow.md) are
+future capabilities, not installed runtime code.
+
+The current skill candidate set includes quality-model capabilities such as
+human-control recommendation, smart test selection, acceptance-evidence audit,
+integration recovery design, performance test design, resilience experiment
+design, and quality-gate evaluation. Skill extraction should wait until Phase
+3.5 is reviewed.
+
 ## Commit And PR Standard
 
 Follow the commit and PR rule in [FORGELOOP_CORE.md](FORGELOOP_CORE.md). The

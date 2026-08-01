@@ -1113,7 +1113,6 @@ These are reusable capabilities the harness should eventually invoke.
   sub-phases.
 - `subphase-implementer`: implement one approved sub-phase at a time.
 - `story-orchestrator`: track a User Story lane from selection through PR.
-- `test-strategy-selector`: select required tests from risk and execution mode.
 - `qa-runner`: run verification, report failures, and classify blockers.
 - `adversarial-code-reviewer`: review implementation against specs,
   architecture, tests, security, and docs.
