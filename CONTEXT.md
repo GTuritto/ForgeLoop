@@ -54,7 +54,7 @@ projects, but it is not a coding agent or orchestration harness.
 - `docs/09-development-plan.md`: ForgeLoop Roadmap / Master Plan.
 - `docs/phases/phase-3-installer-integration-tool.md`: in-progress installer
   plan for applying ForgeLoop to target projects.
-- `docs/phases/phase-3-5-quality-model-consolidation.md`: in-progress quality
+- `docs/phases/phase-3-5-quality-model-consolidation.md`: completed quality
   model plan for risk-adaptive verification and human-control rules.
 - `docs/phases/phase-4-skills-and-gauntlet-extraction.md`: draft plan for
   Gauntlet Mode, Quality Envelope reporting, and skill extraction.

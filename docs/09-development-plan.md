@@ -100,7 +100,7 @@ Every phase below must link back to this plan.
   describe risk-adaptive specifications, TDD, smart test selection,
   acceptance-to-evidence traceability, and delegated human control without
   turning every task into a heavyweight process.
-- Status: In Progress
+- Status: Complete
 
 ### M4: Skill Candidates
 
@@ -168,7 +168,7 @@ Every phase below must link back to this plan.
   ceremony.
 - Depends on: Phase 3 template and installer structure.
 - Execution mode: `Docs-only`.
-- Status: In Progress.
+- Status: Complete.
 - Phase plan: `docs/phases/phase-3-5-quality-model-consolidation.md`.
 
 ### Phase 4: Skill Extraction
@@ -296,7 +296,7 @@ ForgeLoop is a prose-first repo with an early installer CLI.
     `docs/templates/quality-envelope-report-template.html`,
     `docs/templates/quality-envelope-schema-template.json`
   - Owner: Giuseppe
-  - Status: Draft
+  - Status: Active
 - Artifact: Phase 4 skill-extraction plan
   - Location: `docs/phases/phase-4-skills-and-gauntlet-extraction.md`
   - Owner: Giuseppe
@@ -352,3 +352,7 @@ ForgeLoop is a prose-first repo with an early installer CLI.
     verification contract and Quality Envelope report templates.
   - Why: prepare skill extraction and HTML-first evidence reports without
     adding harness code.
+- Date: 2026-08-01
+  - Change: completed Phase 3.5 quality model consolidation.
+  - Why: close the quality-model stabilization gate before Phase 4 skill
+    extraction.

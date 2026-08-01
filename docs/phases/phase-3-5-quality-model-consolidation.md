@@ -7,7 +7,7 @@
 - Branch: `main`
 - Date: 2026-08-01
 - Owner: Giuseppe
-- Status: `In Progress`
+- Status: `Complete`
 - Execution mode: `Docs-only`
 - Tool mode: `Single-tool`
 - Human-control mode: `Final-QA-only`
@@ -118,7 +118,8 @@ For each sub-phase:
 
 ### Integration Test Plan
 
-- Not required. This phase changes docs and templates only.
+- External integration tests are not required. This phase changes workflow docs,
+  templates, and installer template inventory only.
 
 ### Smoke Test Plan
 
@@ -138,13 +139,16 @@ For each sub-phase:
 ### Regression Test Plan
 
 - Existing load order remains unchanged.
-- Existing installer behavior remains unchanged.
+- Existing installer dry-run and no-write behavior remains unchanged.
+- Installer template inventory includes the new evidence templates.
 - Existing templates remain discoverable from `docs/00-index.md`.
 
 ### Test Evidence Required
 
 - `npm test`.
 - Markdown lint command or documented tool absence.
+- Installer dry run against a temporary repo.
+- Local link, template inventory, and JSON parse checks.
 - `git diff --check`.
 
 ## Docs And Diagram Updates
@@ -174,6 +178,46 @@ For each sub-phase:
 - Plan approval required before implementation: delegated by the handoff.
 - Human test handoff required before PR: `yes`.
 - Commit, push, PR, archive, or merge allowed without explicit approval: `no`.
+
+## Closeout Evidence
+
+- Markdown lint:
+  passed with `0 error(s)` using:
+
+  ```sh
+  npx --yes markdownlint-cli2@0.18.1 \
+    AGENTS.md CLAUDE.md FORGELOOP_CORE.md CONTEXT.md README.md \
+    AI-Assisted-Development-Workflow.md docs/00-index.md \
+    docs/09-development-plan.md \
+    docs/phases/phase-3-installer-integration-tool.md \
+    docs/phases/phase-3-5-quality-model-consolidation.md \
+    docs/phases/phase-4-skills-and-gauntlet-extraction.md \
+    docs/templates/verification-contract-template.md \
+    docs/templates/execution-report-template.md \
+    docs/templates/phase-plan-template.md \
+    docs/templates/pr-description-template.md
+  ```
+
+- Unit tests: `npm test` passed with `19` tests.
+- Diff hygiene: `git diff --check` passed.
+- Link and inventory check: local Markdown links resolve, indexed Phase 3,
+  Phase 3.5, Phase 4, Verification Contract, and Quality Envelope templates
+  exist, and `quality-envelope-schema-template.json` parses.
+- Installer smoke test:
+  `npm run forgeloop -- init "$tmpdir" --dry-run` completed without writing
+  files and included `quality-envelope-report-template.html`,
+  `quality-envelope-schema-template.json`, and
+  `verification-contract-template.md`.
+- Agent instruction audit: `AGENTS.md` and `CLAUDE.md` share the same load
+  order, repository rules, quality gates, and Git restrictions. `CLAUDE.md`
+  keeps only its Claude-specific role section.
+
+## Final QA Handoff
+
+- Phase 3.5 is ready for Giuseppe's review.
+- No harness code, publishing, PR, merge, or skill packaging was performed.
+- Phase 4 remains a draft plan and should not start until explicitly approved.
+- Any commit or push for this closeout still requires explicit approval.
 
 ## Exit Criteria
 

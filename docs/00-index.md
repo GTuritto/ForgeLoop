@@ -88,5 +88,4 @@ Default agent load order:
 
 ForgeLoop is prose-first with a reusable template pack and an early safe
 installer CLI. Skills and orchestration harness code should come after the
-installer behavior, Phase 3.5 quality model, and Phase 4 skill-extraction plan
-are validated.
+installer behavior and Phase 4 skill-extraction plan are validated.

@@ -377,8 +377,8 @@ verification-contract authoring, Gauntlet Mode execution, Quality Envelope HTML
 reporting, CRAP or complexity-plus-coverage risk scoring, integration recovery
 design, performance test design, resilience experiment design, clean-code
 review, and quality-gate evaluation. Skill extraction should follow the Phase 4
-plan. Actual skill packaging and installation should wait until the Phase 3.5
-quality model and Phase 4 skill-extraction plan are validated.
+plan. Actual skill packaging and installation should wait until installer
+behavior and the Phase 4 skill-extraction plan are validated.
 
 Quality Envelope reports are HTML-first human artifacts with JSON sidecars for
 agents and CI. The HTML report should be static and self-contained so it can be
@@ -403,12 +403,12 @@ focused on:
 - reducing duplicate definitions across entrypoint docs,
 - keeping optional tools such as OpenSpec and Kaddo supportive, not mandatory,
 - supporting brownfield projects as first-class cases,
-- consolidating risk-adaptive quality, smart verification, and human-control
-  modes,
+- applying the completed risk-adaptive quality, smart verification, and
+  human-control model,
 - preparing Gauntlet Mode, verification contracts, Quality Envelope reports,
   and clean-code skill candidates,
 - validating the installer before publishing or extracting skills.
 
-The next expected evolution after installer validation and quality-model
-consolidation is Phase 4: extracting repeatable workflow activities into
-skills and evidence artifacts before building harness automation.
+The next expected evolution after installer validation is Phase 4: extracting
+repeatable workflow activities into skills and evidence artifacts before
+building harness automation.
