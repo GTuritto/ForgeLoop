@@ -31,6 +31,14 @@ test("plans a dry-run install for a missing Codex instruction file", () => {
     plan.actions.some((action) => action.path.endsWith("docs/templates/quality-envelope-schema-template.json")),
     true
   );
+  assert.equal(
+    plan.actions.some((action) => action.path.endsWith("docs/templates/evaluator-calibration-template.md")),
+    true
+  );
+  assert.equal(
+    plan.actions.some((action) => action.path.endsWith("docs/templates/ai-verification-guardrails-template.md")),
+    true
+  );
 });
 
 test("preserves existing instruction files by writing a review patch", () => {
@@ -154,6 +162,19 @@ test("global install plan copies ForgeLoop package files into a stable source", 
   assert.equal(
     plan.actions.some(
       (action) => action.type === "copy" && action.path.endsWith("docs/templates/quality-envelope-schema-template.json")
+    ),
+    true
+  );
+  assert.equal(
+    plan.actions.some(
+      (action) => action.type === "copy" && action.path.endsWith("docs/templates/eval-suite-template.md")
+    ),
+    true
+  );
+  assert.equal(
+    plan.actions.some(
+      (action) =>
+        action.type === "copy" && action.path.endsWith("docs/templates/harness-assumption-register-template.md")
     ),
     true
   );

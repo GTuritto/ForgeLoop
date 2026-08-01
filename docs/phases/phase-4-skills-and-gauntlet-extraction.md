@@ -7,7 +7,7 @@
 - Branch: `main`
 - Date: 2026-08-01
 - Owner: Giuseppe
-- Status: `Draft`
+- Status: `In Progress`
 - Execution mode: `Docs-only`
 - Tool mode: `Single-tool`
 - Human-control mode: `Approval-gated`
@@ -27,6 +27,8 @@ The phase defines:
 - clean-code skill candidates.
 - fresh-context review and handoff triggers.
 - semantic code-tool guidance.
+- verification-infrastructure templates for evaluator calibration, eval suites,
+  context maps, harness assumptions, and AI verification guardrails.
 - installer expectations for future skill installation.
 
 ## Source Docs To Review
@@ -56,6 +58,10 @@ The phase defines:
   IDEs.
 - Document fresh-context review and context-budget handoff rules.
 - Document optional semantic code tooling such as Serena.
+- Add templates for evaluator calibration, eval suites, context mapping,
+  harness assumption review, and AI verification guardrails.
+- Extend Quality Envelope reporting with AI guardrail and verification-debt
+  evidence.
 
 ### Out Of Scope
 
@@ -64,6 +70,21 @@ The phase defines:
 - Installing third-party skills into user agents.
 - Adding runtime dependencies for HTML report generation.
 - Enforcing hard CI quality gates before thresholds are validated.
+
+## Research Drivers
+
+Phase 4 incorporates these research-backed ideas without adding harness code:
+
+- Separate the generator from the evaluator when quality judgment matters.
+- Define sprint or verification contracts before implementation.
+- Calibrate evaluators against concrete rubrics and failure examples.
+- Treat eval tasks, trials, graders, transcripts, and outcomes as first-class
+  artifacts.
+- Keep context small, prioritized, and recoverable through structured notes.
+- Record harness assumptions because model capabilities and harness needs
+  change over time.
+- Treat AI-assisted delivery as a verification and guardrail problem, not only
+  a code-generation problem.
 
 ## Sub-Phases
 
@@ -96,6 +117,21 @@ For each sub-phase:
   - Tests: markdown lint and link review.
   - Exit signal: future implementation has a clear docs-first target.
 
+- Name: Verification infrastructure templates
+  - Goal: define templates that make evaluator quality, context boundaries,
+    eval suites, harness assumptions, and AI verification guardrails explicit.
+  - Files, modules, or components:
+    `docs/templates/evaluator-calibration-template.md`,
+    `docs/templates/eval-suite-template.md`,
+    `docs/templates/context-map-template.md`,
+    `docs/templates/harness-assumption-register-template.md`,
+    `docs/templates/ai-verification-guardrails-template.md`, README, index,
+    context, reference workflow.
+  - Tests: markdown lint, JSON parsing, template inventory review, and installer
+    dry run.
+  - Exit signal: future skills can use stable artifacts before any harness code
+    exists.
+
 - Name: Review and evidence
   - Goal: verify docs, inspect diff, and prepare a final handoff.
   - Files, modules, or components: touched docs and templates.
@@ -109,6 +145,17 @@ For each sub-phase:
   justifies it.
 - `verification-contract-author`: writes the functional, craft, and contextual
   verification contract before implementation.
+- `evaluator-calibrator`: tunes evaluator rubrics, examples, and false
+  approval checks before repeated critic or QA use.
+- `eval-suite-author`: defines agent, skill, tool, or workflow eval suites with
+  tasks, trials, graders, transcripts, outcomes, and metrics.
+- `context-map-curator`: defines must-load, just-in-time, do-not-load, and
+  persisted-note boundaries for long or high-risk work.
+- `harness-assumption-auditor`: records and reviews the assumptions that justify
+  harness scaffolding, context resets, extra agents, or evaluator loops.
+- `ai-verification-guardrail-reviewer`: checks whether AI-generated or
+  AI-shaped changes are understood, observable, reversible, and free of
+  obvious verification debt.
 - `quality-envelope-reporter`: produces the HTML report and JSON sidecar after
   verification.
 - `change-risk-score-reporter`: calculates CRAP or another approved
@@ -166,6 +213,11 @@ The installer should:
     work.
 - Risk: HTML reports become a dashboard project.
   - Mitigation: keep the first artifact static and self-contained.
+- Risk: Evaluator scores become performative certainty.
+  - Mitigation: require calibration examples, false-approval notes, and human
+    authority for ambiguous release decisions.
+- Risk: Harness assumptions become invisible legacy.
+  - Mitigation: record cost, evidence, review cadence, and pruning experiments.
 - Deferred work:
   - report generation scripts,
   - CI quality gates,
@@ -186,6 +238,9 @@ The installer should:
 - Quality Envelope HTML and JSON templates exist and are indexed.
 - Quality Envelope includes CRAP or another complexity-plus-coverage risk
   score.
+- Evaluator Calibration, Eval Suite, Context Map, Harness Assumption Register,
+  and AI Verification Guardrails templates exist and are indexed.
+- Quality Envelope includes AI guardrail and verification-debt evidence.
 - Roadmap lists Phase 4 as the next docs-first skill-extraction phase.
 - README explains the HTML-first Quality Envelope artifact.
 - Future installer expectations cover agent and IDE skill installation.

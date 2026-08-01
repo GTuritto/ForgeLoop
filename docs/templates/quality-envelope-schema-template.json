@@ -83,6 +83,17 @@
       "observability_verified": null,
       "external_dependency_failure_tested": null,
       "secrets_or_supply_chain_checked": null
+    },
+    "ai_verification_guardrails": {
+      "level": 0,
+      "tool": "",
+      "review_confidence": "unknown",
+      "ai_generated_surface": "",
+      "human_understanding_verified": null,
+      "rollback_or_disable_path_verified": null,
+      "observability_adequacy": "unknown",
+      "verification_debt": [],
+      "guardrail_failures": []
     }
   },
   "commands": [],

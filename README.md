@@ -375,16 +375,21 @@ The current skill candidate set includes quality-model capabilities such as
 human-control recommendation, smart test selection, acceptance-evidence audit,
 verification-contract authoring, Gauntlet Mode execution, Quality Envelope HTML
 reporting, CRAP or complexity-plus-coverage risk scoring, integration recovery
-design, performance test design, resilience experiment design, clean-code
-review, and quality-gate evaluation. Skill extraction should follow the Phase 4
-plan. Actual skill packaging and installation should wait until installer
-behavior and the Phase 4 skill-extraction plan are validated.
+design, performance test design, resilience experiment design, evaluator
+calibration, eval-suite authoring, context mapping, harness-assumption review,
+AI verification guardrail review, clean-code review, and quality-gate
+evaluation. Skill extraction should follow the Phase 4 plan. Actual skill
+packaging and installation should wait until installer behavior and the Phase 4
+skill-extraction plan are validated.
 
 Quality Envelope reports are HTML-first human artifacts with JSON sidecars for
 agents and CI. The HTML report should be static and self-contained so it can be
 attached to PRs, archived with execution evidence, or opened locally without a
 hosted dashboard. The report should include CRAP or another derived risk score
-when the project can combine per-function complexity with coverage.
+when the project can combine per-function complexity with coverage. For
+AI-generated or AI-shaped changes, the report can also capture guardrail
+evidence such as reviewer confidence, observability adequacy, rollback or
+disable readiness, and verification debt.
 
 ## Commit And PR Standard
 
@@ -405,10 +410,10 @@ focused on:
 - supporting brownfield projects as first-class cases,
 - applying the completed risk-adaptive quality, smart verification, and
   human-control model,
-- preparing Gauntlet Mode, verification contracts, Quality Envelope reports,
-  and clean-code skill candidates,
+- validating Phase 4 verification-infrastructure templates for evaluator
+  calibration, eval suites, context maps, harness assumptions, and AI
+  guardrails,
 - validating the installer before publishing or extracting skills.
 
-The next expected evolution after installer validation is Phase 4: extracting
-repeatable workflow activities into skills and evidence artifacts before
-building harness automation.
+The current Phase 4 path extracts repeatable workflow activities into skills and
+evidence artifacts before building harness automation.

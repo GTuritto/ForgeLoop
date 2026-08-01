@@ -107,8 +107,8 @@ Every phase below must link back to this plan.
 - Purpose: identify stable repeated actions that should become agent skills.
 - Target signal: candidate skills map to stable templates, Gauntlet Mode,
   Quality Envelope reporting, installer behavior, the quality model, and
-  recurring review steps.
-- Status: Draft
+  recurring verification, evaluator, context, and guardrail review steps.
+- Status: In Progress
 
 ## Phase Sequence
 
@@ -175,10 +175,12 @@ Every phase below must link back to this plan.
 
 - Goal: identify and define skill candidates from stable templates, installer
   behavior, Gauntlet Mode, verification contracts, and Quality Envelope
-  reporting.
+  reporting, plus verification-infrastructure templates for evaluator
+  calibration, eval suites, context maps, harness assumptions, and AI
+  guardrails.
 - Depends on: Phase 3.5.
 - Execution mode: `Docs-only`.
-- Status: Draft.
+- Status: In Progress.
 - Phase plan:
   `docs/phases/phase-4-skills-and-gauntlet-extraction.md`.
 
@@ -207,6 +209,8 @@ Every phase below must link back to this plan.
 - Risk-adaptive quality, testing, human-control, and evidence models.
 - Gauntlet Mode, verification contracts, Quality Envelope reports, and
   skill-candidate definitions.
+- Evaluator calibration, eval suites, context maps, harness assumptions, and
+  AI verification guardrail templates.
 
 ### Out Of Scope
 
@@ -226,6 +230,8 @@ Every phase below must link back to this plan.
   skill candidates stabilize.
 - Quality Envelope generator: revisit after the HTML and JSON report contracts
   are validated by hand.
+- Executable eval-suite runner: revisit after the eval suite template has been
+  used by hand.
 
 ## Risk Register
 
@@ -297,10 +303,19 @@ ForgeLoop is a prose-first repo with an early installer CLI.
     `docs/templates/quality-envelope-schema-template.json`
   - Owner: Giuseppe
   - Status: Active
+- Artifact: Verification infrastructure templates
+  - Location:
+    `docs/templates/evaluator-calibration-template.md`,
+    `docs/templates/eval-suite-template.md`,
+    `docs/templates/context-map-template.md`,
+    `docs/templates/harness-assumption-register-template.md`,
+    `docs/templates/ai-verification-guardrails-template.md`
+  - Owner: Giuseppe
+  - Status: Active
 - Artifact: Phase 4 skill-extraction plan
   - Location: `docs/phases/phase-4-skills-and-gauntlet-extraction.md`
   - Owner: Giuseppe
-  - Status: Draft
+  - Status: In Progress
 - Artifact: Installer CLI
   - Location: `bin/forgeloop.js`, `src/`
   - Owner: Giuseppe
@@ -356,3 +371,8 @@ ForgeLoop is a prose-first repo with an early installer CLI.
   - Change: completed Phase 3.5 quality model consolidation.
   - Why: close the quality-model stabilization gate before Phase 4 skill
     extraction.
+- Date: 2026-08-01
+  - Change: expanded Phase 4 with verification-infrastructure templates and AI
+    guardrail evidence.
+  - Why: make evaluator quality, eval suites, context boundaries, harness
+    assumptions, and verification debt explicit before adding harness code.

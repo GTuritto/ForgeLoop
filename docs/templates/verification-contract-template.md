@@ -34,6 +34,8 @@ Does the change do what it must do?
 - Negative cases:
 - Required test layer:
 - Required commands:
+- Auto checks:
+- Manual checks:
 
 ## Craft Verification
 
@@ -48,6 +50,9 @@ Is the implementation maintainable?
 - Error handling expectations:
 - Test quality expectations:
 - Required static-analysis commands:
+- Auto checks:
+- Manual checks:
+- Manual rubric:
 
 ## Contextual Verification
 
@@ -60,6 +65,17 @@ Does the change fit the real system?
 - Observability required for future debugging:
 - Rollback or recovery expectations:
 - Manual judgment required:
+- Auto checks:
+- Manual checks:
+- Manual rubric:
+
+## Evaluator Agreement
+
+- Evaluator or critic role:
+- Linked evaluator calibration:
+- Criteria that must be graded skeptically:
+- False approvals to avoid:
+- Human override policy:
 
 ## Gauntlet Plan
 

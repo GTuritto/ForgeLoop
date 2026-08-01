@@ -56,17 +56,30 @@ projects, but it is not a coding agent or orchestration harness.
   plan for applying ForgeLoop to target projects.
 - `docs/phases/phase-3-5-quality-model-consolidation.md`: completed quality
   model plan for risk-adaptive verification and human-control rules.
-- `docs/phases/phase-4-skills-and-gauntlet-extraction.md`: draft plan for
+- `docs/phases/phase-4-skills-and-gauntlet-extraction.md`: in-progress plan for
   Gauntlet Mode, Quality Envelope reporting, and skill extraction.
 - `docs/templates/`: reusable template pack.
 - `docs/templates/acceptance-evidence-matrix-template.md`: traceability
   template for strict and release-critical work.
 - `docs/templates/verification-contract-template.md`: pre-code agreement that
   defines functional, craft, and contextual verification.
+- `docs/templates/evaluator-calibration-template.md`: rubric and example set
+  for tuning skeptical evaluator or critic behavior.
+- `docs/templates/eval-suite-template.md`: repeatable agent, skill, tool, or
+  workflow evaluation suite with tasks, trials, graders, transcripts, outcomes,
+  and metrics.
+- `docs/templates/context-map-template.md`: context boundary artifact for
+  long, brownfield, strict, release-critical, or multi-agent work.
+- `docs/templates/harness-assumption-register-template.md`: review artifact for
+  assumptions that justify harness scaffolding, context resets, extra agents,
+  or evaluator loops.
+- `docs/templates/ai-verification-guardrails-template.md`: guardrail checklist
+  for AI-generated or AI-shaped changes where production confidence depends on
+  understanding, observability, reversibility, and verification-debt review.
 - `docs/templates/quality-envelope-report-template.html`: static HTML report
   for complexity, coverage, CRAP or another complexity-plus-coverage risk
   score, mutation, load, performance, operational safety, evidence commands,
-  and residual risk.
+  AI guardrails, evidence commands, and residual risk.
 - `docs/templates/quality-envelope-schema-template.json`: machine-readable
   sidecar for Quality Envelope reports.
 - `docs/templates/performance-test-plan-template.md`: risk-triggered

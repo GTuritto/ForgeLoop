@@ -71,6 +71,11 @@ Default agent load order:
 - [Integration Test Plan Template](templates/integration-test-plan-template.md)
 - [Acceptance-Evidence Matrix Template](templates/acceptance-evidence-matrix-template.md)
 - [Verification Contract Template](templates/verification-contract-template.md)
+- [Evaluator Calibration Template](templates/evaluator-calibration-template.md)
+- [Eval Suite Template](templates/eval-suite-template.md)
+- [Context Map Template](templates/context-map-template.md)
+- [Harness Assumption Register Template](templates/harness-assumption-register-template.md)
+- [AI Verification Guardrails Template](templates/ai-verification-guardrails-template.md)
 - [Performance Test Plan Template](templates/performance-test-plan-template.md)
 - [Resilience Experiment Template](templates/resilience-experiment-template.md)
 - [Production Rollout Plan Template](templates/production-rollout-plan-template.md)
@@ -87,5 +92,5 @@ Default agent load order:
 ## Status
 
 ForgeLoop is prose-first with a reusable template pack and an early safe
-installer CLI. Skills and orchestration harness code should come after the
-installer behavior and Phase 4 skill-extraction plan are validated.
+installer CLI. Phase 4 verification-infrastructure templates are being
+validated before skill packaging or orchestration harness code.

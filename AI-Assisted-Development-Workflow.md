@@ -1101,6 +1101,17 @@ These are reusable capabilities the harness should eventually invoke.
   dependencies, risk, and test history.
 - `verification-contract-author`: define functional, craft, and contextual
   verification criteria before high-assurance implementation.
+- `evaluator-calibrator`: create rubrics, examples, false-approval checks, and
+  escalation rules for skeptical critic or QA evaluation.
+- `eval-suite-author`: define repeatable agent, skill, tool, or workflow evals
+  with tasks, trials, graders, transcripts, outcomes, and metrics.
+- `context-map-curator`: define must-load, just-in-time, do-not-load, and
+  persisted-note boundaries for long or high-risk work.
+- `harness-assumption-auditor`: record why harness scaffolding exists, what it
+  costs, how it fails, and when it should be simplified or removed.
+- `ai-verification-guardrail-reviewer`: check that AI-generated or AI-shaped
+  changes are understood, observable, reversible, and not carrying unresolved
+  verification debt.
 - `acceptance-evidence-auditor`: verify that requirements trace to scenarios,
   tests, evidence, and residual risk.
 - `integration-recovery-designer`: design integration failure and recovery test
@@ -1643,6 +1654,9 @@ At minimum, the Quality Envelope should cover:
 - performance compared with the previous five comparable runs when available,
 - rollback, observability, external-dependency failure, secrets, and supply
   chain checks,
+- AI verification guardrails, including reviewer confidence, human
+  understanding of changed behavior, rollback or disable readiness,
+  observability adequacy, and verification debt,
 - commands and evidence locations,
 - skipped checks and residual risk.
 
