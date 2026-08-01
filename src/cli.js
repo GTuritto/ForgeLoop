@@ -9,6 +9,7 @@ const {
   executePlan,
   summarizePlan,
 } = require("./installer");
+const { detectTools, detectedToolNames, formatDetectionSummary } = require("./tool-detector");
 const { listToolNames } = require("./tool-adapters");
 
 async function runCli(argv) {
@@ -83,6 +84,8 @@ function parseArgs(argv) {
     globalSourceDir: defaultGlobalSourceDir(),
     mode: "copy",
     tools: ["codex"],
+    toolsProvided: false,
+    detect: true,
     tier: "real",
     workType: undefined,
     otherFiles: [],
@@ -130,7 +133,10 @@ function parseArgs(argv) {
       index += 1;
     } else if (arg === "--tools") {
       parsed.tools = splitList(requireValue(arg, next));
+      parsed.toolsProvided = true;
       index += 1;
+    } else if (arg === "--no-detect") {
+      parsed.detect = false;
     } else if (arg === "--tier") {
       parsed.tier = requireValue(arg, next);
       index += 1;
@@ -153,12 +159,15 @@ function parseArgs(argv) {
 async function askQuestions(parsed) {
   const rl = readline.createInterface({ input, output });
   try {
+    const targetDir = await ask(rl, "Target directory", parsed.targetDir);
+    const tools = await askToolSelection(rl, { ...parsed, targetDir });
+
     return {
       ...parsed,
-      targetDir: await ask(rl, "Target directory", parsed.targetDir),
+      targetDir,
       mode: await ask(rl, "Install mode: copy, symlink, or hybrid", parsed.mode),
       globalSourceDir: await ask(rl, "Global source directory for symlink or hybrid mode", parsed.globalSourceDir),
-      tools: splitList(await ask(rl, `Tools (${listToolNames().join(", ")})`, parsed.tools.join(","))),
+      tools,
       tier: await ask(rl, "Project tier: throwaway, real, or productized", parsed.tier),
       workType: await ask(rl, "Work type: greenfield, brownfield, or maintenance", parsed.workType || "brownfield"),
       write: /^y/i.test(await ask(rl, "Write files now? Dry run is safer first: y/N", "N")),
@@ -166,6 +175,30 @@ async function askQuestions(parsed) {
   } finally {
     rl.close();
   }
+}
+
+async function askToolSelection(rl, parsed) {
+  if (parsed.toolsProvided || parsed.detect === false) {
+    return splitList(await ask(rl, `Tools (${listToolNames().join(", ")})`, parsed.tools.join(",")));
+  }
+
+  const detect = parsed.detectTools || detectTools;
+  const log = parsed.log || console.log;
+  const detection = detect({ targetDir: parsed.targetDir });
+  const detectedTools = detectedToolNames(detection);
+
+  log(formatDetectionSummary(detection));
+
+  if (detectedTools.length === 0) {
+    return splitList(await ask(rl, `Tools (${listToolNames().join(", ")})`, parsed.tools.join(",")));
+  }
+
+  const installAll = await ask(rl, "Install to all detected agents? Y/n", "Y");
+  if (!/^n/i.test(installAll)) {
+    return detectedTools;
+  }
+
+  return splitList(await ask(rl, `Tools (${listToolNames().join(", ")})`, detectedTools.join(",")));
 }
 
 async function askGlobalInstallQuestions(parsed) {
@@ -215,6 +248,7 @@ Options:
   --mode copy|symlink|hybrid
   --global-source PATH      Stable ForgeLoop source for symlink or hybrid mode.
   --tools codex,claude-code
+  --no-detect               Disable local agent and IDE detection in prompts.
   --tier throwaway|real|productized
   --work-type greenfield|brownfield|maintenance
   --other-file PATH         Add a custom tool instruction file.
@@ -230,6 +264,7 @@ Examples:
 }
 
 module.exports = {
+  askToolSelection,
   parseArgs,
   runCli,
 };

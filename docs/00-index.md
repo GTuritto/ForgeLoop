@@ -21,6 +21,8 @@ Default agent load order:
 - [CONTEXT.md](../CONTEXT.md): shared terms for the ForgeLoop repo.
 - [AGENTS.md](../AGENTS.md): repo-local agent instructions for working on
   ForgeLoop itself.
+- [CLAUDE.md](../CLAUDE.md): Claude-specific repo instructions for working on
+  ForgeLoop itself.
 - [package.json](../package.json): npm package and CLI entrypoint metadata.
 
 ## Planning

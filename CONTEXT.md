@@ -48,6 +48,8 @@ projects, but it is not a coding agent or orchestration harness.
 - `FORGELOOP_CORE.md`: compact agent-loading layer.
 - `README.md`: project entrypoint and usage guide.
 - `AGENTS.md`: repo-local agent instructions for working on ForgeLoop itself.
+- `CLAUDE.md`: Claude-specific repo instructions for working on ForgeLoop
+  itself.
 - `AI-Assisted-Development-Workflow.md`: canonical workflow reference.
 - `docs/09-development-plan.md`: ForgeLoop Roadmap / Master Plan.
 - `docs/templates/`: reusable template pack.

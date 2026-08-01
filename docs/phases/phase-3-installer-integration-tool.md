@@ -77,6 +77,11 @@ Giuseppe approved the recommended answers on 2026-07-10.
     `GitHub Copilot`, `Gemini CLI`, `OpenCode`, `Cline`, `Roo Code`,
     `Continue`, `Windsurf / Devin Desktop`, `Aider`, `Amazon Q Developer`,
     `JetBrains AI Assistant`, `Replit Agent`, and `Other`.
+  - Current implementation: detect locally installed agents and IDEs, show the
+    detected set first, and let the user select all detected targets or provide
+    a comma-separated subset in a plain terminal prompt.
+  - Future UX option: add a richer checkbox-style TUI only if the UX gain
+    justifies adding a runtime dependency.
 
 - Decision: create missing project docs from reviewed templates.
   - Constraint: do this only when the target file is missing.
@@ -133,7 +138,19 @@ installer behavior is validated.
 
 ### Tool Selector
 
-The installer must ask which tools the project uses:
+The installer must ask which tools the project uses. In an interactive terminal,
+the preferred flow is:
+
+1. Detect supported agents and IDEs from stable local markers.
+2. Show the detected tools and their target instruction files.
+3. Ask whether to install for all detected tools.
+4. If the user says no, ask for a comma-separated subset.
+5. Keep `Other` available for custom instruction-file paths.
+
+Non-interactive runs must still support `--tools`, `--other-file`, `--yes`,
+and `--json`.
+
+Supported tools:
 
 - `Codex`
 - `Claude Code`
@@ -155,6 +172,60 @@ The installer must ask which tools the project uses:
 The selector must support multiple tools. The selected tools decide which
 instruction files or guidance blocks are created. `Other` remains available
 for tools without a known adapter or for project-specific conventions.
+
+### Agent And IDE Detection
+
+Detection is a convenience, not authority. It must never install into a tool
+without showing the planned target and receiving user confirmation unless the
+user passes an explicit non-interactive flag such as `--tools` with `--yes`.
+
+The detector should use stable, local markers only:
+
+- known instruction or config directories in the target repo,
+- known global config or skills directories in the user's home directory,
+- executable availability only when it is cheap and side-effect free,
+- explicit command flags, which override detection.
+
+Initial detection targets:
+
+- `Claude Code`: `~/.claude/` or target `CLAUDE.md`
+- `Cursor`: `~/.cursor/` or target `.cursor/`
+- `Windsurf / Devin Desktop`: `~/.windsurf/` or target Windsurf rules
+- `Codex`: `~/.codex/` or target `AGENTS.md`
+- `GitHub Copilot`: `~/.github/` or target `.github/copilot-instructions.md`
+- `Gemini CLI`: `~/.gemini/` or target `GEMINI.md`
+- `Antigravity`: target convention still provisional; verify before writing
+
+Detection output should classify each result:
+
+- `detected`: supported marker found,
+- `available`: adapter exists but no marker was found,
+- `provisional`: adapter target needs convention verification,
+- `custom`: supplied through `Other` or `--other-file`.
+
+### Interactive Installer Shape
+
+The current interactive installer uses zero-dependency plain prompts. A richer
+checkbox-style TUI can come later, but CI and simple terminals must keep a
+plain-prompt fallback.
+
+Preferred prompts:
+
+```txt
+Detected agents and IDEs:
+- Claude Code -> CLAUDE.md
+- Cursor -> .cursor/rules/forgeloop.mdc
+- Codex -> AGENTS.md
+
+Install to all detected agents? Yes/No
+
+If No:
+Tools (codex, claude-code, cursor, github-copilot, gemini-cli):
+claude-code,cursor
+```
+
+The final dry-run summary must list every selected target, every skipped target,
+and every provisional adapter that needs review.
 
 ### Tool Adapter Targets
 
@@ -210,6 +281,7 @@ Brownfield setup should include Module / Component Map guidance by default.
 - Detect the target repo root.
 - Read target `README.md`, existing instruction files, and docs index if they
   exist.
+- Detect locally available agents and IDEs when running interactively.
 - Ask installation scope.
 - Ask selected tools.
 - Ask project tier and work type.
@@ -218,6 +290,7 @@ Brownfield setup should include Module / Component Map guidance by default.
 - Write a summary of created, changed, skipped, and deferred files.
 - Refuse `symlink` and `hybrid` modes when the global source is missing.
 - Allow overriding the global source path with `--global-source`.
+- Allow disabling detection with `--no-detect`.
 - Run link and markdown checks when possible.
 
 ## Target Files
@@ -268,11 +341,21 @@ For each sub-phase:
   - Exit signal: Giuseppe approves the installer behavior.
 
 - Name: Installer design
-  - Goal: define CLI or script interface, prompts, dry-run output, and file
-    operations.
+  - Goal: define CLI or script interface, detection, prompts, dry-run output,
+    and file operations.
   - Files, modules, or components: future design doc or ADR.
   - Tests: review against this plan.
   - Exit signal: implementation is ready to start.
+
+- Name: Agent detection and interactive selection
+  - Goal: detect supported local agents and IDEs, then let the user select all,
+    some, or custom targets through an interactive prompt.
+  - Files, modules, or components: CLI argument parser, detector module, tool
+    adapter metadata, prompt flow, tests.
+  - Tests: detector unit tests with temporary home and repo fixtures, prompt
+    fallback tests, dry-run output tests, and no-write safety tests.
+  - Exit signal: complete. The installer can recommend targets from local
+    evidence while preserving explicit confirmation and non-interactive flags.
 
 - Name: Installer implementation
   - Goal: build the smallest safe installer.
@@ -289,7 +372,9 @@ For each sub-phase:
 - Components touched or created:
   - project detector,
   - install-mode selector,
+  - agent and IDE detector,
   - tool selector,
+  - interactive multi-select prompt,
   - file planner,
   - template copier or symlink manager,
   - dry-run reporter,
@@ -308,11 +393,17 @@ For each sub-phase:
 - Planner deduplicates shared targets such as `AGENTS.md`.
 - Brownfield setup includes a Module / Component Map.
 - Dry run does not write files.
+- Detector finds supported agents from repo and home-directory markers without
+  writing files.
+- Interactive selection can choose all detected tools or a comma-separated
+  subset.
+- Non-interactive flags override detection.
 
 ### Integration Test Plan
 
 - Future integration tests should use fixture repos for copy mode, symlink
-  mode, existing-file mode, and multi-tool mode.
+  mode, existing-file mode, multi-tool mode, detection mode, and interactive
+  selection fallback.
 
 ### Smoke Test Plan
 
@@ -328,6 +419,8 @@ For each sub-phase:
 - Confirm the installation scope options are clear.
 - Confirm the tool selector includes the default tools, common adapter tools,
   and a custom `Other` option.
+- Confirm the installer can show detected agents and IDEs before selection.
+- Confirm users can install to all detected tools or choose a subset.
 - Confirm safety rules prevent destructive writes.
 
 ### Regression Test Plan
@@ -362,6 +455,12 @@ For each sub-phase:
 - Risk: Tool conventions change.
   - Mitigation: verify current tool instruction-file conventions during
     implementation.
+- Risk: Detection mistakes a marker for consent.
+  - Mitigation: treat detection as a recommendation only; require confirmation
+    before writes and preserve dry-run as the default.
+- Risk: A TUI dependency makes the installer harder to run through NPX.
+  - Mitigation: prefer zero-dependency prompts first; add a dependency only
+    after the UX gain justifies package complexity.
 - Risk: Installer becomes a harness too early.
   - Mitigation: keep first implementation focused on setup, not orchestration.
 - Deferred work:

@@ -42,6 +42,8 @@ workflow tier that keeps the work safe.
   reports, ADRs, and PRs.
 - [AGENTS.md](AGENTS.md): repo-local agent instructions for working on
   ForgeLoop itself.
+- [CLAUDE.md](CLAUDE.md): Claude-specific agent instructions for working on
+  ForgeLoop itself.
 - [bin/forgeloop.js](bin/forgeloop.js): early installer CLI.
 
 ForgeLoop is not an orchestration harness. It is the standard, template pack,
@@ -180,7 +182,21 @@ Installer options:
 - `--mode`: `copy`, `symlink`, or `hybrid`. Default: `copy`.
 - `--global-source`: stable source for `symlink` or `hybrid` mode. Default:
   `~/.forgeloop/source`.
+- `--no-detect`: disable local agent and IDE detection in prompts.
 - `--other-file`: add a custom instruction file path. Default: none.
+
+Interactive installer behavior:
+
+- detect locally available agents and IDEs,
+- show detected targets before writing,
+- offer a zero-dependency plain terminal install-all or comma-separated
+  multi-select flow,
+- keep `--tools`, `--other-file`, `--yes`, and `--json` for non-interactive
+  runs,
+- treat detection as a recommendation, not permission to write.
+
+A richer checkbox-style TUI can come later if the UX gain justifies adding a
+runtime dependency.
 
 Supported tool adapters:
 

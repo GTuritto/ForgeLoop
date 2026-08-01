@@ -1,4 +1,4 @@
-# ForgeLoop Agent Instructions
+# ForgeLoop Claude Instructions
 
 Follow [FORGELOOP_CORE.md](FORGELOOP_CORE.md) first.
 
@@ -29,3 +29,11 @@ only when the Core and task-specific files do not answer the process question.
 - Prefer small docs-only edits.
 - Run markdown lint on touched Markdown files.
 - Do not commit, push, open a PR, or merge unless Giuseppe explicitly asks.
+
+## Claude Role
+
+Claude may act as a critic, planner, or builder, depending on the task and tool
+availability. When acting as critic, review plans and diffs against repository
+evidence, the Core, Phase 3.5 quality rules, templates, tests, and residual
+risk. When acting as builder, follow the same gates and verification rules as
+any other builder agent.
