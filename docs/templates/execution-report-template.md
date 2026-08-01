@@ -32,6 +32,7 @@ Explain what changed and why.
 - First valid test layer:
 - RED evidence:
 - Markdown lint:
+- Complexity checks:
 - Unit tests:
 - Component tests:
 - Contract tests:

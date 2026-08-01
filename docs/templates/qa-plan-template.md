@@ -32,6 +32,7 @@ plans should add phase-specific test details.
 - Contract or schema inputs:
 - Configuration or runtime inputs:
 - Historical failure inputs:
+- Complexity inputs:
 - Business-criticality inputs:
 
 ## Test Ladder
@@ -120,6 +121,7 @@ For each execution mode:
 ## CI And Local Commands
 
 - Local lint:
+- Local complexity:
 - Local unit:
 - Local integration:
 - Local smoke:

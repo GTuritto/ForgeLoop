@@ -33,6 +33,7 @@ Use this template when the user explicitly approves opening a PR.
 - Smart test selection:
 - First valid test layer:
 - RED evidence:
+- Complexity checks:
 - Unit tests:
 - Component tests:
 - Contract tests:

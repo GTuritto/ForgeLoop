@@ -96,6 +96,7 @@ For each sub-phase:
 - Affected consumers:
 - Contracts or schemas affected:
 - Configuration or runtime wiring affected:
+- Cyclomatic or cognitive complexity impact:
 - Critical invariants:
 - Selected test ladder levels:
 - Checks deferred to later stage:
@@ -141,6 +142,15 @@ For each sub-phase:
 ### Test Evidence Required
 
 - TBD
+
+### Complexity Evidence
+
+- Required: `yes` | `no`
+- Tool or source:
+- Cyclomatic complexity result:
+- Cognitive complexity result:
+- Hotspots and rationale:
+- Refactor required before close: `yes` | `no`
 
 ### Acceptance-Evidence Traceability
 

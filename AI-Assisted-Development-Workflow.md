@@ -1448,12 +1448,14 @@ Selection inputs should include:
 - historical failure data,
 - test runtime,
 - test reliability,
+- static-analysis signals such as cyclomatic complexity, cognitive complexity,
+  nesting depth, and churn,
 - business criticality.
 
 Use this progressive ladder:
 
 - `Level 0 - Structural checks`: formatting, compilation, type checking, lint,
-  changed-file validation, secret scanning.
+  changed-file validation, complexity thresholds, secret scanning.
 - `Level 1 - Focused tests`: changed test files, tests for changed symbols,
   focused unit tests, focused component tests.
 - `Level 2 - Affected regressions`: consumer tests, neighboring modules,
@@ -1498,7 +1500,7 @@ meet a time target.
 Run cheap and high-signal checks before expensive checks:
 
 ```txt
-format/type/lint
+format/type/lint/complexity
   -> focused tests
   -> affected regressions
   -> contracts and integration
@@ -1528,6 +1530,8 @@ visible, owned, time-bounded, and associated with residual-risk documentation.
 Always consider:
 
 - lint or formatting check,
+- static-analysis checks for cyclomatic complexity, cognitive complexity, deep
+  nesting, and other maintainability hotspots,
 - first valid test layer for new behavior,
 - affected regressions,
 - smoke test for phase handoff.
