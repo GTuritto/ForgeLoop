@@ -377,7 +377,8 @@ verification-contract authoring, Gauntlet Mode execution, Quality Envelope HTML
 reporting, CRAP or complexity-plus-coverage risk scoring, integration recovery
 design, performance test design, resilience experiment design, clean-code
 review, and quality-gate evaluation. Skill extraction should follow the Phase 4
-plan after the Phase 3.5 model is reviewed.
+plan. Actual skill packaging and installation should wait until the Phase 3.5
+quality model and Phase 4 skill-extraction plan are validated.
 
 Quality Envelope reports are HTML-first human artifacts with JSON sidecars for
 agents and CI. The HTML report should be static and self-contained so it can be

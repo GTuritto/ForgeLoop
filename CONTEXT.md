@@ -52,6 +52,12 @@ projects, but it is not a coding agent or orchestration harness.
   itself.
 - `AI-Assisted-Development-Workflow.md`: canonical workflow reference.
 - `docs/09-development-plan.md`: ForgeLoop Roadmap / Master Plan.
+- `docs/phases/phase-3-installer-integration-tool.md`: in-progress installer
+  plan for applying ForgeLoop to target projects.
+- `docs/phases/phase-3-5-quality-model-consolidation.md`: in-progress quality
+  model plan for risk-adaptive verification and human-control rules.
+- `docs/phases/phase-4-skills-and-gauntlet-extraction.md`: draft plan for
+  Gauntlet Mode, Quality Envelope reporting, and skill extraction.
 - `docs/templates/`: reusable template pack.
 - `docs/templates/acceptance-evidence-matrix-template.md`: traceability
   template for strict and release-critical work.
@@ -71,6 +77,4 @@ projects, but it is not a coding agent or orchestration harness.
   and rollback planning template.
 - `docs/00-index.md`: documentation map.
 - `docs/adr/0001-builder-and-critic-roles.md`: role-separation decision.
-- `docs/phases/phase-4-skills-and-gauntlet-extraction.md`: draft plan for
-  Gauntlet Mode, Quality Envelope reporting, and skill extraction.
 - `bin/forgeloop.js` and `src/`: early installer CLI.

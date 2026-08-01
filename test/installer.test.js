@@ -23,6 +23,14 @@ test("plans a dry-run install for a missing Codex instruction file", () => {
 
   assert.equal(plan.actions.some((action) => action.type === "create" && action.path.endsWith("AGENTS.md")), true);
   assert.equal(plan.actions.some((action) => action.path.endsWith("docs/09-development-plan.md")), true);
+  assert.equal(
+    plan.actions.some((action) => action.path.endsWith("docs/templates/quality-envelope-report-template.html")),
+    true
+  );
+  assert.equal(
+    plan.actions.some((action) => action.path.endsWith("docs/templates/quality-envelope-schema-template.json")),
+    true
+  );
 });
 
 test("preserves existing instruction files by writing a review patch", () => {
@@ -137,6 +145,18 @@ test("global install plan copies ForgeLoop package files into a stable source", 
     plan.actions.some((action) => action.type === "copy" && action.path.endsWith("docs/templates/master-plan-template.md")),
     true
   );
+  assert.equal(
+    plan.actions.some(
+      (action) => action.type === "copy" && action.path.endsWith("docs/templates/quality-envelope-report-template.html")
+    ),
+    true
+  );
+  assert.equal(
+    plan.actions.some(
+      (action) => action.type === "copy" && action.path.endsWith("docs/templates/quality-envelope-schema-template.json")
+    ),
+    true
+  );
 });
 
 function makeTempRepo() {
@@ -147,9 +167,9 @@ function createMinimalGlobalSource(globalSourceDir) {
   const templatesDir = path.join(globalSourceDir, "docs/templates");
   fs.mkdirSync(templatesDir, { recursive: true });
 
-  for (const file of fs.readdirSync(path.join(forgeLoopRoot, "docs/templates"))) {
-    if (file.endsWith(".md")) {
-      fs.copyFileSync(path.join(forgeLoopRoot, "docs/templates", file), path.join(templatesDir, file));
+  for (const entry of fs.readdirSync(path.join(forgeLoopRoot, "docs/templates"), { withFileTypes: true })) {
+    if (entry.isFile()) {
+      fs.copyFileSync(path.join(forgeLoopRoot, "docs/templates", entry.name), path.join(templatesDir, entry.name));
     }
   }
 }

@@ -240,7 +240,11 @@ function addMissingFile(actions, targetDir, relativePath, content) {
 function addTemplateActions(actions, { templateSourceRoot, targetDir, mode }) {
   const sourceDir = path.join(templateSourceRoot, "docs/templates");
   const targetDirPath = path.join(targetDir, "docs/templates");
-  const templateFiles = fs.readdirSync(sourceDir).filter((file) => file.endsWith(".md")).sort();
+  const templateFiles = fs
+    .readdirSync(sourceDir, { withFileTypes: true })
+    .filter((entry) => entry.isFile())
+    .map((entry) => entry.name)
+    .sort();
   const useSymlink = mode === "symlink" || mode === "hybrid";
 
   for (const file of templateFiles) {

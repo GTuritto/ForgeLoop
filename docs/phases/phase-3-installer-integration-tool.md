@@ -375,7 +375,8 @@ For each sub-phase:
 
 - Name: Installer implementation
   - Goal: build the smallest safe installer.
-  - Files, modules, or components: implementation files TBD after design.
+  - Files, modules, or components: `bin/forgeloop.js`, `src/cli.js`,
+    `src/installer.js`, `src/tool-detector.js`, and `test/`.
   - Tests: unit tests for file operations, dry-run behavior, and no-overwrite
     safety.
   - Exit signal: installer can configure a fixture repo without destructive
@@ -384,7 +385,8 @@ For each sub-phase:
 ## Module / Component Plan
 
 - Module map location: not required yet.
-- Modules touched or created: future installer module.
+- Modules touched or created: CLI entrypoint, argument parser, installer
+  planner, file operations, tool detector, and Node tests.
 - Components touched or created:
   - project detector,
   - install-mode selector,
@@ -456,11 +458,11 @@ For each sub-phase:
 
 ## Docs And Diagram Updates
 
-- Behavior specs: not needed yet.
-- ADRs: add one before implementation if install mode or packaging becomes
-  hard to reverse.
+- Behavior specs: add when installer behavior needs scenario-level acceptance.
+- ADRs: add one if install mode, packaging, or publishing becomes hard to
+  reverse.
 - Diagrams: optional after installer design.
-- README or status docs: update when implementation starts.
+- README or status docs: update when installer behavior or status changes.
 - Roadmap / Master Plan: update in this phase.
 
 ## Risks And Deferrals

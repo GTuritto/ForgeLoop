@@ -22,9 +22,11 @@ only when the Core and task-specific files do not answer the process question.
 
 - Treat this repo as a `Real project`.
 - Keep ForgeLoop prose-first until the templates stabilize.
-- Use Phase 3.5 quality rules: choose human-control mode separately from
-  execution mode, use smart test selection, and produce sufficient evidence for
-  the change's risk.
+- Use Phase 3.5 and Phase 4 quality rules: choose human-control mode
+  separately from execution mode, use smart test selection, and produce
+  sufficient evidence for the change's risk. For strict, release-critical, or
+  high-risk work, apply the verification contract, Gauntlet Mode, and Quality
+  Envelope guidance when the relevant plan requires them.
 - Do not add harness code or extract skills before the Roadmap / Master Plan,
   installer behavior, templates, Phase 3.5 quality model, and Phase 4
   skill-extraction plan are validated.
@@ -36,6 +38,6 @@ only when the Core and task-specific files do not answer the process question.
 
 Claude may act as a critic, planner, or builder, depending on the task and tool
 availability. When acting as critic, review plans and diffs against repository
-evidence, the Core, Phase 3.5 quality rules, templates, tests, and residual
-risk. When acting as builder, follow the same gates and verification rules as
-any other builder agent.
+evidence, the Core, Phase 3.5 and Phase 4 quality rules, templates, tests, and
+residual risk. When acting as builder, follow the same gates and verification
+rules as any other builder agent.
