@@ -22,6 +22,16 @@ Use this template to define real boundaries that must be verified together.
 - Docker-local service wiring:
 - Contracts or schemas:
 
+## Boundary Implementation
+
+For each boundary:
+
+- Boundary:
+- Implementation: `real-local-dependency` | `containerized-dependency` |
+  `sandbox-provider` | `protocol-faithful-simulator` | `fake-or-stub`
+- Why this is sufficient:
+- When this is not sufficient:
+
 ## Test Data
 
 - Required seed data:
@@ -36,10 +46,32 @@ For each integration test:
 
 - Test name:
 - Boundary:
+- Behavior type: `success` | `rejection` | `unavailable` | `timeout` |
+  `partial-completion` | `rollback` | `retry` | `idempotency` |
+  `duplicate-delivery` | `out-of-order` | `concurrency` | `recovery`
 - Setup:
 - Action:
 - Expected result:
+- Observability expected:
 - Cleanup:
+
+## Failure And Recovery Matrix
+
+- Dependency rejection:
+- Dependency unavailability:
+- Latency or timeout:
+- Partial completion:
+- Transaction rollback:
+- Retry:
+- Bounded backoff:
+- Idempotency:
+- Duplicate delivery:
+- Out-of-order events:
+- Concurrency:
+- Connection recovery:
+- Resource cleanup:
+- Eventual recovery:
+- Failure and recovery observability:
 
 ## Commands
 

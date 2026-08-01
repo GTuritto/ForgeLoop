@@ -30,8 +30,15 @@ Use this template when the user explicitly approves opening a PR.
 
 ## Verification
 
+- Smart test selection:
+- First valid test layer:
+- RED evidence:
 - Unit tests:
+- Component tests:
+- Contract tests:
 - Integration tests:
+- Performance tests:
+- Resilience tests:
 - Smoke test:
 - Manual test:
 - Regression checks:
@@ -50,6 +57,7 @@ Use this template when the user explicitly approves opening a PR.
 ## Risk
 
 - Residual risk:
+- Acceptance-evidence matrix:
 - Rollback notes:
 - Follow-up work:
 

@@ -11,6 +11,7 @@ Use this template for a single approved phase in the Roadmap / Master Plan.
 - Owner:
 - Status: `Draft` | `Approved` | `In Progress` | `Blocked` | `Complete`
 - Execution mode:
+- Human-control mode:
 - Tool mode:
 - Linked Roadmap / Master Plan item:
 
@@ -49,6 +50,8 @@ For each question:
 
 - Question:
 - Recommended answer:
+- Classification: `repository-resolvable` | `reversible-assumption` |
+  `blocking-human-decision`
 - Blocking: `yes` | `no`
 
 ## Sub-Phases
@@ -77,9 +80,51 @@ For each sub-phase:
 
 - TBD
 
+### First Valid Test Layer
+
+- Behavior:
+- Selected layer: `unit` | `component` | `contract` | `integration` |
+  `end-to-end` | `not-applicable`
+- RED evidence required:
+- Exception rationale:
+
+### Smart Test Selection
+
+- Changed files:
+- Changed symbols:
+- Affected modules:
+- Affected consumers:
+- Contracts or schemas affected:
+- Configuration or runtime wiring affected:
+- Critical invariants:
+- Selected test ladder levels:
+- Checks deferred to later stage:
+- Deferral rationale:
+
 ### Integration Test Plan
 
 - TBD
+
+### Contract Test Plan
+
+- Required: `yes` | `no`
+- Contracts:
+- Consumer-impact analysis:
+
+### Performance Test Plan
+
+- Required: `yes` | `no`
+- Trigger:
+- Budget or baseline:
+- Template link:
+
+### Resilience Or Chaos Plan
+
+- Required: `yes` | `no`
+- Trigger:
+- Faults:
+- Explicit production authorization required: `yes` | `no`
+- Template link:
 
 ### Smoke Test Plan
 
@@ -96,6 +141,12 @@ For each sub-phase:
 ### Test Evidence Required
 
 - TBD
+
+### Acceptance-Evidence Traceability
+
+- Matrix required: `yes` | `no`
+- Matrix location:
+- Release decision owner:
 
 ## Docs And Diagram Updates
 
@@ -117,6 +168,14 @@ For each sub-phase:
 - Plan approval required before implementation: `yes`
 - Human test handoff required before PR: `yes`
 - Commit, push, PR, archive, or merge allowed without explicit approval: `no`
+- Hard stops:
+  - destructive or irreversible operation:
+  - breaking change:
+  - data loss or corruption risk:
+  - security-sensitive decision:
+  - material cost change:
+  - major scope expansion:
+  - production chaos:
 
 ## Exit Criteria
 

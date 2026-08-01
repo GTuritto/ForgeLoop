@@ -11,6 +11,7 @@ Use this template when adding or changing behavior in an existing codebase.
 - Owner:
 - Status: `Draft` | `Approved` | `In Progress` | `Blocked` | `Complete`
 - Execution mode:
+- Human-control mode:
 - Linked Roadmap / Master Plan item:
 
 ## Goal
@@ -79,13 +80,25 @@ For each slice:
 
 ## QA Plan
 
+- First valid test layer:
+- RED evidence required:
+- Smart test selection:
 - Unit tests:
+- Component tests:
 - Integration tests:
 - Contract tests:
+- Performance tests:
+- Resilience tests:
 - Migration tests:
 - Smoke test:
 - Manual test:
 - Regression evidence:
+
+## Acceptance-Evidence Traceability
+
+- Matrix required: `yes` | `no`
+- Matrix location:
+- Release decision owner:
 
 ## Risks
 

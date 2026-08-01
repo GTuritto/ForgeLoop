@@ -29,15 +29,47 @@ Idea -> Documents -> Decisions -> Roadmap / Master Plan
 - Classify work as greenfield, brownfield, or maintenance.
 - Choose the execution mode: Docs-only, Mechanical, Low-risk, Standard,
   Strict, or Release-critical.
+- Choose the human-control mode separately from the execution mode:
+  Collaborative, Approval-gated, Autonomous-with-escalation, Final-QA-only, or
+  Fully delegated.
 - Choose the tool mode: Single-tool, Multi-tool, or Human-plus-tool.
 - Confirm the work fits the Roadmap / Master Plan.
 - Prepare or update the plan before implementation.
 - Stop for human approval at required gates.
 - Implement one sub-phase, story, or vertical slice at a time.
-- Run required verification before continuing.
+- For behavior-changing work, select the right test layer, write the failing
+  test, verify it fails for the expected reason, implement, verify green, run
+  affected regressions, inspect the diff, and record evidence.
+- Run the smallest sufficient verification set for the change and risk. Use
+  change-aware, dependency-aware, and impact-aware selection. Untouched files
+  are not automatically unaffected.
 - Update docs, diagrams, specs, ADRs, and handoff notes when behavior changes.
 - Review the diff against the approved plan and current repo evidence.
 - Commit, push, open PRs, archive, and merge only after explicit approval.
+
+## Human Control
+
+Execution rigor and human supervision are independent. A task can be
+technically strict while the human chooses Final-QA-only supervision.
+
+The AI normally produces specs, plans, tests, implementation, verification
+evidence, reviews, and handoff artifacts. The human owns intent, final manual
+acceptance, and authorization for sensitive Git, production, destructive,
+security, data-loss, cost, or scope-changing actions.
+
+Even in delegated modes, stop for destructive or irreversible operations,
+breaking changes, possible data loss, security-sensitive decisions, material
+scope expansion, production chaos, or any proposal to weaken accepted
+requirements or important tests.
+
+## Verification Principle
+
+Produce sufficient evidence for the risk introduced by the change.
+
+Do not define healthy testing as running every test on every change. Start with
+cheap, high-signal checks, then escalate through focused tests, affected
+regressions, subsystem verification, and system or quality-attribute checks
+when impact justifies them.
 
 ## Project Tiers
 

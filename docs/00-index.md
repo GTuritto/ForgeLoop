@@ -29,6 +29,9 @@ Default agent load order:
   roadmap and self-application plan.
 - [Phase 3: Installer / Integration Tool Plan](phases/phase-3-installer-integration-tool.md):
   plan for applying ForgeLoop to target projects.
+- [Phase 3.5: Quality Model Consolidation](phases/phase-3-5-quality-model-consolidation.md):
+  plan for consolidating risk-adaptive quality, human-control, and smart
+  verification rules.
 - Installer CLI: `bin/forgeloop.js` with implementation under `src/`.
 
 ## Canonical Concept Homes
@@ -37,8 +40,9 @@ Default agent load order:
   [README.md](../README.md)
 - Default load order, source-of-truth order, core loop, tiers, execution modes,
   tool modes, and commit/PR rule: [FORGELOOP_CORE.md](../FORGELOOP_CORE.md)
-- Detailed workflow rules, gates, optional tools, brownfield flow, testing
-  ladder, and prompts:
+- Detailed workflow rules, gates, optional tools, brownfield flow, quality
+  model, human-control model, smart test selection, testing ladder, and
+  prompts:
   [AI-Assisted-Development-Workflow.md](../AI-Assisted-Development-Workflow.md)
 - Glossary and current canonical file list: [CONTEXT.md](../CONTEXT.md)
 - Roadmap, milestones, phase sequencing, and change log:
@@ -60,6 +64,10 @@ Default agent load order:
 - [Behavior Spec Template](templates/behavior-spec-template.md)
 - [Manual Test Plan Template](templates/manual-test-plan-template.md)
 - [Integration Test Plan Template](templates/integration-test-plan-template.md)
+- [Acceptance-Evidence Matrix Template](templates/acceptance-evidence-matrix-template.md)
+- [Performance Test Plan Template](templates/performance-test-plan-template.md)
+- [Resilience Experiment Template](templates/resilience-experiment-template.md)
+- [Production Rollout Plan Template](templates/production-rollout-plan-template.md)
 - [Execution Report Template](templates/execution-report-template.md)
 - [Pull Request Description Template](templates/pr-description-template.md)
 - [ADR Template](templates/adr-template.md)

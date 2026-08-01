@@ -242,6 +242,100 @@ When a second tool is unavailable, strengthen review by:
 Do not weaken approval gates, test evidence, or manual handoff because only one
 tool is available.
 
+## Human-Control Model
+
+Human-control mode describes how closely the human participates. It is separate
+from execution mode, which describes engineering rigor.
+
+Example:
+
+```yaml
+execution:
+  mode: strict
+
+human_control:
+  mode: final-qa-only
+```
+
+### Modes
+
+- `Collaborative`: the human reviews the specification and plan, answers
+  questions during execution, and performs final manual QA.
+- `Approval-gated`: the human reviews only required consequential decisions and
+  final acceptance.
+- `Autonomous-with-escalation`: the AI creates plans, specs, tests, code,
+  evidence, and review artifacts, then interrupts only for material blockers.
+- `Final-QA-only`: the AI completes planning, implementation, automated
+  verification, internal review, corrections, and handoff. The human returns
+  for final manual acceptance.
+- `Fully delegated`: the AI may also prepare commits or PR artifacts when that
+  has been separately authorized.
+
+Fully delegated does not authorize merge, deployment, production chaos,
+destructive migrations, security-risk acceptance, package publishing, or any
+other sensitive operation unless the human explicitly approves that operation.
+
+### Recommendation At Task Start
+
+At task start, ForgeLoop should recommend a human-control mode from repository
+evidence, task risk, reversibility, blast radius, contract impact, data impact,
+security impact, and available automated verification.
+
+Example:
+
+```yaml
+work_classification:
+  work_type: brownfield-feature
+  execution_mode: standard
+  reversibility: high
+  blast_radius: local
+  contract_impact: none
+  data_impact: none
+  security_impact: none
+
+human_control:
+  ai_recommended_mode: final-qa-only
+  recommendation_reason:
+    - requirements are explicit
+    - existing patterns apply
+    - change is reversible
+    - automated verification is sufficient
+  escalation_conditions:
+    - public contract change becomes necessary
+    - repository evidence contradicts the requirement
+    - scope expands beyond the identified module
+```
+
+### Question Classification
+
+ForgeLoop classifies questions before asking the human:
+
+- `Repository-resolvable`: answer from code, docs, tests, history,
+  configuration, or existing patterns.
+- `Reversible assumption`: proceed, record the assumption, cite the evidence,
+  and state the impact if wrong.
+- `Blocking human decision`: stop when valid answers would lead to materially
+  different product, business, security, data, architecture, or production
+  outcomes.
+
+Do not use the human as a repository search engine.
+
+### Hard Stops
+
+Even in Final-QA-only or Fully delegated mode, stop for:
+
+- destructive or irreversible actions,
+- newly discovered breaking changes,
+- possible data loss or corruption,
+- security-sensitive decisions,
+- material cost changes,
+- major scope expansion,
+- contradictory business outcomes,
+- requirements that cannot be safely satisfied,
+- proposals to weaken acceptance criteria,
+- proposals to remove important tests,
+- actions outside explicitly authorized capabilities.
+
 ### Knowledge Driven Development
 
 Knowledge Driven Development is a workflow discipline, not a tool requirement.
@@ -355,6 +449,14 @@ for their risk level.
 - `docs/templates/manual-test-plan-template.md`: manual test plan template.
 - `docs/templates/integration-test-plan-template.md`: integration test plan
   template.
+- `docs/templates/acceptance-evidence-matrix-template.md`: traceability
+  template for acceptance criteria and evidence.
+- `docs/templates/performance-test-plan-template.md`: performance test plan
+  template.
+- `docs/templates/resilience-experiment-template.md`: resilience and chaos
+  experiment template.
+- `docs/templates/production-rollout-plan-template.md`: production rollout and
+  rollback template.
 - `docs/templates/execution-report-template.md`: execution report template.
 - `docs/templates/pr-description-template.md`: PR description template.
 - `docs/templates/adr-template.md`: ADR template.
@@ -535,6 +637,137 @@ Agents must read the relevant artifact before planning or coding. If an
 artifact is missing, stale, or contradictory, stop and update the documentation
 before implementation.
 
+## Quality Model
+
+ForgeLoop uses evidence over ceremony. Produce enough evidence for the risk
+introduced by the change; do not require every artifact, test type, or human
+gate for every task.
+
+For non-trivial work, the AI normally produces:
+
+- specifications,
+- BDD scenarios,
+- test specifications,
+- automated tests,
+- implementation plans,
+- production code,
+- documentation,
+- verification evidence,
+- review reports,
+- manual QA handoff.
+
+Humans own intent and acceptance. They can add, remove, or modify
+requirements, select supervision level, approve consequential decisions,
+perform final manual acceptance, and authorize sensitive Git or production
+operations.
+
+### Specification Depth
+
+Behavior and change specifications are risk-adaptive. Small changes should not
+fill irrelevant sections blindly. Non-trivial work should consider:
+
+- problem and intended outcome,
+- current behavior,
+- required behavior,
+- non-goals,
+- actors,
+- business invariants,
+- permissions,
+- state transitions,
+- positive, negative, and boundary scenarios,
+- dependency failure and partial failure,
+- retry behavior,
+- idempotency,
+- concurrency,
+- recovery behavior,
+- graceful degradation,
+- contracts and compatibility,
+- security expectations,
+- performance budgets,
+- reliability expectations,
+- observability requirements,
+- rollout and rollback considerations,
+- acceptance criteria,
+- test mapping,
+- open questions and assumptions.
+
+### BDD Scenario Taxonomy
+
+BDD scenarios describe externally observable behavior. They should consider:
+
+- positive behavior,
+- negative behavior,
+- boundary behavior,
+- permissions,
+- dependency failure,
+- partial failure,
+- retry,
+- duplicate operation,
+- idempotency,
+- ordering,
+- concurrency,
+- recovery,
+- graceful degradation,
+- observable user status,
+- observable operator status,
+- consequences that must not occur.
+
+Implementation details such as exact retry delays or broker acknowledgement
+mode belong in technical tests unless they are contractual behavior.
+
+### TDD Feedback Loop
+
+TDD is an implementation feedback loop, not a synonym for unit testing.
+
+For behavior-changing work, use this sequence:
+
+```txt
+Select behavior
+  -> Select the appropriate test layer
+  -> Write the failing test
+  -> Verify that it fails for the expected reason
+  -> Implement the smallest coherent change
+  -> Verify green
+  -> Run affected regressions
+  -> Refactor
+  -> Inspect the diff
+  -> Record evidence
+```
+
+The first valid test may be unit, component, contract, integration, or
+end-to-end when the behavior lives at that boundary. Every RED step must fail
+because of the missing behavior, not because of setup, syntax, fixtures, or
+environment failure.
+
+Explicit exceptions:
+
+- docs-only work,
+- mechanical changes,
+- disposable prototypes,
+- generated artifacts,
+- cases where characterization or approval must precede a safe failing test,
+- cases where the first valid test must be an integration or contract test
+  rather than a unit test.
+
+### Acceptance-To-Evidence Traceability
+
+Strict and release-critical work should include an acceptance-evidence matrix:
+
+```txt
+Requirement -> Scenario -> Test -> Evidence -> Release decision
+```
+
+The matrix should record:
+
+- acceptance criterion identifier,
+- requirement,
+- scenario,
+- test layer,
+- command or test identifier,
+- evidence location,
+- result,
+- residual risk.
+
 ## User Stories
 
 User Stories are useful execution units inside the phase workflow. They should
@@ -577,8 +810,8 @@ inside the broader phase workflow.
 
 ```txt
 Select User Story -> SDD/Behavior Spec -> Human Gate -> Contract Freeze
-     -> TDD RED -> Implementation -> QA -> Code Review -> Docs
-     -> Human Gate -> Archive/PR Prep
+     -> Test Layer Selection -> TDD RED -> Implementation -> QA
+     -> Code Review -> Docs -> Human Gate -> Archive/PR Prep
 ```
 
 This lane is useful when the phase plan contains several independent stories
@@ -595,19 +828,21 @@ and the team wants one repeatable execution cycle per story.
    open decisions, and test depth.
 4. **Contract Freeze**: if the story touches an API, schema, event, command, or
    provider boundary, freeze the contract before implementation.
-5. **TDD RED**: write the failing tests first. Verify they fail for the right
+5. **Test Layer Selection**: choose the first valid test layer for the behavior:
+   unit, component, contract, integration, or end-to-end.
+6. **TDD RED**: write the failing test first. Verify it fails for the right
    reason, not because of setup errors.
-6. **Implementation**: implement the smallest code path that turns the approved
+7. **Implementation**: implement the smallest code path that turns the approved
    tests green. Parallelize backend and frontend only after contracts freeze.
-7. **QA**: run the selected test ladder, including integration, smoke, manual,
+8. **QA**: run the selected test ladder, including integration, smoke, manual,
    and regression checks required by the execution mode.
-8. **Code Review**: run an adversarial review against the story, behavior spec,
+9. **Code Review**: run an adversarial review against the story, behavior spec,
    architecture, tests, security constraints, and docs.
-9. **Docs**: update technical docs, diagrams, behavior specs, ADRs, phase status,
-   and execution evidence.
-10. **Human Gate Before PR**: stop again for final user approval before archive,
+10. **Docs**: update technical docs, diagrams, behavior specs, ADRs, phase
+    status, and execution evidence.
+11. **Human Gate Before PR**: stop again for final user approval before archive,
     push, or PR.
-11. **Archive/PR Prep**: archive the completed spec/change when the project
+12. **Archive/PR Prep**: archive the completed spec/change when the project
     uses that pattern, then prepare the PR notes. Push or open the PR only after
     explicit user approval.
 
@@ -685,9 +920,9 @@ tests.
 
 ```txt
 Codebase Discovery -> Module Discovery -> Impact Map -> Compatibility Plan
-     -> Behavior Spec -> Vertical Slice Plan -> Human Gate -> TDD RED
-     -> Implementation -> Regression Evidence -> Code Review -> Docs
-     -> Human Gate -> PR Prep
+     -> Behavior Spec -> Vertical Slice Plan -> Human Gate
+     -> Test Layer Selection -> TDD RED -> Implementation
+     -> Regression Evidence -> Code Review -> Docs -> Human Gate -> PR Prep
 ```
 
 ### Brownfield Discovery
@@ -847,6 +1082,8 @@ These are reusable capabilities the harness should eventually invoke.
   jobs, integrations, docs, and tests before brownfield implementation.
 - `task-risk-classifier`: choose Docs-only, Mechanical, Low-risk, Standard,
   Strict, or Release-critical mode.
+- `human-control-recommender`: recommend supervision level and escalation
+  conditions.
 - `grill-with-docs`: challenge plans against repo evidence and ask blocking
   questions.
 - `phase-plan-generator`: create phase plans from the template.
@@ -860,6 +1097,18 @@ These are reusable capabilities the harness should eventually invoke.
   contracts before implementation.
 - `tdd-engineer`: write failing tests and verify they fail for the right reason
   before implementation.
+- `smart-test-selector`: select checks from diff, impact, contracts,
+  dependencies, risk, and test history.
+- `acceptance-evidence-auditor`: verify that requirements trace to scenarios,
+  tests, evidence, and residual risk.
+- `integration-recovery-designer`: design integration failure and recovery test
+  coverage.
+- `performance-test-designer`: design workload, metrics, baselines, and
+  regression tolerances.
+- `resilience-experiment-designer`: design deterministic resilience tests and
+  chaos experiments with guardrails.
+- `quality-gate-evaluator`: classify verification results and release
+  readiness.
 - `implementation-planner`: break approved work into smallest coherent
   sub-phases.
 - `subphase-implementer`: implement one approved sub-phase at a time.
@@ -1164,21 +1413,124 @@ For each sub-phase:
 4. For brownfield work, re-check the impact map, compatibility plan, migration
    plan, and regression target before editing.
 5. Resolve all blocking questions before coding.
-6. Implement the smallest coherent unit.
-7. Add or update tests.
-8. Run the sub-phase test suite until green.
-9. Update docs, behavior specs, and diagrams if behavior changed.
-10. Review the diff.
+6. Select the behavior and the appropriate first test layer.
+7. Write the failing test and verify it fails for the expected reason.
+8. Implement the smallest coherent unit that makes the test pass.
+9. Verify green, then run affected regressions.
+10. Refactor only with tests green.
+11. Update docs, behavior specs, and diagrams if behavior changed.
+12. Review the diff and record evidence.
 
 Do not continue to the next sub-phase while the current one has failing tests,
 unresolved blocking questions, or unclear objectives.
 
-### 10. Testing Ladder
+### 10. Smart Test Selection
 
-Always:
+Use the smallest sufficient set of tests that proves the changed behavior and
+protects affected existing behavior. Untouched files are not automatically
+unaffected.
+
+Selection inputs should include:
+
+- Git diff,
+- changed symbols,
+- module map,
+- dependency graph,
+- affected consumers,
+- public contracts,
+- schemas,
+- configuration,
+- runtime wiring,
+- behavior spec,
+- acceptance criteria,
+- execution mode,
+- risk classification,
+- test-to-code mapping,
+- historical failure data,
+- test runtime,
+- test reliability,
+- business criticality.
+
+Use this progressive ladder:
+
+- `Level 0 - Structural checks`: formatting, compilation, type checking, lint,
+  changed-file validation, secret scanning.
+- `Level 1 - Focused tests`: changed test files, tests for changed symbols,
+  focused unit tests, focused component tests.
+- `Level 2 - Affected regressions`: consumer tests, neighboring modules,
+  affected workflows, compatibility tests, critical invariants.
+- `Level 3 - Subsystem verification`: service suite, integration tests,
+  contract tests, database tests, application tests.
+- `Level 4 - System and quality-attribute verification`: end-to-end, browser
+  matrix, performance, load, security, resilience, chaos, migration rehearsal.
+
+Place tests by delivery stage:
+
+- developer inner loop: cheap structural checks and focused tests,
+- local handoff: affected regressions, relevant contracts, smoke tests,
+- pull-request critical path: high-signal checks required for merge safety,
+- post-merge: broader compatibility or expensive checks when safe,
+- nightly or scheduled validation: broad regression, slow integration,
+  flake-sensitive, and large matrix runs,
+- release candidate: release-critical contracts, migration rehearsal,
+  performance, security, and resilience checks,
+- progressive production rollout: production telemetry, smoke checks,
+  canaries, and continuous validation.
+
+Serious projects should define a small critical-invariant suite that runs
+regardless of impact selection. Examples include application startup, primary
+API validity, authentication, tenant isolation, core transaction behavior,
+critical calculations, duplicate-payment prevention, and migration coherence.
+
+Feedback budgets are guidance, not safety limits:
+
+| Execution mode | Typical fast-path target |
+| --- | ---: |
+| Docs-only | under 2 minutes |
+| Mechanical | under 3 minutes |
+| Low-risk | under 5 minutes |
+| Standard | under 10-15 minutes |
+| Strict | broader evidence accepted |
+| Release-critical | evidence takes priority over duration |
+
+Do not skip required security, migration, compatibility, or recovery checks to
+meet a time target.
+
+Run cheap and high-signal checks before expensive checks:
+
+```txt
+format/type/lint
+  -> focused tests
+  -> affected regressions
+  -> contracts and integration
+  -> expensive quality-attribute tests
+```
+
+Independent checks may run in parallel when they do not distort results or
+contend for the same constrained resources.
+
+Cached results are valid only when the cache key represents all relevant
+inputs, including source, tests, dependencies, runtime, configuration, schemas,
+fixtures, build flags, and environment-sensitive inputs.
+
+Classify every failure as one of:
+
+- product defect,
+- test defect,
+- environment defect,
+- flaky or nondeterministic,
+- unknown.
+
+Do not permit blind rerun-until-green behavior. Quarantine must be temporary,
+visible, owned, time-bounded, and associated with residual-risk documentation.
+
+### 11. Testing Ladder
+
+Always consider:
 
 - lint or formatting check,
-- unit tests for new behavior,
+- first valid test layer for new behavior,
+- affected regressions,
 - smoke test for phase handoff.
 
 Add when relevant:
@@ -1186,15 +1538,24 @@ Add when relevant:
 - integration tests for database, auth, storage, background jobs, external
   adapters, Docker service wiring,
 - behavior/API tests for user-visible workflows,
-- contract tests for OpenAPI or provider ports,
+- contract tests for HTTP/REST, GraphQL, gRPC, events, schemas, DTOs, SDKs,
+  provider ports, configuration, and rolling-deployment compatibility,
 - migration tests for schema changes,
 - AI eval fixtures for LLM behavior,
-- security tests for tenant boundaries and secret handling.
+- security tests for tenant boundaries and secret handling,
+- performance tests for hot paths, algorithms, queries, serialization, caches,
+  concurrency, batching, external-call count, throughput, memory allocation,
+  runtime upgrades, or infrastructure configuration,
+- resilience tests for dependency outage, latency, connection recovery,
+  duplicate delivery, resource cleanup, eventual recovery, and observability.
 
 Every non-trivial phase must define a phase QA plan with:
 
 - unit test plan,
 - integration test plan,
+- contract test plan when contracts change,
+- performance test plan when performance risk is introduced,
+- resilience or chaos plan when recovery behavior is material,
 - smoke test plan,
 - manual test plan,
 - regression test plan,
@@ -1220,8 +1581,88 @@ It should include:
 - commands required to run the tests,
 - expected success signal.
 
+Integration plans should cover success, dependency rejection, unavailability,
+latency and timeout, partial completion, transaction rollback, retry, bounded
+backoff, idempotency, duplicate delivery, out-of-order events, concurrency,
+connection recovery, resource cleanup, eventual recovery, and observability of
+failure and recovery when those risks apply.
+
+Identify the boundary implementation:
+
+- real local dependency,
+- containerized dependency,
+- sandbox provider,
+- protocol-faithful simulator,
+- fake or stub.
+
 Integration tests should use real local dependencies where practical. Use fakes
 when external services would make the test slow, flaky, expensive, or unsafe.
+The plan must explain when a fake is sufficient and when it is not.
+
+### Contract Testing
+
+Contract changes trigger consumer-impact analysis.
+
+Cover the contract types the project uses:
+
+- HTTP or REST APIs,
+- GraphQL,
+- gRPC,
+- events,
+- schemas,
+- DTOs,
+- SDKs,
+- provider ports,
+- configuration contracts,
+- compatibility across rolling deployments.
+
+Contract tests should prove both producer behavior and consumer assumptions
+when the contract crosses a team, service, package, or release boundary.
+
+### Performance Testing
+
+Performance tests are conditional. Use them when the change affects hot paths,
+algorithms, database queries, serialization, caches, concurrency, batching,
+external-call count, message throughput, memory allocation, runtime or
+framework versions, or infrastructure configuration.
+
+Choose the right test type:
+
+- microbenchmark,
+- component benchmark,
+- query benchmark,
+- performance regression test,
+- load test,
+- stress test,
+- spike test,
+- soak test,
+- capacity test,
+- scalability test,
+- volume test,
+- cost-performance validation.
+
+Performance plans should define workload, representative data, concurrency,
+environment, cold or warm state, baseline, p50, p95, p99, throughput, error
+rate, CPU, memory, storage, network, external-call count, infrastructure cost,
+correctness guardrails, and regression tolerance.
+
+### Resilience And Chaos
+
+Resilience testing is conditional. Use deterministic resilience tests before
+broader chaos experiments when a controlled test can prove the behavior.
+
+Potential faults include process or container termination, dependency outage,
+added latency, packet loss, connection reset, network partition, CPU or memory
+pressure, connection-pool exhaustion, disk pressure, queue backlog, duplicate
+messages, delayed messages, out-of-order messages, and zone or region failure.
+
+A chaos experiment must define steady state, hypothesis, target, fault, scope,
+duration, traffic level, expected behavior, guardrails, abort conditions,
+telemetry, recovery objective, observed outcome, data-integrity result, and
+remediation.
+
+Do not make chaos testing mandatory for ordinary local or non-distributed
+changes. Production chaos always requires explicit human authorization.
 
 ### Manual Test Plan
 
@@ -1268,7 +1709,7 @@ At the end of the phase:
 - report every failure,
 - offer concrete solution options before proceeding.
 
-### 11. Phase Documentation Gate
+### 12. Phase Documentation Gate
 
 Before a phase can close, update project documentation so a future human or
 agent can understand the current state.
@@ -1304,7 +1745,7 @@ The docs must answer:
 
 Do not close a phase if docs describe an older project state.
 
-### 12. Manual Test Handoff
+### 13. Manual Test Handoff
 
 Before asking the user to test, provide:
 
@@ -1317,7 +1758,7 @@ Before asking the user to test, provide:
 - known limitations,
 - what feedback is needed.
 
-### 13. Process Feedback
+### 14. Process Feedback
 
 Every user comment becomes one of:
 
@@ -1328,7 +1769,7 @@ Every user comment becomes one of:
 
 Do not start the next phase until current phase exit criteria are met.
 
-### 14. Execution Report
+### 15. Execution Report
 
 At the end of a sub-phase, phase, or User Story, produce an execution report.
 Use exact values when tooling can provide them. Otherwise mark values as
@@ -1361,7 +1802,7 @@ This report helps evaluate whether the workflow is slow, expensive, effective,
 or over-engineered. Do not optimize for raw machine speed if doing so removes
 the gates that prevent rework.
 
-### 15. Pull Request
+### 16. Pull Request
 
 Open a GitHub Pull Request only after the user says the branch is ready for PR.
 
@@ -1386,7 +1827,7 @@ PR must include:
 If the user explicitly approves an early review branch, use a draft PR. Without
 that approval, keep PR notes local until the branch is approved for push.
 
-### 16. Merge And Reset
+### 17. Merge And Reset
 
 Never commit, push a branch, open a PR, merge, or push to `main` until the
 user explicitly says the work is ready for that action.
@@ -1760,8 +2201,10 @@ impact map, compatibility plan, migration or expand-contract plan, and
 regression evidence plan.
 Create or update behavior specs and Mermaid diagrams for this phase.
 Include KDD notes, BDD scenarios, Docker commands, unit tests, smoke test,
-integration test plan, manual test plan, regression test plan, manual test
-handoff, test evidence, exit criteria, risks, out-of-scope items, and the
+integration test plan, contract test plan when contracts change, performance
+or resilience plans when triggered, smart test selection, manual test plan,
+regression test plan, acceptance-evidence traceability when required, manual
+test handoff, test evidence, exit criteria, risks, out-of-scope items, and the
 Roadmap / Master Plan update needed after completion.
 
 Run a grill-with-docs pass against CONTEXT.md, ADRs, behavior specs, diagrams,
@@ -1783,8 +2226,11 @@ plan, migrations, contracts, and regression target before editing.
 Resolve all blocking questions before implementation.
 Confirm the selected execution mode and required verification.
 Keep changes scoped.
-Add or update tests.
+Select the first valid test layer.
+Write the failing test and verify it fails for the expected reason.
+Implement the smallest coherent change.
 Run the sub-phase Docker-local verification until green.
+Run affected regressions.
 Update docs, behavior specs, and diagrams if behavior changed.
 Report changed files, tests run, smoke-test status, unresolved issues, proposed
 solutions, execution telemetry, and residual risk.

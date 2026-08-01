@@ -92,11 +92,21 @@ Every phase below must link back to this plan.
   and work type, then run a dry run before any files change.
 - Status: In Progress
 
+### M3.5: Quality Model Consolidation
+
+- Purpose: consolidate ForgeLoop's quality, testing, human-control, and
+  smart-verification model before skill extraction.
+- Target signal: the Core, reference workflow, roadmap, index, and templates
+  describe risk-adaptive specifications, TDD, smart test selection,
+  acceptance-to-evidence traceability, and delegated human control without
+  turning every task into a heavyweight process.
+- Status: In Progress
+
 ### M4: Skill Candidates
 
 - Purpose: identify stable repeated actions that should become agent skills.
 - Target signal: candidate skills map to stable templates, installer behavior,
-  and recurring review steps.
+  the quality model, and recurring review steps.
 - Status: Draft
 
 ## Phase Sequence
@@ -151,11 +161,20 @@ Every phase below must link back to this plan.
 - Status: In Progress.
 - Phase plan: `docs/phases/phase-3-installer-integration-tool.md`.
 
+### Phase 3.5: Quality Model Consolidation
+
+- Goal: strengthen ForgeLoop's quality model while preserving evidence over
+  ceremony.
+- Depends on: Phase 3 template and installer structure.
+- Execution mode: `Docs-only`.
+- Status: In Progress.
+- Phase plan: `docs/phases/phase-3-5-quality-model-consolidation.md`.
+
 ### Phase 4: Skill Extraction
 
 - Goal: identify and define skill candidates from stable templates and
   installer behavior.
-- Depends on: Phase 3.
+- Depends on: Phase 3.5.
 - Execution mode: `Docs-only`.
 - Status: Draft.
 - Phase plan: required before creating or installing ForgeLoop-specific skills.
@@ -169,8 +188,10 @@ Every phase below must link back to this plan.
   the initial template pack exists.
 - Phase 3 depends on Phase 2.5 because the installer should apply stable,
   de-duplicated docs, not overlapping prose.
-- Phase 4 depends on Phase 3 because skill extraction should build on real
-  setup behavior and validated templates.
+- Phase 3.5 depends on Phase 3 because the quality model should build on the
+  existing template and installer structure without expanding the harness.
+- Phase 4 depends on Phase 3.5 because skill extraction should build on real
+  setup behavior, validated templates, and stable quality rules.
 
 ## Scope Boundaries
 
@@ -180,6 +201,7 @@ Every phase below must link back to this plan.
 - Compact Core.
 - Repo-local context, index, ADRs, and templates.
 - Markdown verification.
+- Risk-adaptive quality, testing, human-control, and evidence models.
 
 ### Out Of Scope
 
@@ -194,6 +216,8 @@ Every phase below must link back to this plan.
 - Full diagram pack: revisit when architecture becomes more than docs-only.
 - OpenSpec or Kaddo setup inside ForgeLoop: revisit if the repo starts using
   those tools directly.
+- Full smart-test-selection harness: revisit after the quality model and
+  skill candidates stabilize.
 
 ## Risk Register
 
@@ -219,6 +243,10 @@ Every phase below must link back to this plan.
   index without loading the full workflow.
 - Regression expectations: no dangling references to missing template files.
 - Release or demo gates: docs must explain both what changed and why.
+- Quality-model expectation: tests and artifacts are selected by impact and
+  risk, not by a blanket requirement to run every test or fill every template.
+- Traceability expectation: strict and release-critical work can trace
+  requirements to scenarios, tests, evidence, and residual risk.
 
 ## Brownfield Protection
 
@@ -291,3 +319,8 @@ ForgeLoop is a prose-first repo with an early installer CLI.
 - Date: 2026-07-10
   - Change: started Phase 3 installer / integration tool implementation.
   - Why: validate setup automation before publishing or extracting skills.
+- Date: 2026-08-01
+  - Change: started Phase 3.5 quality model consolidation.
+  - Why: incorporate risk-adaptive specifications, smart verification,
+    delegated human control, and acceptance-to-evidence traceability before
+    extracting skills.

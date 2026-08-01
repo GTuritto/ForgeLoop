@@ -10,6 +10,7 @@ Use this template at the end of a sub-phase, phase, or User Story.
 - Commit:
 - Date:
 - Execution mode:
+- Human-control mode:
 - Tool mode:
 - Agent roles used:
 
@@ -27,9 +28,16 @@ Explain what changed and why.
 
 ## Verification
 
+- Smart test selection:
+- First valid test layer:
+- RED evidence:
 - Markdown lint:
 - Unit tests:
+- Component tests:
+- Contract tests:
 - Integration tests:
+- Performance tests:
+- Resilience tests:
 - Smoke test:
 - Manual test:
 - Regression checks:
@@ -41,12 +49,21 @@ Add command outputs, screenshots, logs, or links when useful.
 
 - TBD
 
+## Acceptance-Evidence Matrix
+
+- Matrix required: `yes` | `no`
+- Matrix location:
+- Criteria covered:
+- Criteria not covered:
+- Release decision:
+
 ## Defects Found
 
 - Found by QA:
 - Found by review:
 - Fixed:
 - Deferred:
+- Failure classifications:
 
 ## Docs Updated
 

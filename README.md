@@ -62,8 +62,9 @@ Use one canonical home for each concept:
 
 - Loading order, source-of-truth order, project tiers, execution modes, tool
   modes, and commit/PR rule: [FORGELOOP_CORE.md](FORGELOOP_CORE.md).
-- Detailed workflow rules, gates, optional tools, brownfield flow, testing
-  ladder, and prompts:
+- Detailed workflow rules, gates, optional tools, brownfield flow, quality
+  model, human-control model, smart test selection, testing ladder, and
+  prompts:
   [AI-Assisted-Development-Workflow.md](AI-Assisted-Development-Workflow.md).
 - Repo glossary and current canonical file list: [CONTEXT.md](CONTEXT.md).
 - Documentation navigation and template inventory:
@@ -331,6 +332,10 @@ the stricter templates:
 
 - [docs/templates/brownfield-feature-plan-template.md](docs/templates/brownfield-feature-plan-template.md)
 - [docs/templates/integration-test-plan-template.md](docs/templates/integration-test-plan-template.md)
+- [docs/templates/acceptance-evidence-matrix-template.md](docs/templates/acceptance-evidence-matrix-template.md)
+- [docs/templates/performance-test-plan-template.md](docs/templates/performance-test-plan-template.md)
+- [docs/templates/resilience-experiment-template.md](docs/templates/resilience-experiment-template.md)
+- [docs/templates/production-rollout-plan-template.md](docs/templates/production-rollout-plan-template.md)
 - [docs/templates/manual-test-plan-template.md](docs/templates/manual-test-plan-template.md)
 - [docs/templates/execution-report-template.md](docs/templates/execution-report-template.md)
 - [docs/templates/pr-description-template.md](docs/templates/pr-description-template.md)
@@ -357,7 +362,10 @@ focused on:
 - reducing duplicate definitions across entrypoint docs,
 - keeping optional tools such as OpenSpec and Kaddo supportive, not mandatory,
 - supporting brownfield projects as first-class cases,
+- consolidating risk-adaptive quality, smart verification, and human-control
+  modes,
 - validating the installer before publishing or extracting skills.
 
-The next expected evolution after the installer is to identify the repeatable
-workflow activities that should become skills or automation.
+The next expected evolution after installer validation and quality-model
+consolidation is to identify the repeatable workflow activities that should
+become skills or automation.

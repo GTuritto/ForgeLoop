@@ -28,6 +28,15 @@ projects, but it is not a coding agent or orchestration harness.
 - `Multi-tool mode`: one tool builds and another critiques.
 - `Human-plus-tool mode`: one tool builds and the human performs review,
   manual QA, or final judgment.
+- `Human-control mode`: how closely the human participates during execution.
+  It is separate from engineering rigor. Common modes are Collaborative,
+  Approval-gated, Autonomous-with-escalation, Final-QA-only, and Fully
+  delegated.
+- `Smart test selection`: risk-based verification that runs the smallest
+  sufficient set of checks for the changed behavior and affected existing
+  behavior.
+- `Acceptance-evidence matrix`: a traceability artifact that links requirements
+  to scenarios, tests, evidence, results, and residual risk.
 - `Brownfield`: work inside an existing codebase with current behavior to
   protect.
 - `Greenfield`: work that starts from little or no existing implementation.
@@ -42,6 +51,14 @@ projects, but it is not a coding agent or orchestration harness.
 - `AI-Assisted-Development-Workflow.md`: canonical workflow reference.
 - `docs/09-development-plan.md`: ForgeLoop Roadmap / Master Plan.
 - `docs/templates/`: reusable template pack.
+- `docs/templates/acceptance-evidence-matrix-template.md`: traceability
+  template for strict and release-critical work.
+- `docs/templates/performance-test-plan-template.md`: risk-triggered
+  performance test planning template.
+- `docs/templates/resilience-experiment-template.md`: risk-triggered
+  resilience and chaos experiment template.
+- `docs/templates/production-rollout-plan-template.md`: risk-triggered rollout
+  and rollback planning template.
 - `docs/00-index.md`: documentation map.
 - `docs/adr/0001-builder-and-critic-roles.md`: role-separation decision.
 - `bin/forgeloop.js` and `src/`: early installer CLI.

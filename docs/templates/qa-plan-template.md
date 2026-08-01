@@ -17,19 +17,41 @@ plans should add phase-specific test details.
 - Data or contract boundaries to protect:
 - Reliability expectations:
 - Security expectations:
+- Performance expectations:
+- Observability expectations:
 - Release or demo gates:
+
+## Smart Test Selection
+
+- Selection principle:
+- Changed-file inputs:
+- Changed-symbol inputs:
+- Module map inputs:
+- Dependency graph inputs:
+- Consumer-impact inputs:
+- Contract or schema inputs:
+- Configuration or runtime inputs:
+- Historical failure inputs:
+- Business-criticality inputs:
 
 ## Test Ladder
 
-- Lint or formatting:
-- Typecheck:
-- Unit tests:
-- Integration tests:
-- Contract tests:
-- Migration tests:
-- Smoke tests:
-- Manual tests:
-- Regression tests:
+- Level 0 structural checks:
+- Level 1 focused tests:
+- Level 2 affected regressions:
+- Level 3 subsystem verification:
+- Level 4 system and quality-attribute verification:
+
+## Critical Invariant Suite
+
+- Application startup:
+- Primary API or workflow:
+- Authentication:
+- Authorization or tenant isolation:
+- Core transaction:
+- Critical calculation:
+- Migration coherence:
+- Project-specific invariants:
 
 ## Execution Mode Mapping
 
@@ -39,6 +61,7 @@ For each execution mode:
 - Required checks:
 - Optional checks:
 - Checks that need explicit deferral:
+- Typical fast-path target:
 
 ## Integration Strategy
 
@@ -48,6 +71,37 @@ For each execution mode:
 - Background jobs:
 - External providers:
 - Docker-local wiring:
+- Boundary implementation:
+- Fake or simulator rationale:
+
+## Contract Strategy
+
+- HTTP or REST:
+- GraphQL:
+- gRPC:
+- Events:
+- Schemas:
+- DTOs or SDKs:
+- Provider ports:
+- Configuration:
+- Rolling-deployment compatibility:
+
+## Performance Strategy
+
+- Triggers:
+- Test types:
+- Metrics:
+- Baseline:
+- Regression tolerance:
+- Correctness guardrails:
+
+## Resilience Strategy
+
+- Deterministic resilience tests:
+- Chaos experiments:
+- Faults:
+- Guardrails:
+- Explicit human authorization needed:
 
 ## Manual QA Strategy
 
@@ -75,6 +129,9 @@ For each execution mode:
 
 - Blocking defect criteria:
 - Non-blocking defect criteria:
+- Failure classification: `product defect` | `test defect` |
+  `environment defect` | `flaky or nondeterministic` | `unknown`
+- Flake quarantine owner and expiry:
 - Required report format:
 - Owner for triage:
 

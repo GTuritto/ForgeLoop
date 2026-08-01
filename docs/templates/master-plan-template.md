@@ -130,9 +130,15 @@ Define the project-level quality expectations. Phase plans will provide the
 phase-specific test detail.
 
 - Minimum test level:
+- Smart test selection principle:
+- Critical invariant suite:
 - Required integration boundaries:
+- Contract testing triggers:
+- Performance testing triggers:
+- Resilience or chaos testing triggers:
 - Manual QA expectations:
 - Regression expectations:
+- Acceptance-evidence traceability:
 - Release or demo gates:
 
 ## Brownfield Protection
