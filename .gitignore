@@ -1,6 +1,7 @@
 # Local assistant and editor state
 .specstory/
 .vscode/
+.history/
 
 # Secrets and local environment
 .env
@@ -21,3 +22,16 @@ coverage/
 .cache/
 .tmp/
 tmp/
+
+# Graphify generated artifacts
+graphify-out/
+graph.json
+
+# Claude Code personal settings
+.claude/settings.local.json
+
+# Local Claude files, if Graphify or another tool creates them
+.claude/cache/
+.claude/tmp/
+.claude/logs/
+.claude/handoffs/
