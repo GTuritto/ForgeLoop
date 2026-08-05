@@ -1,32 +1,32 @@
 # Local assistant and editor state
 .specstory/
-.vscode/
 .history/
+.vscode/
+.claude/settings.local.json
+.claude/handoffs/
+
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+.npmrc
 
 # OS files
 .DS_Store
+._*
 
-# Dependencies and generated output
+# Dependencies
 node_modules/
-dist/
-build/
-coverage/
 
-# Logs and caches
+# Logs
 *.log
-.cache/
-.tmp/
-tmp/
+
+# npm pack output
+*.tgz
+
+# SwarmForge runtime state (daemon pids, logs, handoff queues, role worktrees)
+.swarmforge/
+.worktrees/
 
 # Graphify generated artifacts
 graphify-out/
-graph.json
-
-# Claude Code personal settings
-.claude/settings.local.json
-
-# Local Claude files, if Graphify or another tool creates them
-.claude/cache/
-.claude/tmp/
-.claude/logs/
-.claude/handoffs/
