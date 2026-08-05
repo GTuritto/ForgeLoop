@@ -3,11 +3,6 @@
 .vscode/
 .history/
 
-# Secrets and local environment
-.env
-.env.*
-!.env.example
-
 # OS files
 .DS_Store
 
