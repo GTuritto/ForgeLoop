@@ -90,7 +90,7 @@ Every phase below must link back to this plan.
   projects.
 - Target signal: a user can choose install scope, selected tools, project tier,
   and work type, then run a dry run before any files change.
-- Status: In Progress
+- Status: Complete
 
 ### M3.5: Quality Model Consolidation
 
@@ -159,7 +159,7 @@ Every phase below must link back to this plan.
   projects.
 - Depends on: Phase 2.5.
 - Execution mode: `Standard`.
-- Status: In Progress.
+- Status: Complete.
 - Phase plan: `docs/phases/phase-3-installer-integration-tool.md`.
 
 ### Phase 3.5: Quality Model Consolidation
@@ -376,3 +376,13 @@ ForgeLoop is a prose-first repo with an early installer CLI.
     guardrail evidence.
   - Why: make evaluator quality, eval suites, context boundaries, harness
     assumptions, and verification debt explicit before adding harness code.
+- Date: 2026-08-06
+  - Change: closed Phase 3 installer / integration tool.
+  - Why: exit criteria verified with recorded evidence (19/19 installer tests,
+    non-destructive fixture dry run, lint, link check); npm publishing and
+    harness work remain explicitly deferred.
+- Date: 2026-08-05
+  - Change: started Phase 4.6 divergence-review and option-space expansion as a
+    docs-only draft.
+  - Why: capture optional two-pass divergent review before renewed analysis or
+    harness work, while keeping implementation deferred.

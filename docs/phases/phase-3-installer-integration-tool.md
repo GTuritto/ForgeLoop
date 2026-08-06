@@ -7,7 +7,7 @@
 - Branch: `docs/installer-integration-plan`
 - Date: 2026-07-10
 - Owner: Giuseppe
-- Status: `In Progress`
+- Status: `Complete`
 - Execution mode: `Standard`
 - Tool mode: `Single-tool`
 - Linked Roadmap / Master Plan item: `docs/09-development-plan.md`
@@ -379,8 +379,8 @@ For each sub-phase:
     `src/installer.js`, `src/tool-detector.js`, and `test/`.
   - Tests: unit tests for file operations, dry-run behavior, and no-overwrite
     safety.
-  - Exit signal: installer can configure a fixture repo without destructive
-    writes.
+  - Exit signal: complete. The installer configures a fixture repo without
+    destructive writes; dry run is the default and `--write` is explicit.
 
 ## Module / Component Plan
 
@@ -499,3 +499,18 @@ For each sub-phase:
 - Required docs checks pass.
 - Early CLI implementation exists.
 - Existing-file behavior is non-destructive.
+
+## Closure Evidence
+
+Recorded 2026-08-06 at closure:
+
+- `npm test`: 19 tests, 19 pass, 0 fail.
+- Fixture dry run: `forgeloop init <fixture> --tools codex --yes --no-detect`
+  printed the full plan and wrote no files (verified by before/after file
+  listing); output ends with "No files were changed. Re-run with --write to
+  apply the plan."
+- `markdownlint-cli2`: 0 errors on touched docs.
+- Local link check: no dangling references (`docs/module-map.md` in Target
+  Files describes a target-repo file, not a repo link).
+- `git diff --check`: clean.
+- Deferred per plan: npm publishing, orchestration harness.
