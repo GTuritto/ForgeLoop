@@ -377,10 +377,10 @@ verification-contract authoring, Gauntlet Mode execution, Quality Envelope HTML
 reporting, CRAP or complexity-plus-coverage risk scoring, integration recovery
 design, performance test design, resilience experiment design, evaluator
 calibration, eval-suite authoring, context mapping, harness-assumption review,
-AI verification guardrail review, clean-code review, and quality-gate
-evaluation. Skill extraction should follow the Phase 4 plan. Actual skill
-packaging and installation should wait until installer behavior and the Phase 4
-skill-extraction plan are validated.
+AI verification guardrail review, divergence review, clean-code review, and
+quality-gate evaluation. Skill extraction should follow the Phase 4 plan.
+Actual skill packaging and installation should wait until installer behavior
+and the Phase 4 skill-extraction plan are validated.
 
 Quality Envelope reports are HTML-first human artifacts with JSON sidecars for
 agents and CI. The HTML report should be static and self-contained so it can be
@@ -413,6 +413,8 @@ focused on:
 - validating Phase 4 verification-infrastructure templates for evaluator
   calibration, eval suites, context maps, harness assumptions, and AI
   guardrails,
+- drafting Phase 4.6 divergence-review rules for optional two-pass option-space
+  expansion before renewed analysis or harness work,
 - validating the installer before publishing or extracting skills.
 
 The current Phase 4 path extracts repeatable workflow activities into skills and

@@ -1105,6 +1105,9 @@ These are reusable capabilities the harness should eventually invoke.
   escalation rules for skeptical critic or QA evaluation.
 - `eval-suite-author`: define repeatable agent, skill, tool, or workflow evals
   with tasks, trials, graders, transcripts, outcomes, and metrics.
+- `divergence-reviewer`: expand high-ambiguity decisions through isolated
+  first-pass divergence, controller synthesis, cross-pollinated second-pass
+  divergence, and an option matrix with traps and evidence needs.
 - `context-map-curator`: define must-load, just-in-time, do-not-load, and
   persisted-note boundaries for long or high-risk work.
 - `harness-assumption-auditor`: record why harness scaffolding exists, what it

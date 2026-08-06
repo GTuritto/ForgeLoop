@@ -149,6 +149,9 @@ For each sub-phase:
   approval checks before repeated critic or QA use.
 - `eval-suite-author`: defines agent, skill, tool, or workflow eval suites with
   tasks, trials, graders, transcripts, outcomes, and metrics.
+- `divergence-reviewer`: expands high-ambiguity decisions through isolated
+  first-pass divergence, controller synthesis, cross-pollinated second-pass
+  divergence, and an option matrix with traps and evidence needs.
 - `context-map-curator`: defines must-load, just-in-time, do-not-load, and
   persisted-note boundaries for long or high-risk work.
 - `harness-assumption-auditor`: records and reviews the assumptions that justify

@@ -58,6 +58,12 @@ projects, but it is not a coding agent or orchestration harness.
   model plan for risk-adaptive verification and human-control rules.
 - `docs/phases/phase-4-skills-and-gauntlet-extraction.md`: in-progress plan for
   Gauntlet Mode, Quality Envelope reporting, and skill extraction.
+- `docs/phases/phase-4-5-process-state-and-gate-integrity.md`: draft plan for
+  durable process state, gate receipts, evidence freshness, and future doctor
+  invariants.
+- `docs/phases/phase-4-6-divergence-review-and-option-space.md`: draft plan for
+  optional two-pass divergent option expansion before renewed analysis or
+  harness work.
 - `docs/templates/`: reusable template pack.
 - `docs/templates/acceptance-evidence-matrix-template.md`: traceability
   template for strict and release-critical work.

@@ -37,6 +37,12 @@ Default agent load order:
 - [Phase 4: Skills And Gauntlet Extraction](phases/phase-4-skills-and-gauntlet-extraction.md):
   plan for extracting stable quality workflows into future skills and evidence
   artifacts.
+- [Phase 4.5: Process State And Gate Integrity](phases/phase-4-5-process-state-and-gate-integrity.md):
+  draft plan for durable process state, gate receipts, evidence freshness, and
+  future doctor invariants.
+- [Phase 4.6: Divergence Review And Option-Space Expansion](phases/phase-4-6-divergence-review-and-option-space.md):
+  draft plan for optional two-pass divergent option expansion before renewed
+  analysis or harness work.
 - Installer CLI: `bin/forgeloop.js` with implementation under `src/`.
 
 ## Canonical Concept Homes
@@ -54,6 +60,10 @@ Default agent load order:
   [docs/09-development-plan.md](09-development-plan.md)
 - Installer behavior and accepted setup decisions:
   [Phase 3 plan](phases/phase-3-installer-integration-tool.md)
+- Durable process state and gate-integrity draft:
+  [Phase 4.5 plan](phases/phase-4-5-process-state-and-gate-integrity.md)
+- Divergence-review and option-space expansion draft:
+  [Phase 4.6 plan](phases/phase-4-6-divergence-review-and-option-space.md)
 - Template inventory: this index, under [Templates](#templates)
 - Builder/critic role decision:
   [ADR 0001](adr/0001-builder-and-critic-roles.md)
@@ -92,5 +102,6 @@ Default agent load order:
 ## Status
 
 ForgeLoop is prose-first with a reusable template pack and an early safe
-installer CLI. Phase 4 verification-infrastructure templates are being
-validated before skill packaging or orchestration harness code.
+installer CLI. Phase 4 verification-infrastructure templates, Phase 4.5
+gate-integrity rules, and Phase 4.6 divergence-review rules are being validated
+before skill packaging or orchestration harness code.

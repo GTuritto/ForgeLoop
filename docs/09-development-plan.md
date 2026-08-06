@@ -110,6 +110,23 @@ Every phase below must link back to this plan.
   recurring verification, evaluator, context, and guardrail review steps.
 - Status: In Progress
 
+### M4.5: Process State And Gate Integrity
+
+- Purpose: make approvals, handoffs, evidence freshness, and phase state
+  durable enough to survive context loss.
+- Target signal: gate receipts, process state blocks, adversarial verification
+  ownership, and doctor invariants are specified before automation.
+- Status: Draft
+
+### M4.6: Divergence Review And Option-Space Expansion
+
+- Purpose: define an optional two-pass divergent review pattern for
+  high-ambiguity decisions before renewed analysis or harness work.
+- Target signal: agents can run isolated divergence, controller synthesis, and
+  cross-pollinated second-pass divergence by hand, then converge into an option
+  matrix with traps and evidence needs.
+- Status: Draft
+
 ## Phase Sequence
 
 ### Phase 0: Workflow Standard Baseline
@@ -184,6 +201,26 @@ Every phase below must link back to this plan.
 - Phase plan:
   `docs/phases/phase-4-skills-and-gauntlet-extraction.md`.
 
+### Phase 4.5: Process State And Gate Integrity
+
+- Goal: make ForgeLoop's process state durable, typed, and mechanically
+  checkable before future harness work.
+- Depends on: Phase 4.
+- Execution mode: `Docs-only`.
+- Status: Draft.
+- Phase plan:
+  `docs/phases/phase-4-5-process-state-and-gate-integrity.md`.
+
+### Phase 4.6: Divergence Review And Option-Space Expansion
+
+- Goal: define optional two-pass divergent review for high-ambiguity planning,
+  architecture, API, naming, product, evaluator, and fuzzy-debugging decisions.
+- Depends on: Phase 4 and the Phase 4.5 gate-integrity draft.
+- Execution mode: `Docs-only`.
+- Status: Draft.
+- Phase plan:
+  `docs/phases/phase-4-6-divergence-review-and-option-space.md`.
+
 ## Dependency Map
 
 - Phase 1 depends on Phase 0 because templates need stable Core terminology.
@@ -197,6 +234,11 @@ Every phase below must link back to this plan.
   existing template and installer structure without expanding the harness.
 - Phase 4 depends on Phase 3.5 because skill extraction should build on real
   setup behavior, validated templates, and stable quality rules.
+- Phase 4.5 depends on Phase 4 because gate integrity should harden the phase
+  and evidence model before any harness implementation.
+- Phase 4.6 depends on Phase 4 and the Phase 4.5 draft because option-space
+  expansion should produce traceable decision artifacts, not hidden
+  agent-to-agent context drift.
 
 ## Scope Boundaries
 
@@ -211,6 +253,9 @@ Every phase below must link back to this plan.
   skill-candidate definitions.
 - Evaluator calibration, eval suites, context maps, harness assumptions, and
   AI verification guardrail templates.
+- Gate receipts, durable process state, evidence freshness rules, and future
+  doctor invariants.
+- Optional two-pass divergent review for high-ambiguity decisions.
 
 ### Out Of Scope
 
@@ -232,6 +277,8 @@ Every phase below must link back to this plan.
   are validated by hand.
 - Executable eval-suite runner: revisit after the eval suite template has been
   used by hand.
+- Parallel-agent divergent review: revisit after Phase 4.6 has been validated
+  manually through eval-suite examples and harness-assumption review.
 
 ## Risk Register
 
@@ -316,6 +363,14 @@ ForgeLoop is a prose-first repo with an early installer CLI.
   - Location: `docs/phases/phase-4-skills-and-gauntlet-extraction.md`
   - Owner: Giuseppe
   - Status: In Progress
+- Artifact: Phase 4.5 gate-integrity draft
+  - Location: `docs/phases/phase-4-5-process-state-and-gate-integrity.md`
+  - Owner: Giuseppe
+  - Status: Draft
+- Artifact: Phase 4.6 divergence-review draft
+  - Location: `docs/phases/phase-4-6-divergence-review-and-option-space.md`
+  - Owner: Giuseppe
+  - Status: Draft
 - Artifact: Installer CLI
   - Location: `bin/forgeloop.js`, `src/`
   - Owner: Giuseppe
