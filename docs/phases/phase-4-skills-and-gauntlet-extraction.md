@@ -7,7 +7,7 @@
 - Branch: `main`
 - Date: 2026-08-01
 - Owner: Giuseppe
-- Status: `In Progress`
+- Status: `Complete`
 - Execution mode: `Docs-only`
 - Tool mode: `Single-tool`
 - Human-control mode: `Approval-gated`
@@ -248,3 +248,18 @@ The installer should:
 - README explains the HTML-first Quality Envelope artifact.
 - Future installer expectations cover agent and IDE skill installation.
 - Local verification is recorded.
+
+## Closure Evidence
+
+Recorded 2026-08-06 at closure:
+
+- `npm test`: 19 tests, 19 pass, 0 fail.
+- `markdownlint-cli2`: 0 errors across all 36 repo markdown files.
+- JSON parse: `quality-envelope-schema-template.json` parses cleanly.
+- `git diff --check`: clean.
+- Exit criteria: all verified against the repo. One gap found and fixed at
+  closure: the Quality Envelope HTML template carried AI guardrail evidence
+  but did not render verification debt; a `Verification Debt` block backed by
+  the schema's `verification_debt` field was added to
+  `docs/templates/quality-envelope-report-template.html`.
+- Skipped checks: none.

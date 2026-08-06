@@ -108,7 +108,7 @@ Every phase below must link back to this plan.
 - Target signal: candidate skills map to stable templates, Gauntlet Mode,
   Quality Envelope reporting, installer behavior, the quality model, and
   recurring verification, evaluator, context, and guardrail review steps.
-- Status: In Progress
+- Status: Complete
 
 ### M4.5: Process State And Gate Integrity
 
@@ -197,7 +197,7 @@ Every phase below must link back to this plan.
   guardrails.
 - Depends on: Phase 3.5.
 - Execution mode: `Docs-only`.
-- Status: In Progress.
+- Status: Complete.
 - Phase plan:
   `docs/phases/phase-4-skills-and-gauntlet-extraction.md`.
 
@@ -362,7 +362,7 @@ ForgeLoop is a prose-first repo with an early installer CLI.
 - Artifact: Phase 4 skill-extraction plan
   - Location: `docs/phases/phase-4-skills-and-gauntlet-extraction.md`
   - Owner: Giuseppe
-  - Status: In Progress
+  - Status: Complete
 - Artifact: Phase 4.5 gate-integrity draft
   - Location: `docs/phases/phase-4-5-process-state-and-gate-integrity.md`
   - Owner: Giuseppe
@@ -436,6 +436,11 @@ ForgeLoop is a prose-first repo with an early installer CLI.
   - Why: exit criteria verified with recorded evidence (19/19 installer tests,
     non-destructive fixture dry run, lint, link check); npm publishing and
     harness work remain explicitly deferred.
+- Date: 2026-08-06
+  - Change: closed Phase 4 skill extraction.
+  - Why: all exit criteria verified with recorded evidence; one gap fixed at
+    closure by adding a Verification Debt block to the Quality Envelope HTML
+    template so guardrail and verification-debt evidence both render.
 - Date: 2026-08-05
   - Change: started Phase 4.6 divergence-review and option-space expansion as a
     docs-only draft.
