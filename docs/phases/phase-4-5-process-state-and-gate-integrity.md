@@ -67,8 +67,9 @@ runtime, no harness code.
 
 ## Assumptions
 
-- Phase 4 (skill extraction) is validated and merged before this phase starts
-  implementation; this plan may be drafted and reviewed earlier.
+- Phases 4 through 4.2 (skill extraction, intake and discovery, roadmap
+  progress view) are complete before this phase starts implementation; this
+  plan may be drafted and reviewed earlier.
 - SwarmForge is used as a design source only; no code or files are copied.
 - The state block and receipt formats are cheap enough per phase that they do
   not violate the evidence-over-ceremony principle for `Quick` tier work;

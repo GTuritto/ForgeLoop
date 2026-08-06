@@ -110,6 +110,28 @@ Every phase below must link back to this plan.
   recurring verification, evaluator, context, and guardrail review steps.
 - Status: Complete
 
+### M4.1: Project Intake And Brownfield Discovery
+
+- Purpose: define how ForgeLoop turns supplied inputs (a PRD and context
+  documents) or an existing codebase into the starter documentation set.
+- Target signal: an agent can read the intake folder (`docs/context/` by
+  default, user-customizable and recorded in the docs index and CONTEXT.md),
+  generate Product Intent, a roadmap skeleton, and behavior spec candidates,
+  and run the Open Questions loop until a stated completeness bar is met; for
+  brownfield repos, a discovery procedure produces CONTEXT.md, the module map,
+  and a baseline roadmap from the existing code.
+- Status: Planned
+
+### M4.2: Roadmap Progress View
+
+- Purpose: make a project's origin, progress, and direction visible from the
+  roadmap without reading the full document.
+- Target signal: a hand-maintained roadmap view contract (statuses, milestone
+  timeline, current phase) is defined and validated by hand, HTML-first like
+  the Quality Envelope; automated rendering stays deferred and later feeds on
+  the Phase 4.5 process state blocks.
+- Status: Planned
+
 ### M4.5: Process State And Gate Integrity
 
 - Purpose: make approvals, handoffs, evidence freshness, and phase state
@@ -201,11 +223,32 @@ Every phase below must link back to this plan.
 - Phase plan:
   `docs/phases/phase-4-skills-and-gauntlet-extraction.md`.
 
+### Phase 4.1: Project Intake And Brownfield Discovery
+
+- Goal: define the intake procedure (PRD plus context documents from a
+  configurable intake folder, `docs/context/` by default) and the brownfield
+  discovery procedure (existing code to CONTEXT.md, module map, and baseline
+  roadmap), including the clarifying-question loop and its completeness bar.
+- Depends on: Phase 4.
+- Execution mode: `Docs-only`.
+- Status: Planned.
+- Phase plan: to be authored when the phase is prepared.
+
+### Phase 4.2: Roadmap Progress View
+
+- Goal: define the hand-maintained roadmap view contract that shows where a
+  project started, its progress, and its direction, HTML-first with rendering
+  automation deferred.
+- Depends on: Phase 4.1.
+- Execution mode: `Docs-only`.
+- Status: Planned.
+- Phase plan: to be authored when the phase is prepared.
+
 ### Phase 4.5: Process State And Gate Integrity
 
 - Goal: make ForgeLoop's process state durable, typed, and mechanically
   checkable before future harness work.
-- Depends on: Phase 4.
+- Depends on: Phase 4.2.
 - Execution mode: `Docs-only`.
 - Status: Draft.
 - Phase plan:
@@ -234,8 +277,13 @@ Every phase below must link back to this plan.
   existing template and installer structure without expanding the harness.
 - Phase 4 depends on Phase 3.5 because skill extraction should build on real
   setup behavior, validated templates, and stable quality rules.
-- Phase 4.5 depends on Phase 4 because gate integrity should harden the phase
-  and evidence model before any harness implementation.
+- Phase 4.1 depends on Phase 4 because intake and discovery procedures should
+  generate documents from the validated template set.
+- Phase 4.2 depends on Phase 4.1 because the progress view renders the roadmap
+  that intake and discovery produce.
+- Phase 4.5 depends on Phase 4.2 because gate integrity should harden the
+  phase and evidence model, including intake and view conventions, before any
+  harness implementation.
 - Phase 4.6 depends on Phase 4 and the Phase 4.5 draft because option-space
   expansion should produce traceable decision artifacts, not hidden
   agent-to-agent context drift.
@@ -253,6 +301,8 @@ Every phase below must link back to this plan.
   skill-candidate definitions.
 - Evaluator calibration, eval suites, context maps, harness assumptions, and
   AI verification guardrail templates.
+- Project intake and brownfield discovery procedures, the configurable intake
+  folder convention, and the roadmap progress view contract.
 - Gate receipts, durable process state, evidence freshness rules, and future
   doctor invariants.
 - Optional two-pass divergent review for high-ambiguity decisions.
@@ -441,6 +491,13 @@ ForgeLoop is a prose-first repo with an early installer CLI.
   - Why: all exit criteria verified with recorded evidence; one gap fixed at
     closure by adding a Verification Debt block to the Quality Envelope HTML
     template so guardrail and verification-debt evidence both render.
+- Date: 2026-08-06
+  - Change: added planned Phases 4.1 (project intake and brownfield discovery)
+    and 4.2 (roadmap progress view) between Phase 4 and Phase 4.5, and moved
+    Phase 4.5's dependency to Phase 4.2.
+  - Why: capture PRD intake with a configurable `docs/context/` folder,
+    clarifying-question completeness, brownfield discovery, and a visible
+    project roadmap before hardening process state in Phase 4.5.
 - Date: 2026-08-05
   - Change: started Phase 4.6 divergence-review and option-space expansion as a
     docs-only draft.
