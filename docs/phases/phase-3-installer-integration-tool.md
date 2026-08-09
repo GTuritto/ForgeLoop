@@ -78,10 +78,10 @@ Giuseppe approved the recommended answers on 2026-07-10.
     `Continue`, `Windsurf / Devin Desktop`, `Aider`, `Amazon Q Developer`,
     `JetBrains AI Assistant`, `Replit Agent`, and `Other`.
   - Current implementation: detect locally installed agents and IDEs, show the
-    detected set first, and let the user select all detected targets or provide
-    a comma-separated subset in a plain terminal prompt.
-  - Future UX option: add a richer checkbox-style TUI only if the UX gain
-    justifies adding a runtime dependency.
+    detected set first, and let the user choose tools from a zero-dependency
+    arrow-key checklist with Space toggle, Enter continue, and an all-tools row.
+  - Future UX option: add a richer styled TUI only if the UX gain justifies
+    adding a runtime dependency.
 
 - Decision: create missing project docs from reviewed templates.
   - Constraint: do this only when the target file is missing.
@@ -143,8 +143,9 @@ the preferred flow is:
 
 1. Detect supported agents and IDEs from stable local markers.
 2. Show the detected tools and their target instruction files.
-3. Ask whether to install for all detected tools.
-4. If the user says no, ask for a comma-separated subset.
+3. Show a checkbox-style selector with detected tools preselected.
+4. Support arrow-key movement, Space toggle, Enter continue, and all-tools
+   selection in one step.
 5. Keep `Other` available for custom instruction-file paths.
 
 Non-interactive runs must still support `--tools`, `--other-file`, `--yes`,
@@ -413,8 +414,8 @@ For each sub-phase:
 - Dry run does not write files.
 - Detector finds supported agents from repo and home-directory markers without
   writing files.
-- Interactive selection can choose all detected tools or a comma-separated
-  subset.
+- Interactive selection can choose tools with arrow keys, Space, Enter, and the
+  all-tools row.
 - Non-interactive flags override detection.
 
 ### Integration Test Plan

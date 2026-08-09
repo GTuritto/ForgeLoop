@@ -189,14 +189,19 @@ Interactive installer behavior:
 
 - detect locally available agents and IDEs,
 - show detected targets before writing,
-- offer a zero-dependency plain terminal install-all or comma-separated
-  multi-select flow,
+- show an ASCII ForgeLoop banner with a short workflow explanation,
+- offer zero-dependency arrow-key checklist tool selection in a plain terminal,
+- support `Space` to select or unselect tools, `Enter` to continue, and an
+  `All tools` row for one-step selection,
+- offer arrow-key radio selection for install mode, project tier, and work type,
+- ask for the global source directory only when `symlink` or `hybrid` mode is
+  selected,
 - keep `--tools`, `--other-file`, `--yes`, and `--json` for non-interactive
   runs,
 - treat detection as a recommendation, not permission to write.
 
-A richer checkbox-style TUI can come later if the UX gain justifies adding a
-runtime dependency.
+A richer styled TUI can come later if the UX gain justifies adding a runtime
+dependency.
 
 Supported tool adapters:
 
