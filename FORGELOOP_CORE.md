@@ -24,6 +24,29 @@ Idea -> Documents -> Decisions -> Roadmap / Master Plan
      -> Smoke Test -> PR -> Merge
 ```
 
+## Phase Execution
+
+- Use one long-lived branch per major phase, for example `phase-1`.
+- Land ordinary subphases directly on the active phase branch.
+- If a subphase expands into a multi-step workstream, create a nested branch
+  from the phase branch before implementation begins. Merge it back into the
+  phase branch after completion and verification. Do not merge nested subphase
+  branches directly into `main`.
+- Before implementation starts, classify branch topology: small slice,
+  medium subphase, or large phase. If work crosses about five commits,
+  multiple modules, or multiple QA surfaces, pause and create a nested branch
+  plan.
+- Maintain a small phase status ledger with the current phase, current
+  subphase, current step, last completed step, next step, steps remaining,
+  completion indicator, required verification command, branch owner, and next
+  merge target.
+- When asked what is next or how many steps remain, answer from the ledger.
+- Maintain an append-only phase transaction log in `docs/phase-log.md` or
+  `.forgeloop/phase-ledger.jsonl`.
+- Work from one approved row at a time:
+  `question/decision -> executable spec row -> minimal change -> focused check
+  -> full gate -> update counters -> stop`.
+
 ## Non-Negotiables
 
 - Classify work as greenfield, brownfield, or maintenance.
@@ -32,9 +55,25 @@ Idea -> Documents -> Decisions -> Roadmap / Master Plan
 - Choose the human-control mode separately from the execution mode:
   Collaborative, Approval-gated, Autonomous-with-escalation, Final-QA-only, or
   Fully delegated.
+- Choose the delivery mode separately: `plan-only`, `implement-only`,
+  `commit-only`, `push-approved`, `merge-approved`, `deploy-approved`, or
+  `tooling-refresh-only`. Do not escalate delivery mode without explicit user
+  approval.
+- Record the request boundary before execution: exact authorized action, exact
+  stop condition, and actions that require fresh approval.
+- Treat scope escalation as an alarm: any new lifecycle-changing action outside
+  the request boundary must stop for confirmation before work continues.
 - Choose the tool mode: Single-tool, Multi-tool, or Human-plus-tool.
 - Confirm the work fits the Roadmap / Master Plan.
 - Prepare or update the plan before implementation.
+- Every phase QA plan must map requirements to test or spec files, commands,
+  evidence, and status. A phase cannot close on QA that was only described.
+- For durable or audited workflows, check failure parity: success, refusal,
+  failure before side effects, failure after partial side effects, read
+  failures, and write failures must all have appropriate evidence.
+- Run tooling preflight before graph, handoff, or generated-artifact work:
+  verify required runtimes and CLIs, prefer `python3` over `python`, never
+  inspect or print secret values, and record environment variable names only.
 - Stop for human approval at required gates.
 - Implement one sub-phase, story, or vertical slice at a time.
 - For behavior-changing work, select the right test layer, write the failing
@@ -47,8 +86,16 @@ Idea -> Documents -> Decisions -> Roadmap / Master Plan
   before implementation and a Quality Envelope report when quality,
   performance, load, or operational evidence must be summarized for review.
 - Update docs, diagrams, specs, ADRs, and handoff notes when behavior changes.
+- Before merging a phase or nested subphase, run focused checks, the full fast
+  gate, the phase completion indicator, graph or index refresh when used,
+  handoff creation and validation, `git status`, and merge only into the
+  declared parent branch.
 - Review the diff against the approved plan and current repo evidence.
 - Commit, push, open PRs, archive, and merge only after explicit approval.
+- After push or PR publication, default to fix-forward. Rewrite published
+  history only when the user explicitly authorizes it.
+- After completing the requested unit of work, report status and stop unless
+  the user explicitly authorizes the next lifecycle action.
 
 ## Human Control
 

@@ -62,11 +62,13 @@ into every project.
 
 Use one canonical home for each concept:
 
-- Loading order, source-of-truth order, project tiers, execution modes, tool
-  modes, and commit/PR rule: [FORGELOOP_CORE.md](FORGELOOP_CORE.md).
+- Loading order, source-of-truth order, phase execution, delivery modes,
+  project tiers, execution modes, tool modes, and commit/PR rule:
+  [FORGELOOP_CORE.md](FORGELOOP_CORE.md).
 - Detailed workflow rules, gates, optional tools, brownfield flow, quality
-  model, human-control model, smart test selection, testing ladder, and
-  prompts:
+  model, human-control model, phase branching, phase status ledgers, tooling
+  preflight, generated artifacts, next-approved-row workflow, QA traceability,
+  smart test selection, testing ladder, and prompts:
   [AI-Assisted-Development-Workflow.md](AI-Assisted-Development-Workflow.md).
 - Repo glossary and current canonical file list: [CONTEXT.md](CONTEXT.md).
 - Documentation navigation and template inventory:
@@ -415,6 +417,9 @@ focused on:
 - supporting brownfield projects as first-class cases,
 - applying the completed risk-adaptive quality, smart verification, and
   human-control model,
+- making phase state explicit through branch ownership, current-step ledgers,
+  transaction logs, next approved rows, completion indicators,
+  generated-artifact status, delivery-mode locks, and closeout gates,
 - validating Phase 4 verification-infrastructure templates for evaluator
   calibration, eval suites, context maps, harness assumptions, and AI
   guardrails,

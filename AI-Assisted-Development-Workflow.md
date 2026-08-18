@@ -1285,6 +1285,101 @@ codex/phase-1-saas-foundation
 codex/phase-2-sources
 ```
 
+### Phase Execution And Branching
+
+Use one long-lived branch per major phase, for example `phase-1`.
+
+Subphases normally land directly on the active phase branch. If a subphase
+expands into a multi-step workstream, create a nested branch from the phase
+branch before implementation begins.
+
+Before implementation starts, classify branch topology:
+
+- `small-slice`: one branch, one to three commits, one QA surface,
+- `medium-subphase`: nested branch recommended when a bounded subphase crosses
+  multiple files, modules, or checks,
+- `large-phase`: multiple nested branches by approved step.
+
+If the phase crosses about five commits, multiple modules, or multiple QA
+surfaces, pause and create a nested branch plan before continuing.
+
+Example:
+
+- `phase-1` owns all Phase 1 work.
+- `phase-1.7` branches from `phase-1` when Phase 1.7 expands into many steps.
+- Steps `1.7.1` through `1.7.13` happen on `phase-1.7`.
+- When complete and verified, merge `phase-1.7` back into `phase-1`.
+- Continue with `1.8` from `phase-1`.
+- Merge `phase-1` into `main` only after the full phase is complete.
+
+Do not merge nested subphase branches directly into `main`.
+
+Before push or PR publication, run a commit topology review:
+
+- Are commits grouped by coherent step?
+- Are docs, specs, tests, and code paired cleanly?
+- Would review be easier as stacked or nested branches?
+- Has anything been pushed that would make rewrite costly?
+
+Before push, commit splitting or reorganization is allowed when approved. After
+push or PR publication, default to fix-forward. Do not rewrite published history
+unless the user explicitly authorizes it.
+
+### Phase Status Ledger
+
+Every phase must maintain a small status ledger in the active phase plan or an
+explicit status document linked from that plan.
+
+The ledger must include:
+
+- current phase,
+- current subphase,
+- current step,
+- last completed step,
+- next step,
+- steps remaining,
+- completion indicator,
+- required verification command,
+- branch owner,
+- next merge target.
+
+When the user asks "what is next?" or "how many steps are left?", answer from
+this ledger. If the ledger is stale or missing, update it before answering.
+
+### Phase Transaction Log
+
+Every phase must keep an append-only transaction log in `docs/phase-log.md` or
+`.forgeloop/phase-ledger.jsonl`.
+
+Each row captures:
+
+- phase,
+- slice or step id,
+- user decision or approval,
+- files changed,
+- focused check,
+- full gate,
+- result,
+- residual risk,
+- next allowed action.
+
+Use `docs/templates/phase-transaction-log-template.md` for a human-readable log
+or its JSONL shape for machine-readable logs. The log is the durable source of
+truth for what was approved and completed; chat is not.
+
+### Next Approved Row Workflow
+
+Agents work from one approved row at a time:
+
+```txt
+question/decision -> executable spec row -> minimal change -> focused check
+-> full gate -> update counters -> stop
+```
+
+No agent may skip from a broad phase goal to multiple implementation rows
+without approval. After each row, update the phase status ledger, transaction
+log, QA trace if relevant, and next allowed action.
+
 ### 3. Analyze Phase
 
 The active agent reads:
@@ -1303,6 +1398,20 @@ The active agent reads:
 Load `README.md` or this full workflow only when the compact load does not
 answer the process question.
 
+### Tooling Preflight
+
+Before graph, handoff, or generated-artifact work:
+
+- verify `python3`, Node, pnpm, and required CLIs exist when the task needs
+  them,
+- prefer `python3` over `python`,
+- never inspect or print secret values,
+- record environment variable names only,
+- treat generated graph artifacts as local unless explicitly approved for
+  commit,
+- check generated-artifact ignore rules before creating files,
+- record skipped tools and the reason in the phase ledger or execution report.
+
 If files or commands can answer a question, inspect them before asking.
 
 ### 4. Classify Risk And Execution Mode
@@ -1310,6 +1419,7 @@ If files or commands can answer a question, inspect them before asking.
 Before writing the phase plan, classify the phase or task:
 
 - selected execution mode,
+- selected delivery mode,
 - why that mode is sufficient,
 - required tests,
 - skipped tests and rationale,
@@ -1319,6 +1429,47 @@ Before writing the phase plan, classify the phase or task:
 
 If the selected mode is `Strict` or `Release-critical`, require explicit user
 approval before implementation.
+
+Delivery mode is separate from execution rigor:
+
+- `plan-only`: write or revise plans, specs, and decisions only,
+- `implement-only`: edit code or docs and verify, but do not commit,
+- `commit-only`: commit approved local changes, but do not push,
+- `push-approved`: push only the approved branch or commit set,
+- `merge-approved`: merge only the approved PR or branch,
+- `deploy-approved`: deploy only the approved artifact or target,
+- `tooling-refresh-only`: refresh approved tooling artifacts only.
+
+Before execution, record the request boundary in the phase transaction log or
+execution report:
+
+- exact authorized action,
+- exact stop condition,
+- actions outside the boundary,
+- approval evidence for the boundary,
+- blocked escalation attempts, if any.
+
+Do not escalate delivery mode automatically. If the user asks for a commit, do
+not push. If the user asks for a merge, do not start the next phase. If the
+user asks for a tooling refresh, do not turn it into a delivery loop.
+
+Lifecycle-changing actions require explicit confirmation:
+
+- creating branches,
+- committing,
+- pushing,
+- opening PRs,
+- merging,
+- deploying,
+- starting the next phase,
+- refreshing durable generated artifacts,
+- rewriting history.
+
+This is the scope escalation alarm: any new lifecycle-changing action outside
+the recorded request boundary must stop for confirmation before work continues.
+
+After completing the requested unit of work, report status and stop unless the
+user explicitly authorizes the next action.
 
 ### 5. grill-with-docs Gate
 
@@ -1355,6 +1506,10 @@ The plan must include:
 - out-of-scope items,
 - assumptions,
 - open questions,
+- delivery mode,
+- branch topology classification,
+- phase transaction log location,
+- next approved row workflow,
 - sub-phases,
 - tasks per sub-phase,
 - User Stories if used,
@@ -1370,11 +1525,16 @@ The plan must include:
 - BDD scenarios,
 - unit test plan,
 - integration test plan,
+- phase QA testing plan,
+- QA plan-to-implementation trace,
+- QA drift gate,
+- failure-parity checklist for durable or audited workflows,
 - smoke test plan,
 - manual test plan,
 - regression test plan,
 - Docker commands,
 - diagram updates,
+- generated artifact policy and closeout decision,
 - manual test handoff,
 - test evidence required,
 - regression evidence for affected existing behavior,
@@ -1893,6 +2053,7 @@ unknown.
 Phase or User Story:
 Branch:
 Execution mode:
+Delivery mode:
 Human time:
 Machine time:
 Tokens:
@@ -1908,6 +2069,11 @@ Docs updated:
 Diagrams updated:
 Artifacts changed:
 Skipped checks:
+Tool versions:
+Warnings:
+Stale metadata:
+Experimental runtime warnings:
+Blocking warnings:
 Residual risk:
 Verdict:
 ```
@@ -1946,6 +2112,25 @@ that approval, keep PR notes local until the branch is approved for push.
 Never commit, push a branch, open a PR, merge, or push to `main` until the
 user explicitly says the work is ready for that action.
 
+Before merging a phase or nested subphase:
+
+1. Run focused checks.
+2. Run the full fast gate.
+3. Run the phase completion indicator.
+4. Refresh codebase graph tools if used.
+5. Create or update the handoff.
+6. Validate the handoff.
+7. Confirm branch and remote state.
+8. Review `git status`.
+9. Capture topology witness evidence: branch base, merge target, commit
+   ancestry, published-history state, and uncommitted residue.
+10. Confirm generated-artifact provenance against `HEAD`.
+11. Merge only into the declared parent branch.
+
+The handoff template or validator must match the active workflow contract. If a
+validator requires specific top-level heading depth, use that heading depth in
+the template and document the rule before relying on the score.
+
 After approval and merge:
 
 ```sh
@@ -1954,7 +2139,9 @@ git pull --ff-only
 git status --short
 ```
 
-Then prepare the next phase.
+Then record the final gate, refresh knowledge or graph tooling only if it was
+used or approved, update project status and context docs, and mark the next
+phase as planning-only until the user approves it.
 
 ## Diagram Requirements
 
@@ -2097,6 +2284,37 @@ Recommended cadence:
 - after meaningful code changes: `kaddo scan`,
 - before commit or PR: `kaddo guard`,
 - when unsure what is stale: `kaddo explain` or `kaddo understand`.
+
+## Generated Artifact Rules
+
+Generated graph, index, report, and handoff artifacts are local by default.
+Commit them only when the phase plan, repository policy, or explicit user
+approval says they are durable project artifacts.
+
+Before creating or refreshing generated artifacts:
+
+- run tooling preflight,
+- check whether the artifact path is ignored,
+- compare artifact metadata with the current branch and HEAD when available,
+- refresh artifacts after meaningful code or documentation changes when the
+  tools were used for discovery or review,
+- record whether each artifact was refreshed, skipped, ignored, or committed,
+- never include secrets, secret values, raw provider tokens, or direct personal
+  data in generated artifacts.
+
+Phase closeout must decide whether generated artifacts are local only,
+committed, or discarded. If metadata points at an older `HEAD`, refresh the
+artifact or record why it is stale and non-blocking.
+
+Generated-artifact provenance must include:
+
+- artifact path,
+- source commit or commit range,
+- regeneration command,
+- generation timestamp when available,
+- freshness state: `current`, `stale`, or `unknown`,
+- durability decision: `local-only`, `committed`, or `discarded`,
+- stale-artifact handling.
 
 ## Example Multi-Tool Setup: Codex And Claude Code
 
@@ -2447,6 +2665,52 @@ Best lesson: the cleanest current workflow is docs-first, phase-gated,
 Docker-local, diagram-aware, PR-based, Kaddo-compatible, and agent-readable from
 day one.
 
+### Orchestra Phase 1
+
+Best lesson: ForgeLoop should manage phase state explicitly, not just
+instructions. It should know where the work lives, what branch owns it, what
+step is next, what gate proves completion, what generated artifacts are local,
+and where the next merge target is.
+
+The useful patterns were docs-first phase gates, explicit load order, small
+reviewable steps, dry-run or review before writing instructions, validated
+handoffs for long sessions, and measurable gates such as `npm run verify` plus
+a phase-specific completion indicator.
+
+The weak spots were coarse branching for a 13-step subphase, no persistent
+current-step ledger, late invention of the phase completion indicator, missing
+graph refresh and handoff validation in merge closeout, missing tooling
+preflight, unclear generated-artifact policy, and handoff validation
+requirements hidden in the validator instead of the template.
+
+For Orchestra Phase 1, the completion indicator was:
+
+```txt
+npm run todo-spec -> 0 pending, 43 green, 43 total
+```
+
+### Orchestra Phase 2
+
+Best lesson: ForgeLoop needs stronger control and QA traceability, not just
+more evidence. Agents must not silently turn a requested unit of work into an
+unapproved delivery pipeline.
+
+The useful patterns were one approved row at a time, measurable focused checks,
+full gates, and audited success and failure records.
+
+The weak spots were missing QA plan-to-implementation traceability, a failed
+read path that did not write evidence, broad branch topology for a phase that
+crossed many modules and QA surfaces, and insufficient delivery-mode locks
+around commit, push, merge, generated artifacts, and next-phase work.
+
+For durable or audited workflows, ask:
+
+- Did success write evidence?
+- Did refusal write evidence?
+- Did failure before side effects write evidence?
+- Did failure after partial side effects write evidence?
+- Are read failures audited as well as write failures?
+
 ## Minimal Startup Pack
 
 If time is tight, create this minimum before code:
@@ -2467,6 +2731,8 @@ docs/18-openspec-kdd-bdd.md
 docs/19-local-docker-development.md
 docs/templates/master-plan-template.md
 docs/templates/phase-plan-template.md
+docs/templates/phase-transaction-log-template.md
+docs/templates/phase-qa-testing-plan-template.md
 docs/templates/architecture-plan-template.md
 docs/templates/qa-plan-template.md
 docs/templates/brownfield-feature-plan-template.md
@@ -2511,6 +2777,19 @@ A phase is done when:
 
 - scope is implemented,
 - out-of-scope items stayed out,
+- the phase transaction log has a row for each approved step,
+- the next approved row queue is empty or explicitly points to the next
+  planning-only action,
+- all planned behavior rows are green or explicitly deferred with owner and
+  reason,
+- no pending todo-spec rows remain when the phase uses todo-spec as its
+  completion indicator,
+- the QA plan-to-implementation trace table covers every planned QA
+  requirement,
+- the QA drift gate has no silent skipped categories,
+- failure-parity gaps are closed or explicitly deferred for durable or audited
+  workflows,
+- the declared phase completion indicator passes,
 - docs match behavior,
 - README and project status reflect the current phase,
 - behavior specs match behavior,
@@ -2522,11 +2801,23 @@ A phase is done when:
 - integration tests pass where required,
 - smoke test passes,
 - manual test handoff was completed,
+- handoff exists and validates when the phase uses a handoff validator,
+- graph or index artifacts are refreshed or explicitly skipped when they were
+  used,
+- generated artifacts are classified as local-only, committed, or discarded
+  after metadata is compared with `HEAD`,
+- topology witness evidence can reconstruct branch, merge, publication,
+  residue, and verification state without relying on chat history,
 - execution report is complete,
+- execution report records tooling drift and whether each warning blocks the
+  phase,
 - user feedback was processed,
 - PR is reviewed,
-- branch is merged to `main`,
-- `main` is clean and up to date.
+- branch and remote state are confirmed after merge,
+- nested subphase branches are merged only into their parent phase branch,
+- phase branch is merged into its parent branch only after full phase closeout,
+- target branch is clean and up to date after merge,
+- the next phase is planning-only until explicitly approved.
 
 ## Final Operating Rule
 

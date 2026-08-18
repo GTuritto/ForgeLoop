@@ -12,8 +12,30 @@ Use this template for a single approved phase in the Roadmap / Master Plan.
 - Status: `Draft` | `Approved` | `In Progress` | `Blocked` | `Complete`
 - Execution mode:
 - Human-control mode:
+- Delivery mode: `plan-only` | `implement-only` | `commit-only` |
+  `push-approved` | `merge-approved` | `deploy-approved` |
+  `tooling-refresh-only`
 - Tool mode:
 - Linked Roadmap / Master Plan item:
+
+## Phase Status Ledger
+
+- Current phase:
+- Current subphase:
+- Current step:
+- Last completed step:
+- Next step:
+- Steps remaining:
+- Completion indicator:
+- Required verification command:
+- Branch owner:
+- Next merge target:
+- Phase transaction log:
+- Next approved row:
+- Next allowed action:
+- Exact authorized action:
+- Exact stop condition:
+- Actions requiring fresh approval:
 
 ## Goal
 
@@ -56,10 +78,33 @@ For each question:
 
 ## Sub-Phases
 
+### Branch Topology Gate
+
+- Classification: `small-slice` | `medium-subphase` | `large-phase`
+- Expected commit count:
+- Modules or surfaces crossed:
+- QA surfaces crossed:
+- Nested branch plan required: `yes` | `no`
+- Nested branches:
+- Review as stacked branches: `yes` | `no`
+- Rewrite allowed before push: `yes` | `no`
+- Fix-forward required after push or PR publication: `yes`
+
+### Commit Topology Review
+
+- Required before push or PR: `yes` | `no`
+- Commits grouped by coherent step:
+- Docs, specs, tests, and code paired cleanly:
+- Stacked or nested branch review preferred:
+- Published history makes rewrite costly:
+
 For each sub-phase:
 
 - Name:
 - Goal:
+- Branch owner:
+- Nested branch required: `yes` | `no`
+- Parent branch:
 - Files, modules, or components:
 - Tests:
 - Exit signal:
@@ -75,6 +120,9 @@ For each sub-phase:
 - Human review needed:
 
 ## QA Plan For This Phase
+
+Use `docs/plans/phase-N-qa-testing-plan.md` or copy
+`docs/templates/phase-qa-testing-plan-template.md` into the phase plan.
 
 ### Unit Test Plan
 
@@ -143,6 +191,40 @@ For each sub-phase:
 
 - TBD
 
+### QA Plan-To-Implementation Trace
+
+For each QA requirement:
+
+- QA requirement:
+- Test or spec file:
+- Command:
+- Evidence:
+- Status: `planned` | `implemented` | `deferred` | `blocked`
+
+### QA Drift Gate
+
+- Every promised QA item implemented: `yes` | `no`
+- Deferred QA items explicitly marked: `yes` | `no`
+- Late tests added because plan missed them:
+- New QA categories revealed by implementation:
+- Plan updated before closeout: `yes` | `no`
+
+### Failure-Parity Checklist
+
+- Success writes evidence:
+- Refusal writes evidence:
+- Failure before side effects writes evidence:
+- Failure after partial side effects writes evidence:
+- Read failures audited:
+- Write failures audited:
+
+### Phase Completion Indicator
+
+- Command:
+- Expected passing signal:
+- Current result:
+- Remaining rows or checks:
+
 ### Verification Contract
 
 - Required: `yes` | `no`
@@ -189,6 +271,32 @@ For each sub-phase:
 - README or status docs:
 - Roadmap / Master Plan:
 
+## Generated Artifacts
+
+- Graph or index tools used: `yes` | `no`
+- Tooling preflight required: `yes` | `no`
+- Required runtimes and CLIs:
+- Generated artifact paths:
+- Source commit or range:
+- Regeneration command:
+- Generation timestamp:
+- Freshness state: `current` | `stale` | `unknown`
+- Ignored or local-only artifacts:
+- Durable artifacts approved for commit:
+- Metadata compared to `HEAD`:
+- Artifact closeout decision: `local-only` | `committed` | `discarded`
+- Stale-artifact handling:
+- Refresh required before closeout: `yes` | `no`
+- Skip rationale:
+
+## Handoff
+
+- Required: `yes` | `no`
+- Location:
+- Validation command:
+- Required template or heading contract:
+- Last validation result:
+
 ## Risks And Deferrals
 
 - Risk:
@@ -201,7 +309,21 @@ For each sub-phase:
 - Plan approval required before implementation: `yes`
 - Human test handoff required before PR: `yes`
 - Commit, push, PR, archive, or merge allowed without explicit approval: `no`
+- Stop after requested action: `yes`
+- Delivery mode escalation requires explicit approval: `yes`
+- Boundary approval evidence:
+- Blocked escalation attempts:
+- Scope escalation alarm:
 - Hard stops:
+  - creating branches:
+  - committing:
+  - pushing:
+  - opening PRs:
+  - merging:
+  - deploying:
+  - starting next phase:
+  - refreshing durable generated artifacts:
+  - rewriting history:
   - destructive or irreversible operation:
   - breaking change:
   - data loss or corruption risk:
@@ -214,7 +336,21 @@ For each sub-phase:
 
 - Scope complete or explicitly deferred.
 - Required tests pass.
+- QA plan-to-implementation trace is complete.
+- QA drift gate is complete.
+- Failure-parity checklist is complete when durable or audited workflows are
+  touched.
+- Phase completion indicator passes.
 - Manual test handoff is ready.
+- Handoff exists and validates when required.
+- Generated graph or index artifacts are refreshed or explicitly skipped when
+  used.
 - Docs and diagrams are updated.
 - Execution report is complete.
 - Roadmap / Master Plan status is updated.
+- Nested subphase branch has merged into the phase branch when applicable.
+- Phase branch merges only into its declared parent branch after phase closeout.
+- Topology witness evidence captures branch base, merge target, commit
+  ancestry, publication state, and dirty residue.
+- Requested delivery mode is complete, and no unapproved next action was
+  started.

@@ -49,11 +49,14 @@ Default agent load order:
 
 - Usage entrypoint, examples, and repo package overview:
   [README.md](../README.md)
-- Default load order, source-of-truth order, core loop, tiers, execution modes,
-  tool modes, and commit/PR rule: [FORGELOOP_CORE.md](../FORGELOOP_CORE.md)
+- Default load order, source-of-truth order, core loop, phase execution,
+  phase-status ledger, delivery modes, tiers, execution modes, tool modes, and
+  commit/PR rule:
+  [FORGELOOP_CORE.md](../FORGELOOP_CORE.md)
 - Detailed workflow rules, gates, optional tools, brownfield flow, quality
-  model, human-control model, smart test selection, testing ladder, and
-  prompts:
+  model, human-control model, phase branching, tooling preflight, generated
+  artifacts, next-approved-row workflow, QA traceability, smart test selection,
+  testing ladder, and prompts:
   [AI-Assisted-Development-Workflow.md](../AI-Assisted-Development-Workflow.md)
 - Glossary and current canonical file list: [CONTEXT.md](../CONTEXT.md)
 - Roadmap, milestones, phase sequencing, and change log:
@@ -72,6 +75,8 @@ Default agent load order:
 
 - [Roadmap / Master Plan Template](templates/master-plan-template.md)
 - [Phase Plan Template](templates/phase-plan-template.md)
+- [Phase Transaction Log Template](templates/phase-transaction-log-template.md)
+- [Phase QA Testing Plan Template](templates/phase-qa-testing-plan-template.md)
 - [Architecture Plan Template](templates/architecture-plan-template.md)
 - [Module / Component Map Template](templates/module-map-template.md)
 - [QA Plan Template](templates/qa-plan-template.md)

@@ -15,8 +15,33 @@ projects, but it is not a coding agent or orchestration harness.
   competing definitions.
 - `Roadmap / Master Plan`: the project-level sequencing document above phase
   plans, User Stories, vertical slices, and tasks.
+- `Delivery mode`: the explicit lifecycle authorization for the current task,
+  such as `plan-only`, `implement-only`, `commit-only`, `push-approved`,
+  `merge-approved`, `deploy-approved`, or `tooling-refresh-only`.
+- `Phase status ledger`: the small state record that names the current phase,
+  subphase, step, last completed step, next step, remaining steps, completion
+  indicator, required verification command, branch owner, and next merge
+  target.
+- `Phase transaction log`: the append-only project record in
+  `docs/phase-log.md` or `.forgeloop/phase-ledger.jsonl` that captures the
+  phase, slice or step id, approval, files changed, focused check, full gate,
+  result, residual risk, and next allowed action.
+- `Next approved row`: the single executable row an agent may implement next.
+  The row should connect a user decision to one minimal change, focused check,
+  full gate, counter update, and stop condition.
+- `Phase completion indicator`: the phase-specific command and passing signal
+  that prove the planned behavior set is complete, such as a todo-spec command
+  reaching zero pending rows.
+- `QA trace table`: the phase QA mapping from each QA requirement to the
+  implemented test or spec file, command, evidence, and status.
 - `Module / Component Map`: a planning artifact that identifies modules,
   components, responsibilities, dependencies, tests, and uncertain boundaries.
+- `Generated artifact`: an output from graph, index, report, handoff, or similar
+  tooling. Generated artifacts are local by default unless a phase plan,
+  repository policy, or explicit approval makes them durable project artifacts.
+- `Tooling drift`: execution-report evidence for tool versions, warnings,
+  stale metadata, experimental runtime warnings, skipped checks, and whether
+  each warning blocks the phase.
 - `Installer CLI`: the `forgeloop init` command that plans or applies
   ForgeLoop files to a target project.
 - `Builder agent`: the tool that edits the repository, runs commands, and
@@ -65,6 +90,11 @@ projects, but it is not a coding agent or orchestration harness.
   optional two-pass divergent option expansion before renewed analysis or
   harness work.
 - `docs/templates/`: reusable template pack.
+- `docs/templates/phase-transaction-log-template.md`: append-only phase
+  approval, evidence, residual-risk, and next-action log.
+- `docs/templates/phase-qa-testing-plan-template.md`: per-phase QA command,
+  manual debug, negative-path, adversarial-check, traceability, drift, and
+  warning template.
 - `docs/templates/acceptance-evidence-matrix-template.md`: traceability
   template for strict and release-critical work.
 - `docs/templates/verification-contract-template.md`: pre-code agreement that
